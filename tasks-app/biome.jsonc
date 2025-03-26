@@ -1,0 +1,65 @@
+{
+	"$schema": "https://biomejs.dev/schemas/1.9.3/schema.json",
+	"files": {
+		"ignoreUnknown": false,
+		"ignore": [
+			"**/dist/*",
+			"**/.next/*",
+			"**/coverage/*",
+			"**/CHANGELOG.md",
+			"**/node_modules/*",
+			".nx/cache/",
+			".nx/workspace-data/",
+			".all-contributorsrc"
+		]
+	},
+	"formatter": {
+		"enabled": true,
+		"indentWidth": 2,
+		"indentStyle": "tab"
+	},
+	"organizeImports": {
+		"enabled": true
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"nursery": {
+				"useSortedClasses": {
+					"options": {
+						"attributes": ["classList"],
+						"functions": ["clsx", "cva", "tw", "tw.*"]
+					},
+					"fix": "safe",
+					"level": "error"
+				}
+			}
+		}
+	},
+	"javascript": {
+		"formatter": {
+			"semicolons": "always",
+			"quoteStyle": "single"
+		}
+	},
+	"json": {
+		"formatter": {
+			"trailingCommas": "none"
+		}
+	}
+}
+
+// onSave:
+// lint
+// format
+// organizeImports
+
+// eslint.style
+// https://github.com/antfu/eslint-config
+// https://www.npmjs.com/package/eslint-plugin-react-hooks
+// https://www.npmjs.com/package/eslint-plugin-react-refresh
+// perfectionist/sort-imports
+// filename-case
+
+// After all of this is followed, follow this video:
+// https://www.youtube.com/watch?v=Kr4VxMbF3LY

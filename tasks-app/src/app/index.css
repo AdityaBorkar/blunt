@@ -1,0 +1,42 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+
+@import "tailwindcss";
+
+@utility inline-icon {
+	@apply -mt-0.5 mr-2 inline-block;
+}
+
+@utility resize-hide {
+	::-webkit-resizer {
+		display: none;
+	}
+	::-moz-resizer {
+		display: none;
+	}
+}
+
+@layer base {
+	:root {
+		font-family: "Inter", sans-serif;
+		@apply text-neutral-300 bg-neutral-950;
+	}
+
+	body {
+		@apply grid place-items-center min-w-[320px] min-h-screen text-sm relative m-0 text-neutral-300 bg-neutral-950;
+	}
+
+	textarea::-webkit-resizer {
+		display: none;
+	}
+	textarea::-moz-resizer {
+		display: none;
+	}
+}
+
+@media (prefers-reduced-motion) {
+	*,
+	::before,
+	::after {
+		animation: none !important;
+	}
+}
