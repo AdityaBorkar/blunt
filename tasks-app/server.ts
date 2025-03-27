@@ -2,8 +2,6 @@ import { router, serve } from 'blunt';
 import type { BluntGlobalConfig } from '#/blunt/types';
 
 await serve({
-	development: process.env.NODE_ENV !== 'production',
-	// routes: TrieBasedRouting('src/app'),
 	dev: {
 		dir: '#/.blunt',
 		// 	env: {},
@@ -22,6 +20,7 @@ await serve({
 		include: ['src/app'],
 		exclude: ['**/~*'],
 	}),
+
 	config: {
 		ppr: false,
 		ssr: true,

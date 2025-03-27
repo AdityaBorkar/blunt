@@ -1,4 +1,5 @@
 export * from './core/dev';
+export * from './core/router';
 
 // * Register CLI commands
 // dev

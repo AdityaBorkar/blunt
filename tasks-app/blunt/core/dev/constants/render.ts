@@ -1,5 +1,5 @@
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 import { generateHydrationScript, getAssets } from 'solid-js/web';
 
 const dist = import.meta.resolve('../dist').replace('file://', '');
@@ -14,7 +14,7 @@ for (const route of routes) {
 		.replace('<!--ssr-outlet-->', app)
 		.replace('<!--ssr-head-->', generateHydrationScript())
 		.replace('<!--ssr-assets-->', getAssets());
-	const filePath = dist + `/client${route === '/' ? '/index' : route}.html`;
+	const filePath = `${dist}/client${route === '/' ? '/index' : route}.html`;
 	fs.mkdirSync(path.dirname(filePath), {
 		recursive: true,
 	});

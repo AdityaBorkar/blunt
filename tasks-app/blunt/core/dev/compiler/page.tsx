@@ -1,15 +1,13 @@
-import type { Server, SocketAddress } from 'bun';
+import type { Server, SocketAddress } from "bun";
+import { file } from "bun";
+import TailwindPlugin from "bun-plugin-tailwind";
+import { renderToReadableStream } from "react-dom/server";
+import { jsx } from "#/blunt/core/dev/constants/jsx";
 import type {
 	BluntGlobalConfig,
 	BluntPageConfig,
 	FileMetadata,
-} from '#/blunt/types';
-
-import { file } from 'bun';
-import TailwindPlugin from 'bun-plugin-tailwind';
-import { renderToReadableStream } from 'react-dom/server';
-
-import { jsx } from '#/blunt/core/dev/constants/jsx';
+} from "#/blunt/types";
 
 export async function CompilePage({
 	request,
@@ -26,16 +24,16 @@ export async function CompilePage({
 	files: FileMetadata[];
 }) {
 	const { isCrawler, req, path } = request;
-	const { GLOBAL_CONFIG, routesDir, tempDir } = globalThis.BLUNTJS;
+	const { GLOBAL_CONFIG } = globalThis.BLUNTJS;
 
-	const PageFile = files.find((file) => file.type === 'page');
+	const PageFile = files.find((file) => file.type === "page");
 	if (!PageFile)
-		return new Response('[BLUNTJS] Internal Server Error', { status: 500 });
+		return new Response("[BLUNTJS] Internal Server Error", { status: 500 });
 	const Page = await import(`${routesDir}/${PageFile.path}`);
 
 	// Performance and Logging
-	console.log('⬅️ Fetching route', path);
-	console.log('⌛ Compiling');
+	console.log("⬅️ Fetching route", path);
+	console.log("⌛ Compiling");
 	const start = performance.now();
 
 	// Page Config
@@ -59,11 +57,11 @@ export async function CompilePage({
 	server.timeout(req, TIMEOUT);
 	const result = await Bun.build({
 		// entrypoints: ['../../src/pages/layout.tsx'],
-		entrypoints: ['blunt/core/dev/constants/index.html'],
+		entrypoints: ["blunt/core/dev/constants/index.html"],
 		outdir: tempDir,
 		minify: false,
 		splitting: false,
-		sourcemap: 'linked',
+		sourcemap: "linked",
 		// banner: "use client"
 		// define: {}
 		//   define: {
@@ -73,8 +71,8 @@ export async function CompilePage({
 		// minify: true,
 		// splitting: true,
 		// bytecode: true,
-		target: 'browser',
-		publicPath: '/_public/',
+		target: "browser",
+		publicPath: "/_public/",
 		plugins: [TailwindPlugin],
 	});
 	// console.log(result.outputs);
@@ -89,13 +87,13 @@ export async function CompilePage({
 
 	// Framework Settings:
 	output_html = output_html.replace(
-		'<!--framework-settings-->',
-		'<script>window.SSR = true;</script>',
+		"<!--framework-settings-->",
+		"<script>window.SSR = true;</script>",
 	);
 
 	// SSR:
 	if (!SSR) {
-		console.log('IMPLEMENT: SSR is disabled');
+		console.log("IMPLEMENT: SSR is disabled");
 	}
 
 	// Streaming:
@@ -107,21 +105,21 @@ export async function CompilePage({
 		// bootstrapScriptContent
 		// nonce
 		onError(error, errorInfo) {
-			console.error('Error in React rendering:', error, errorInfo);
+			console.error("Error in React rendering:", error, errorInfo);
 		},
 	});
 	if (!STREAMING) {
 		await stream.allReady;
 		const reader = stream.getReader();
 		const { value } = await reader.read();
-		let html_react = '';
+		let html_react = "";
 		if (value) html_react += new TextDecoder().decode(value);
-		output_html = output_html.replace('<!--ssr-outlet-->', html_react);
+		output_html = output_html.replace("<!--ssr-outlet-->", html_react);
 	}
 
 	// Return Response
 	return new Response(output_html, {
 		status: 200,
-		headers: { 'Content-Type': 'text/html' },
+		headers: { "Content-Type": "text/html" },
 	});
 }

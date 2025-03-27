@@ -1,6 +1,5 @@
-import type { FileMetadata, Files, Routes } from '#/blunt/types';
-
 import { readdir } from 'node:fs/promises';
+import type { FileMetadata, Files, Routes } from '#/blunt/types';
 
 import IndexHtml from '../../constants/index.html';
 import { VALID_ROUTING_FILES } from './constants';

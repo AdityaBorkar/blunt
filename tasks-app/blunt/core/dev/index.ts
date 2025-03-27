@@ -1,15 +1,22 @@
-import type { BluntGlobalConfig } from '../../types';
+import { color } from "bun" with { type: "macro" };
+import { serve as BunServe } from "bun";
+import type { BluntGlobalConfig } from "../../types";
 
-import { color } from 'bun' with { type: 'macro' };
-import { serve as BunServe } from 'bun';
+import { Router } from "./builder";
+import { handleError } from "./compiler/handleError";
+import { handleFetch } from "./compiler/handleFetch";
+import { generateHttps } from "./utils/generateHttps";
+import { prepareWorkspace } from "./utils/prepareWorkspace";
 
-import { Router } from './builder';
-import { handleError } from './compiler/handleError';
-import { handleFetch } from './compiler/handleFetch';
-import { generateHttps } from './utils/generateHttps';
-import { prepareWorkspace } from './utils/prepareWorkspace';
+declare global {
+	var BLUNTJS: {
+		GLOBAL_CONFIG: BluntGlobalConfig;
+		ENV_FILES: string[];
+		router: Awaited<ReturnType<typeof Router>>;
+	};
+}
 
-interface ServeProps {
+export interface ServeProps {
 	routes: unknown;
 	dev?: {
 		unix?: string;
@@ -30,29 +37,18 @@ interface ServeProps {
 		dir?: string;
 		basePath?: string;
 		compress?:
-			| 'gzip'
-			| 'brotli'
-			| 'none'
-			| ((response: Response) => 'gzip' | 'brotli' | 'none');
+			| "gzip"
+			| "brotli"
+			| "none"
+			| ((response: Response) => "gzip" | "brotli" | "none");
 		chunking?: {
 			js?: boolean;
 			css?: boolean;
 		};
 	};
 	config: BluntGlobalConfig;
-	keyFile?: string | 'auto-generate' | (() => Promise<string>);
-	certFile?: string | 'auto-generate' | (() => Promise<string>);
-}
-
-declare global {
-	var BLUNTJS: {
-		GLOBAL_CONFIG: BluntGlobalConfig;
-		ENV_FILES: string[];
-		router: Awaited<ReturnType<typeof Router>>;
-		tempDir: string;
-		buildDir: string;
-		routesDir: string;
-	};
+	keyFile?: string | "auto-generate" | (() => Promise<string>);
+	certFile?: string | "auto-generate" | (() => Promise<string>);
 }
 
 export async function serve({
@@ -64,10 +60,10 @@ export async function serve({
 }: ServeProps) {
 	// Performance and Logging
 	const SERVER_BUILD_START = performance.now();
-	console.log(color('hotpink', 'ansi'));
-	console.log('Blunt v1.2.3 | Bun v1.1.19');
-	console.log(color('gray', 'ansi'));
-	console.log('Server Starting...');
+	console.log(color("hotpink", "ansi"));
+	console.log("Blunt v1.2.3 | Bun v1.1.19");
+	console.log(color("gray", "ansi"));
+	console.log("Server Starting...");
 
 	// Prepare Workspace
 	prepareWorkspace();
@@ -79,7 +75,7 @@ export async function serve({
 	}
 
 	// Implement HTTPS
-	if (props.keyFile === 'auto-generate' && props.certFile === 'auto-generate') {
+	if (props.keyFile === "auto-generate" && props.certFile === "auto-generate") {
 		const { keyFile, certFile } = await generateHttps();
 		props.keyFile = keyFile;
 		props.certFile = certFile;
@@ -88,16 +84,27 @@ export async function serve({
 	// *** HMR START ***
 
 	// Build Config, Router and Server
-	const GLOBAL_CONFIG = config;
-	const ENV_FILES = ['.env', '.env.prod']; // !
-	const router = await Router({ dir: routesDir });
+	const GLOBAL_CONFIG = {
+		// pages: config.pages || { include: ["#/src/app"] }, // routes
+		// ssr: config.ssr || false,
+		// streaming: config.streaming || false,
+		// compress: config.compress || "gzip",
+		// dir: config.dir || "#/src/app",
+		// hostname: config.hostname || 'localhost',
+		// port: config.port || 3000,
+		// reusePort: config.reusePort || false,
+		// unix: config.unix || null,
+		// ipv6Only: config.ipv6Only || false,
+	};
+	const ENV_FILES = [".env", ".env.prod"]; // !
+	const router = await Router({ dir: GLOBAL_CONFIG.pages.include[0] });
 	globalThis.BLUNTJS = {
 		GLOBAL_CONFIG,
 		ENV_FILES,
 		router,
-		tempDir: tempDir ?? '#/.blunt',
-		buildDir: buildDir ?? '#/.build',
-		routesDir: routesDir ?? '#/src/app',
+		// tempDir: tempDir ?? '#/.blunt',
+		// buildDir: buildDir ?? '#/.build',
+		// routesDir: routesDir ?? '#/src/app',
 	};
 	const server = BunServe({
 		...props,
@@ -129,14 +136,14 @@ export async function serve({
 	const SERVER_BUILD_END = performance.now();
 	const SERVER_BUILD_TIME = (SERVER_BUILD_END - SERVER_BUILD_START).toFixed(2);
 	console.log(`Server Started in ${SERVER_BUILD_TIME}ms`);
-	console.log('Local Network  : ', server.url.href);
+	console.log("Local Network  : ", server.url.href);
 	console.log(
-		'Public Network : ',
-		EXPOSE_HOST ? server.url.href : 'use --host to expose',
+		"Public Network : ",
+		EXPOSE_HOST ? server.url.href : "use --host to expose",
 	);
-	console.log('Environments   : ', ENV_FILES.join(', '));
+	console.log("Environments   : ", ENV_FILES.join(", "));
 
-	console.log(color('white', 'ansi'));
+	console.log(color("white", "ansi"));
 	return server;
 }
 

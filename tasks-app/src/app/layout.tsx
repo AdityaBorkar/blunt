@@ -2,7 +2,9 @@ import './index.css';
 
 export default function RootLayout({
 	children,
-}: { children: React.ReactNode }) {
+}: {
+	children: React.ReactNode;
+}) {
 	// {/*
 	// <head>
 	// 	<meta charSet="UTF-8" />
