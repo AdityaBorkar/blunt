@@ -2,15 +2,49 @@ import { readdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import { file } from 'bun';
 import TailwindPlugin from 'bun-plugin-tailwind';
+import { processDir } from './processDir';
+import { processFile } from './processFile';
+import { processSpecialFile } from './processSpecialFile';
 
-const RESERVED_FILE_NAMES = [
-	'layout.tsx',
+export const SPECIAL_FILES = [
 	'page.tsx',
+	'page.jsx',
+	'page.ts',
+	'page.js',
+	'layout.tsx',
+	'layout.jsx',
+	'layout.ts',
+	'layout.js',
 	'loading.tsx',
+	'loading.jsx',
+	'loading.ts',
+	'loading.js',
 	'error.tsx',
+	'error.jsx',
+	'error.ts',
+	'error.js',
 	'not-found.tsx',
-	'middleware.ts',
+	'not-found.jsx',
+	'not-found.ts',
+	'not-found.js',
+	'route.tsx',
+	'route.jsx',
 	'route.ts',
+	'route.js',
+	'middleware.ts',
+	'middleware.js',
+	'template.tsx',
+	'template.jsx',
+	'template.ts',
+	'template.js',
+	'forbidden.tsx',
+	'forbidden.jsx',
+	'forbidden.ts',
+	'forbidden.js',
+	'unauthorized.tsx',
+	'unauthorized.jsx',
+	'unauthorized.ts',
+	'unauthorized.js',
 ];
 
 export async function BuildWorkspace() {
@@ -33,6 +67,9 @@ export async function BuildWorkspace() {
 			unauthorized: string;
 		};
 		[key: string]: RouteType;
+	}
+	function resolveRoute(route: string) {
+		return; // eval(`routes.${route}`);
 	}
 	const routes: { [key: string]: RouteType } = {
 		// Priority of execution = middleware -> template -> layout -> loading -> route / page -> notFound / error / forbidden / unauthorized
@@ -59,37 +96,44 @@ export async function BuildWorkspace() {
 		// 	},
 		// },
 	};
+
+	// Create the root node of the trie
+	const rootNode: RouteNode = {
+		metadata: {},
+		children: {},
+		dynamicSegments: {},
+		segment: '',
+		fullPath: '/',
+	};
+	// add option to add(), remove()
+
+	// Scan all directories
+	// for (const dir of router.dir.include) {
+	// 	scanDirectory(dir, []);
+	// }
 	scanDirectory(router.dir, []);
 
 	async function scanDirectory(dir: string, triePath: string[]) {
+		// TODO: Filter if path is EXCLUDED
+		// Skip directories that match exclude patterns
+		// if (exclude.some((pattern) => new RegExp(pattern).test(itemPath)))
+		// 	continue;
+
 		const files = await readdir(dir);
+
 		for (const fileName of files) {
-			const isFile = await file(join(dir, fileName)).exists();
+			const item = file(join(dir, fileName));
+			const isFile = await item.exists();
+			const isSpecialFile = SPECIAL_FILES.includes(fileName);
+
 			if (!isFile) {
-				// ignored? pattern?
-				eval(
-					`routes${triePath.length > 0 ? `["${triePath.join('"].["')}"]` : ''}["${fileName}"] = {}`,
-				);
-				scanDirectory(join(dir, fileName), [...triePath, fileName]);
-				continue;
+				const result = processDir(fileName, triePath);
+				scanDirectory(result.dir, result.triePath);
+			} else if (!isSpecialFile) {
+				processFile();
+			} else {
+				processSpecialFile();
 			}
-
-			const isReserved = RESERVED_FILE_NAMES.includes(fileName);
-			if (!isReserved) {
-				// TODO: Hash file name and save as it for future imports and references
-				// TODO: If possible link it directly to the path and not copy the file name.
-				continue;
-			}
-
-			const route = triePath.join('.');
-			// const trieExists = eval(`routes.${route} `);
-			const exists = route in routes;
-			console.log({ fileName, triePath, exists, routes });
-
-			// TODO: BUILD AHEAD OF TIME
-			// TODO: Detect ssr, rendering mode, and tell that in the fetch
-			// TODO: Auto-add "use client" directive.
-			// Every file has it's own distinct "index.html" file
 		}
 	}
 
