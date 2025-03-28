@@ -100,8 +100,11 @@ export async function serve({
 
 	// *** HMR START ***
 
-	// Build Ahead of Time
+	// Context
 	const router = await Router({ dir: routes });
+	globalThis.BLUNTJS = { GLOBAL_CONFIG, outputDir, router };
+
+	// Build Ahead of Time
 	if (ENVIRONMENT !== 'production') await BuildWorkspace(); // TODO: Inject `ENV_FILES`
 
 	// Server
@@ -112,9 +115,6 @@ export async function serve({
 		// TODO: Implement Websockets
 		// TODO: Implement SSE
 	});
-
-	// Context
-	globalThis.BLUNTJS = { GLOBAL_CONFIG, outputDir, router };
 
 	// Mandatory File Checks
 	// const RootLayout = router.files.match('layout.tsx');

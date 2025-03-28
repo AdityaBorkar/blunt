@@ -1,6 +1,5 @@
 import { readdir } from 'node:fs/promises';
 import type { FileMetadata, Files, Routes } from '../../../types';
-import IndexHtml from '../../constants/index.html';
 import { VALID_ROUTING_FILES } from './constants';
 
 // Initialize HMR handlers

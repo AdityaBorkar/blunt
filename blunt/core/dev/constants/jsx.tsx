@@ -6,13 +6,13 @@ const config = {
 };
 
 // const { } = globalThis;
-console.log({ BLUNTJS: globalThis.BLUNTJS });
+// console.log({ BLUNTJS: globalThis.BLUNTJS });
 
-const RootLayout = (await import('#/src/app/layout')).default;
-console.log({ RootLayout });
+// const RootLayout = (await import('#/src/app/layout')).default;
+// console.log({ RootLayout });
 
-const App = (await import('#/src/app/page')).default;
-console.log({ App });
+// const App = (await import('#/src/app/page')).default;
+// console.log({ App });
 
 const StrictModeToggle = config.strictMode ? StrictMode : Fragment;
 const ProfilerToggle = config.profiler ? Profiler : Fragment;
@@ -21,9 +21,10 @@ const ProfilerToggle = config.profiler ? Profiler : Fragment;
 export const jsx = (
 	<StrictModeToggle>
 		{/* <ProfilerToggle id="root" onRender={() => {}}> */}
-		<RootLayout>
+		{/* <RootLayout>
 			<App />
-		</RootLayout>
+		</RootLayout> */}
+		ok
 		{/* </ProfilerToggle> */}
 	</StrictModeToggle>
 );
