@@ -1,5 +1,5 @@
-import { Logger } from 'blunt/_logger';
-import { getProjectConfig } from 'blunt/server/config/project-config';
+import { Logger } from '../../_logger';
+import { getProjectConfig } from '../../server/config/project-config';
 
 /**
  * Build command for production

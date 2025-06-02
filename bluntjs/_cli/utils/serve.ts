@@ -1,5 +1,4 @@
-import { Logger } from 'blunt/_logger';
-
+import { Logger } from '../../_logger';
 import { serve as BluntServe } from '../../server';
 import {
 	getProjectConfig,

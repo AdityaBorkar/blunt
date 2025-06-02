@@ -1,6 +1,6 @@
 import { existsSync } from 'node:fs';
-import { Logger } from 'blunt/_logger';
 
+import { Logger } from '../../_logger';
 import { getProjectConfig } from '../../server/config/project-config';
 import { serve } from '../utils/serve';
 

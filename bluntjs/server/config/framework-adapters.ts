@@ -5,4 +5,4 @@ export const FrameworkAdapters = {
 	ESLint: 'eslint',
 	Vercel: 'vercel',
 	Vite: 'vite',
-};
+} as const;

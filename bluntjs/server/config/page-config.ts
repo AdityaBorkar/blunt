@@ -1,11 +1,11 @@
-// export interface BluntPageConfig {
-// 	ssr?: boolean; // default: false
-// 	ppr?: boolean; // default: false
-// 	streaming?: boolean; // default: false
-// 	spa?: boolean; // default: false
-// 	pages?: {
-// 		include?: string[];
-// 		exclude?: string[];
-// 	};
-// 	timeout?: number; // default: 60
-// }
+import { type } from 'arktype';
+
+export const PageConfigSchema = type({
+	ppr: 'boolean',
+	spa: 'boolean',
+	ssr: 'boolean',
+	streaming: 'boolean',
+	timeout: 'number',
+});
+
+export type PageConfig = typeof PageConfigSchema.infer;

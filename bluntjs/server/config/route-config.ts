@@ -1,10 +1,11 @@
-// export interface BluntRouteConfig {
-// 	ssr?: boolean; // default: false
-// 	ppr?: boolean; // default: false
-// 	spa?: boolean; // default: false
-// 	pages?: {
-// 		include?: string[];
-// 		exclude?: string[];
-// 	};
-// 	timeout?: number; // default: 60
-// }
+import { type } from 'arktype';
+
+export const RouteConfigSchema = type({
+	ppr: 'boolean',
+	spa: 'boolean',
+	ssr: 'boolean',
+	streaming: 'boolean',
+	timeout: 'number',
+});
+
+export type RouteConfig = typeof RouteConfigSchema.infer;

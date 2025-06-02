@@ -1,9 +1,10 @@
 import { writeFile } from 'node:fs/promises';
-import ErrorBoundary from 'blunt/server-new/dev/utils/ErrorBoundary';
 import bunPluginTailwind from 'bun-plugin-tailwind';
 import { Suspense } from 'react';
 import { renderToReadableStream } from 'react-dom/server';
 import { prerender } from 'react-dom/static';
+
+import ErrorBoundary from '../utils/ErrorBoundary';
 
 type FileConfig = {
 	render: 'dynamic' | 'static';
@@ -101,6 +102,7 @@ function buildReactTree(
 	index = 0,
 ): { jsx: React.ReactNode; string: string } {
 	const [current, ...rest] = components;
+	// @ts-expect-error TODO: Fix this
 	const { fn: Component, type } = current;
 	const { jsx, string } =
 		rest.length > 0
@@ -118,7 +120,6 @@ function buildReactTree(
 			string: `<ErrorBoundary fallback={<C${index} />}>${string}</ErrorBoundary>`,
 		};
 	return {
-		// @ts-expect-error TODO: Fix this
 		jsx: <Component>{jsx}</Component>,
 		string: `<C${index}>${string}</C${index}>`,
 	};
@@ -146,3 +147,24 @@ function buildReactTree(
 // 		</head>
 // 	);
 // }
+
+// const Page = await import(`${router.dir}/${PageFile.path}`);
+
+// // Performance and Logging
+// // TODO: When building, save this details to the file.
+// console.log('FETCH [Dynamic] [SSR] route', path);
+// // Static, Dynamic-Edge, Dynamic-Server
+// // Static generated at (build time/ on demand).
+// // Cache-Device, Cache-Edge, Cache-Server
+// // PPR is enabled by default.
+// // If using Edge, you need to mention the cf / vercel / aws / etc environment to make sure you use the compatible functions.
+// // If using Server, you need to mention the node / deno / bun to make sure you use the compatible functions.
+
+// // Page Config
+// const PAGE_CONFIG = (Page.config || {}) as BluntPageConfig; // TODO: Validate `PageConfig`
+// const SSR = isCrawler ? true : (PAGE_CONFIG.ssr ?? GLOBAL_CONFIG.ssr);
+// const STREAMING = isCrawler
+// 	? false
+// 	: (PAGE_CONFIG.streaming ?? GLOBAL_CONFIG.streaming);
+// // Set Server Config for the Route:
+// server.timeout(req, TIMEOUT);

@@ -1,14 +1,15 @@
 import { readdir, stat } from 'node:fs/promises';
 import { join } from 'node:path';
 import { type } from 'arktype';
-import { typeofFile } from 'blunt/routes/utils';
+import type { Server } from 'bun';
+
+import { buildPage } from '../serve/dev-DEPRECATED/build';
 import {
 	PAGE_FILES,
 	PRECEDENCE,
 	ROUTE_FILES,
-} from 'blunt/server-new/constants';
-import { buildPage } from 'blunt/server-new/dev/build';
-import type { Server } from 'bun';
+} from '../serve/dev-DEPRECATED/constants';
+import { typeofFile } from '../utils/typeofFile';
 
 const PropsSchema = type({
 	'caseInsensitive?': 'boolean',
@@ -18,7 +19,7 @@ const PropsSchema = type({
 	'ssr?': 'boolean',
 });
 
-export async function FileBasedRouter(props?: typeof PropsSchema.infer) {
+export async function FileRouter(props?: typeof PropsSchema.infer) {
 	const {
 		// spa = false,
 		// ssr = false,
@@ -74,6 +75,16 @@ export async function FileBasedRouter(props?: typeof PropsSchema.infer) {
 		setTimeout(() => controller.abort(), 10000); // TODO
 
 		const isCrawler = false; // TODO
+
+		// const ip = server.requestIP(req);
+		// const isCrawler =
+		// 	GLOBAL_CONFIG.botDetection === false
+		// 		? undefined
+		// 		: typeof GLOBAL_CONFIG.botDetection === 'function'
+		// 			? GLOBAL_CONFIG.botDetection()
+		// 			: botDetection();
+		// const request = { ip, isCrawler, path, req };
+		// // TODO: Instrumentation
 
 		const url = new URL(request.url);
 		const pathname = url.pathname;

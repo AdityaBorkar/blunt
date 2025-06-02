@@ -2,7 +2,7 @@ import { existsSync } from 'node:fs';
 import { writeFile } from 'node:fs/promises';
 
 import { Logger } from '../../_logger';
-import { getProjectConfigPath } from '../../server/config/project-config';
+import { getProjectConfig } from '../../server/config/project-config';
 
 /**
  * Eject command to expose configuration
@@ -12,18 +12,17 @@ export async function ejectCommand(options: { force?: boolean }) {
 		'⚠️  IRREVERSIBLE ACTION: This will expose internal configuration files.',
 	);
 
-	const configFile = getProjectConfigPath();
-	if (!configFile) {
+	const { config } = await getProjectConfig().catch(() => {
 		Logger.error(
-			'Not a Blunt project. Run this command in a directory with a package.json.',
+			'Could not detect a Blunt project.',
+			'Create a `blunt.config.ts` file OR run `bunx create-blunt-app`',
 		);
 		process.exit(1);
-	}
+	});
 
-	const configExists =
-		existsSync('blunt.config.ts') || existsSync('blunt.config.js');
-
-	if (configExists && !options.force) {
+	const serverExists =
+		existsSync('app/blunt.server.ts') || existsSync('app/blunt.server.js');
+	if (serverExists && !options.force) {
 		Logger.error('Configuration already exists. Use --force to overwrite.');
 		process.exit(1);
 	}
@@ -31,38 +30,24 @@ export async function ejectCommand(options: { force?: boolean }) {
 	try {
 		Logger.info('Ejecting configuration files...');
 
-		// Create blunt.config.ts
-		const configContent = `import type { BluntConfig } from 'blunt/types';
+		const tsconfigExists = existsSync('tsconfig.json');
 
-export default {
-	app: {
-		dir: 'src/app',
-		publicDir: 'public'
-	},
-	server: {
-		port: 3000,
-		hostname: 'localhost'
-	},
-	build: {
-		outDir: '.build',
-		minify: true,
-		sourcemap: true
-	},
-	// Custom webpack configuration
-	webpack(config, { dev, isServer }) {
-		// Modify webpack config here
-		return config;
-	}
-} satisfies BluntConfig;
-`;
-		await writeFile('blunt.server.ts', configContent);
-		// TODO: delete `blunt.config.ts`
+		const fileName = tsconfigExists ? 'blunt.server.ts' : 'blunt.server.js';
+		const fileContent = `
+		import { serve } from 'blunt/server';
+
+		const config = ${JSON.stringify(config, null, 2)};
+
+		const app = serve(config);
+		console.log('Server started at', app.url.href);
+		`;
+		await writeFile(fileName, fileContent);
+		const configFile = Bun.file('blunt.config.ts');
+		await configFile.unlink();
 
 		Logger.success('Configuration ejected successfully!');
-		Logger.info('You can now customize blunt.config.ts to fit your needs.');
-		Logger.warn(
-			'Note: Updates to Blunt may require manual configuration changes.',
-		);
+		Logger.info('You can now customize the server to fit your needs.');
+		Logger.warn('Note: Updates to Blunt may require manual changes.');
 	} catch (error) {
 		Logger.error('Failed to eject configuration:', error);
 		process.exit(1);

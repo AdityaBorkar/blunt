@@ -1,20 +1,21 @@
-import { exists, resolve } from 'node:path';
-import { type } from 'arktype';
+import { existsSync } from 'node:fs';
+import { resolve } from 'node:path';
+import { ArkErrors, type } from 'arktype';
 
 import { FrameworkAdapters } from './framework-adapters';
 
 const ProjectConfigSchema = type({
 	build: {
 		analyze: 'boolean',
-		bundler: 'enum',
-		cloud: 'enum',
-		linter: 'enum',
+		bundler: "'bun' | 'vite'",
+		cloud: "'aws' | 'cloudflare' | 'vercel'",
+		linter: "'biome' | 'eslint'",
 		minify: 'boolean',
 		outDir: 'string',
 		sourcemap: 'boolean',
 	},
 	pages: {
-		botDetection: 'boolean | () => boolean',
+		// botDetection: 'boolean | (() => boolean)',
 		maxRequestBodySize: 'number',
 		ppr: 'boolean',
 		spa: 'boolean',
@@ -27,7 +28,7 @@ const ProjectConfigSchema = type({
 		strictMode: 'boolean',
 	},
 	routes: {
-		botDetection: 'boolean | () => boolean',
+		// botDetection: 'boolean | (() => boolean)',
 		maxRequestBodySize: 'number',
 		timeout: 'number',
 	},
@@ -35,7 +36,7 @@ const ProjectConfigSchema = type({
 		hostname: 'string',
 		port: 'number',
 		public: 'string',
-		router: 'any[]',
+		// router: 'any[]',
 		// unix?: string;
 		// ipv6Only?: boolean;
 		// reusePort?: boolean;
@@ -58,24 +59,28 @@ async function getProjectConfigPath(): Promise<string | null> {
 	const indicators = ['blunt.config.ts', 'blunt.config.js'];
 	for (const indicator of indicators) {
 		const path = resolve(process.cwd(), indicator);
-		const isFile = await exists(path);
+		const isFile = existsSync(path);
 		if (isFile) return path;
 	}
 	return null;
 }
 
-export async function getProjectConfig(): Promise<ProjectConfig> {
+export async function getProjectConfig() {
 	const path = await getProjectConfigPath();
 	if (!path) throw new Error('No Blunt project found');
 
 	const file = await import(resolve(path));
 	const _config = file.default;
-	const $config = ProjectConfigSchema.parse(_config);
+	const $config = ProjectConfigSchema(_config);
+	if ($config instanceof ArkErrors) {
+		throw new Error(`Invalid Blunt project config`); // TODO: Better error message
+	}
 	const config = { ...DEFAULT_GLOBAL_CONFIG, ...$config };
 	return { config, path };
 }
 
 const DEFAULT_GLOBAL_CONFIG = {
+	// TODO: Write defaults properly
 	build: {
 		analyze: true,
 		bundler: FrameworkAdapters.Bun,
@@ -85,16 +90,28 @@ const DEFAULT_GLOBAL_CONFIG = {
 		outDir: '.build',
 		sourcemap: false,
 	},
+	pages: {
+		maxRequestBodySize: 1024 * 1024 * 10, // 10MB
+		ppr: false,
+		spa: false,
+		ssr: false,
+		streaming: false,
+		timeout: 60,
+	},
 	react: {
 		profiler: false,
 		strictMode: process.env.NODE_ENV === 'development', // process.env.NODE_ENV === 'development',
 		// Million Lint / React Scan / React DevTools
 	},
+	routes: {
+		maxRequestBodySize: 1024 * 1024 * 10, // 10MB
+		timeout: 60,
+	},
 	server: {
 		hostname: 'localhost',
-		https: true,
 		port: 3000,
 		public: 'public',
-		router: ['src/app'],
+		// https: true,
+		// router: ['src/app'],
 	},
 } satisfies ProjectConfig;

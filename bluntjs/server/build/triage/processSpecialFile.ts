@@ -1,4 +1,4 @@
-import type { RouteNode } from '../router/trie-based';
+import type { RouteNode } from '../../file-router/trie-based';
 
 export async function processSpecialFile(
 	fileName: string,

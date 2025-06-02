@@ -2,8 +2,8 @@ import { color } from 'bun' with { type: 'macro' };
 import type { ServeOptions } from 'bun';
 import { serve as BunServe } from 'bun';
 
-import type { ProjectConfig } from '../../../types/types';
-import { BuildWorkspace } from './build';
+import type { ProjectConfig } from '../../types/types';
+import { BuildWorkspace } from '../build/triage';
 import { Router } from './builder';
 import { handleError } from './compiler/handleError';
 import { handleFetch } from './compiler/handleFetch';

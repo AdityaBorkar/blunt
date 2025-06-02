@@ -1,4 +1,6 @@
+export type { PageConfig } from '../server/config/page-config';
 export type { ProjectConfig } from '../server/config/project-config';
+export type { RouteConfig } from '../server/config/route-config';
 
 // ? We have decided not to support react-server-actions. We understand API routes are better for now.
 // ? We strongly recommend using API routes instead. We will revisit this decision in the future.
