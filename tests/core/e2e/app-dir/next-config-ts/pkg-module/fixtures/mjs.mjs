@@ -1,1 +1,1 @@
-export const mjs = 'mjs'
+export const mjs = 'mjs';

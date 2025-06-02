@@ -2,11 +2,11 @@
  * @type {import('next').NextConfig}
  */
 const nextConfig = {
-  logging: {
-    incomingRequests: {
-      ignore: [/^\/hello/, /^\/non-existent/, /^\/_next\/static\//],
-    },
-  },
-}
+	logging: {
+		incomingRequests: {
+			ignore: [/^\/hello/, /^\/non-existent/, /^\/_next\/static\//],
+		},
+	},
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

@@ -1,1 +1,1 @@
-export const condition = 'react-server'
+export const condition = 'react-server';

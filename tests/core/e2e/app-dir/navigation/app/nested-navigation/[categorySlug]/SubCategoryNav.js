@@ -1,31 +1,32 @@
-'use client'
+'use client';
 
-import { TabNavItem } from '../TabNavItem'
-import { useSelectedLayoutSegments } from 'next/navigation'
+import { useSelectedLayoutSegments } from 'next/navigation';
+
+import { TabNavItem } from '../TabNavItem';
 
 const SubCategoryNav = ({ category }) => {
-  const selectedLayoutSegment = useSelectedLayoutSegments()
+	const selectedLayoutSegment = useSelectedLayoutSegments();
 
-  return (
-    <div style={{ display: 'flex' }}>
-      <TabNavItem
-        href={`/nested-navigation/${category.slug}`}
-        isActive={!selectedLayoutSegment}
-      >
-        All
-      </TabNavItem>
+	return (
+		<div style={{ display: 'flex' }}>
+			<TabNavItem
+				href={`/nested-navigation/${category.slug}`}
+				isActive={!selectedLayoutSegment}
+			>
+				All
+			</TabNavItem>
 
-      {category.items.map((item) => (
-        <TabNavItem
-          key={item.slug}
-          href={`/nested-navigation/${category.slug}/${item.slug}`}
-          isActive={item.slug === selectedLayoutSegment}
-        >
-          {item.name}
-        </TabNavItem>
-      ))}
-    </div>
-  )
-}
+			{category.items.map((item) => (
+				<TabNavItem
+					href={`/nested-navigation/${category.slug}/${item.slug}`}
+					isActive={item.slug === selectedLayoutSegment}
+					key={item.slug}
+				>
+					{item.name}
+				</TabNavItem>
+			))}
+		</div>
+	);
+};
 
-export default SubCategoryNav
+export default SubCategoryNav;

@@ -1,16 +1,16 @@
-import { nextTestSetup } from 'e2e-utils'
+import { nextTestSetup } from 'e2e-utils';
 
 describe('hook-function-names', () => {
-  const { next } = nextTestSetup({
-    files: __dirname,
-  })
+	const { next } = nextTestSetup({
+		files: __dirname,
+	});
 
-  it('should show readable hook names in stacks', async () => {
-    const browser = await next.browser('/button')
+	it('should show readable hook names in stacks', async () => {
+		const browser = await next.browser('/button');
 
-    await browser.elementByCss('button').click()
+		await browser.elementByCss('button').click();
 
-    await expect(browser).toDisplayCollapsedRedbox(`
+		await expect(browser).toDisplayCollapsedRedbox(`
      {
        "count": 1,
        "description": "Error: Kaputt!",
@@ -26,13 +26,13 @@ describe('hook-function-names', () => {
          "Page app/button/page.tsx (18:10)",
        ],
      }
-    `)
-  })
+    `);
+	});
 
-  it('should show readable hook names in stacks for default-exported components', async () => {
-    const browser = await next.browser('/')
+	it('should show readable hook names in stacks for default-exported components', async () => {
+		const browser = await next.browser('/');
 
-    await expect(browser).toDisplayRedbox(`
+		await expect(browser).toDisplayRedbox(`
      {
        "count": 1,
        "description": "Error: error in useEffect",
@@ -45,6 +45,6 @@ describe('hook-function-names', () => {
          "Page.useEffect app/page.tsx (7:11)",
        ],
      }
-    `)
-  })
-})
+    `);
+	});
+});

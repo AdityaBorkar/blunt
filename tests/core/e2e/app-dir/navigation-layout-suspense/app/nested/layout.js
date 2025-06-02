@@ -1,17 +1,17 @@
-import { Suspense } from 'react'
-import Link from 'next/link'
+import Link from 'next/link';
+import { Suspense } from 'react';
 
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
 
 export default async function Layout(props) {
-  return (
-    <>
-      <div>
-        <Link href={`/`} className="text-blue-500">
-          Home Page
-        </Link>
-      </div>
-      <Suspense fallback={<h1>Loading...</h1>}>{props.children}</Suspense>
-    </>
-  )
+	return (
+		<>
+			<div>
+				<Link className="text-blue-500" href={`/`}>
+					Home Page
+				</Link>
+			</div>
+			<Suspense fallback={<h1>Loading...</h1>}>{props.children}</Suspense>
+		</>
+	);
 }

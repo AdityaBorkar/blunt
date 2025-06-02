@@ -1,17 +1,17 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 
 export function WaitForHydration() {
-  const [hydrated, setHydrated] = useState(false)
+	const [hydrated, setHydrated] = useState(false);
 
-  useEffect(() => {
-    setHydrated(true)
-  }, [])
+	useEffect(() => {
+		setHydrated(true);
+	}, []);
 
-  if (hydrated) {
-    return <div id="ready">hydrated</div>
-  }
+	if (hydrated) {
+		return <div id="ready">hydrated</div>;
+	}
 
-  return null
+	return null;
 }

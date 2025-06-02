@@ -1,13 +1,13 @@
-'use server'
+'use server';
 
 export async function serverComponentAction() {
-  return 'server-action'
+	return 'server-action';
 }
 
 export async function clientComponentAction() {
-  return 'client-action'
+	return 'client-action';
 }
 
 export async function unusedExportedAction() {
-  return 'unused-exported-action'
+	return 'unused-exported-action';
 }

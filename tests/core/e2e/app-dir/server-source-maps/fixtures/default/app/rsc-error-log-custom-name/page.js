@@ -1,14 +1,14 @@
-import { connection } from 'next/server'
+import { connection } from 'next/server';
 
 class UnnamedError extends Error {}
 class NamedError extends Error {
-  name = 'MyError'
+	name = 'MyError';
 }
 
 export default async function Page() {
-  await connection()
+	await connection();
 
-  console.error(new UnnamedError('Foo'))
-  console.error(new NamedError('Bar'))
-  return null
+	console.error(new UnnamedError('Foo'));
+	console.error(new NamedError('Bar'));
+	return null;
 }

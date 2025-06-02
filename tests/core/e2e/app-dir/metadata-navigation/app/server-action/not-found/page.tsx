@@ -1,7 +1,7 @@
-export { default } from './page-client'
+export { default } from './page-client';
 
 export async function generateMetadata() {
-  return {
-    robots: 'noindex, nofollow',
-  }
+	return {
+		robots: 'noindex, nofollow',
+	};
 }

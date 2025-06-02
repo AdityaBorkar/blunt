@@ -1,18 +1,18 @@
-import { nextTestSetup } from 'e2e-utils'
-import stripAnsi from 'strip-ansi'
+import { nextTestSetup } from 'e2e-utils';
+import stripAnsi from 'strip-ansi';
 
 describe('next build --debug', () => {
-  const { next } = nextTestSetup({
-    files: __dirname,
-    buildCommand: 'pnpm next build --debug',
-  })
+	const { next } = nextTestSetup({
+		buildCommand: 'pnpm next build --debug',
+		files: __dirname,
+	});
 
-  let output = ''
-  beforeAll(() => {
-    output = stripAnsi(next.cliOutput)
-  })
+	let output = '';
+	beforeAll(() => {
+		output = stripAnsi(next.cliOutput);
+	});
 
-  const str = `
+	const str = `
 
 
 Redirects
@@ -36,9 +36,9 @@ Rewrites
 └ destination: /
 
 
-Route (app)`
+Route (app)`;
 
-  it('should log Redirects above Route(app)', async () => {
-    expect(output).toContain(str)
-  })
-})
+	it('should log Redirects above Route(app)', async () => {
+		expect(output).toContain(str);
+	});
+});

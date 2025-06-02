@@ -1,24 +1,24 @@
-'use server'
+'use server';
 
-import Link from 'next/link'
-import { unstable_expireTag } from 'next/cache'
+import { unstable_expireTag } from 'next/cache';
+import Link from 'next/link';
 
 const RevalidateViaPage = async ({
-  searchParams,
+	searchParams,
 }: {
-  searchParams: Promise<{ tag: string }>
+	searchParams: Promise<{ tag: string }>;
 }) => {
-  const { tag } = await searchParams
-  unstable_expireTag(tag)
+	const { tag } = await searchParams;
+	unstable_expireTag(tag);
 
-  return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <pre>Tag [{tag}] has been revalidated</pre>
-      <Link href="/" id="home">
-        To Home
-      </Link>
-    </div>
-  )
-}
+	return (
+		<div className="flex h-screen flex-col items-center justify-center">
+			<pre>Tag [{tag}] has been revalidated</pre>
+			<Link href="/" id="home">
+				To Home
+			</Link>
+		</div>
+	);
+};
 
-export default RevalidateViaPage
+export default RevalidateViaPage;

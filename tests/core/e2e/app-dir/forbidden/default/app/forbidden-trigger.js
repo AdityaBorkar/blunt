@@ -1,12 +1,12 @@
-'use client'
+'use client';
 
-import { useSearchParams, forbidden } from 'next/navigation'
+import { forbidden, useSearchParams } from 'next/navigation';
 
 export default function ForbiddenTrigger() {
-  const searchParams = useSearchParams()
+	const searchParams = useSearchParams();
 
-  if (searchParams.get('root-forbidden')) {
-    forbidden()
-  }
-  return null
+	if (searchParams.get('root-forbidden')) {
+		forbidden();
+	}
+	return null;
 }

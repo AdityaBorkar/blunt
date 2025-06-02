@@ -1,9 +1,9 @@
-import * as ReactDOMServerBrowser from 'internal-pkg/server'
+import * as ReactDOMServerBrowser from 'internal-pkg/server';
 
 export default function Page() {
-  return (
-    <>
-      <pre>{JSON.stringify(ReactDOMServerBrowser, null, 2)}</pre>
-    </>
-  )
+	return (
+		<>
+			<pre>{JSON.stringify(ReactDOMServerBrowser, null, 2)}</pre>
+		</>
+	);
 }

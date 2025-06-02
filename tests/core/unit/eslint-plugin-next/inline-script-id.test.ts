@@ -1,16 +1,90 @@
-import { RuleTester as ESLintTesterV8 } from 'eslint-v8'
-import { RuleTester as ESLintTesterV9 } from 'eslint'
-import { rules } from '@next/eslint-plugin-next'
+import { rules } from '@next/eslint-plugin-next';
+import { RuleTester as ESLintTesterV9 } from 'eslint';
+import { RuleTester as ESLintTesterV8 } from 'eslint-v8';
 
-const NextESLintRule = rules['inline-script-id']
+const NextESLintRule = rules['inline-script-id'];
 
 const errorMessage =
-  '`next/script` components with inline content must specify an `id` attribute. See: https://nextjs.org/docs/messages/inline-script-id'
+	'`next/script` components with inline content must specify an `id` attribute. See: https://nextjs.org/docs/messages/inline-script-id';
 
 const tests = {
-  valid: [
-    {
-      code: `import Script from 'next/script';
+	invalid: [
+		{
+			code: `import Script from 'next/script';
+
+        export default function TestPage() {
+          return (
+            <Script>
+              {\`console.log('Hello world');\`}
+            </Script>
+          )
+        }`,
+			errors: [
+				{
+					message: errorMessage,
+					type: 'JSXElement',
+				},
+			],
+		},
+		{
+			code: `import Script from 'next/script';
+
+        export default function TestPage() {
+          return (
+            <Script
+              dangerouslySetInnerHTML={{
+                __html: \`console.log('Hello world');\`
+              }}
+            />
+          )
+        }`,
+			errors: [
+				{
+					message: errorMessage,
+					type: 'JSXElement',
+				},
+			],
+		},
+		{
+			code: `import MyScript from 'next/script';
+
+        export default function TestPage() {
+          return (
+            <MyScript>
+              {\`console.log('Hello world');\`}
+            </MyScript>
+          )
+        }`,
+			errors: [
+				{
+					message: errorMessage,
+					type: 'JSXElement',
+				},
+			],
+		},
+		{
+			code: `import MyScript from 'next/script';
+
+        export default function TestPage() {
+          return (
+            <MyScript
+              dangerouslySetInnerHTML={{
+                __html: \`console.log('Hello world');\`
+              }}
+            />
+          )
+        }`,
+			errors: [
+				{
+					message: errorMessage,
+					type: 'JSXElement',
+				},
+			],
+		},
+	],
+	valid: [
+		{
+			code: `import Script from 'next/script';
 
       export default function TestPage() {
         return (
@@ -19,9 +93,9 @@ const tests = {
           </Script>
         )
       }`,
-    },
-    {
-      code: `import Script from 'next/script';
+		},
+		{
+			code: `import Script from 'next/script';
 
       export default function TestPage() {
         return (
@@ -33,18 +107,18 @@ const tests = {
           />
         )
       }`,
-    },
-    {
-      code: `import Script from 'next/script';
+		},
+		{
+			code: `import Script from 'next/script';
 
       export default function TestPage() {
         return (
           <Script src="https://example.com" />
         )
       }`,
-    },
-    {
-      code: `import MyScript from 'next/script';
+		},
+		{
+			code: `import MyScript from 'next/script';
 
       export default function TestPage() {
         return (
@@ -53,9 +127,9 @@ const tests = {
           </MyScript>
         )
       }`,
-    },
-    {
-      code: `import MyScript from 'next/script';
+		},
+		{
+			code: `import MyScript from 'next/script';
 
       export default function TestPage() {
         return (
@@ -67,9 +141,9 @@ const tests = {
           />
         )
       }`,
-    },
-    {
-      code: `import Script from 'next/script';
+		},
+		{
+			code: `import Script from 'next/script';
 
       export default function TestPage() {
         return (
@@ -78,9 +152,9 @@ const tests = {
           </Script>
         )
       }`,
-    },
-    {
-      code: `import Script from 'next/script';
+		},
+		{
+			code: `import Script from 'next/script';
 
       export default function TestPage() {
         return (
@@ -89,9 +163,9 @@ const tests = {
           </Script>
         )
       }`,
-    },
-    {
-      code: `import Script from 'next/script';
+		},
+		{
+			code: `import Script from 'next/script';
       const spread = { strategy: "lazyOnload" }
       export default function TestPage() {
         return (
@@ -100,106 +174,32 @@ const tests = {
           </Script>
         )
       }`,
-    },
-  ],
-  invalid: [
-    {
-      code: `import Script from 'next/script';
-
-        export default function TestPage() {
-          return (
-            <Script>
-              {\`console.log('Hello world');\`}
-            </Script>
-          )
-        }`,
-      errors: [
-        {
-          message: errorMessage,
-          type: 'JSXElement',
-        },
-      ],
-    },
-    {
-      code: `import Script from 'next/script';
-
-        export default function TestPage() {
-          return (
-            <Script
-              dangerouslySetInnerHTML={{
-                __html: \`console.log('Hello world');\`
-              }}
-            />
-          )
-        }`,
-      errors: [
-        {
-          message: errorMessage,
-          type: 'JSXElement',
-        },
-      ],
-    },
-    {
-      code: `import MyScript from 'next/script';
-
-        export default function TestPage() {
-          return (
-            <MyScript>
-              {\`console.log('Hello world');\`}
-            </MyScript>
-          )
-        }`,
-      errors: [
-        {
-          message: errorMessage,
-          type: 'JSXElement',
-        },
-      ],
-    },
-    {
-      code: `import MyScript from 'next/script';
-
-        export default function TestPage() {
-          return (
-            <MyScript
-              dangerouslySetInnerHTML={{
-                __html: \`console.log('Hello world');\`
-              }}
-            />
-          )
-        }`,
-      errors: [
-        {
-          message: errorMessage,
-          type: 'JSXElement',
-        },
-      ],
-    },
-  ],
-}
+		},
+	],
+};
 
 describe('inline-script-id', () => {
-  new ESLintTesterV8({
-    parserOptions: {
-      ecmaVersion: 2018,
-      sourceType: 'module',
-      ecmaFeatures: {
-        modules: true,
-        jsx: true,
-      },
-    },
-  }).run('eslint-v8', NextESLintRule, tests)
+	new ESLintTesterV8({
+		parserOptions: {
+			ecmaFeatures: {
+				jsx: true,
+				modules: true,
+			},
+			ecmaVersion: 2018,
+			sourceType: 'module',
+		},
+	}).run('eslint-v8', NextESLintRule, tests);
 
-  new ESLintTesterV9({
-    languageOptions: {
-      ecmaVersion: 2018,
-      sourceType: 'module',
-      parserOptions: {
-        ecmaFeatures: {
-          modules: true,
-          jsx: true,
-        },
-      },
-    },
-  }).run('eslint-v9', NextESLintRule, tests)
-})
+	new ESLintTesterV9({
+		languageOptions: {
+			ecmaVersion: 2018,
+			parserOptions: {
+				ecmaFeatures: {
+					jsx: true,
+					modules: true,
+				},
+			},
+			sourceType: 'module',
+		},
+	}).run('eslint-v9', NextESLintRule, tests);
+});

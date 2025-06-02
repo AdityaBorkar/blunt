@@ -1,5 +1,5 @@
 module.exports = {
-  experimental: {
-    staticGenerationRetryCount: 3,
-  },
-}
+	experimental: {
+		staticGenerationRetryCount: 3,
+	},
+};

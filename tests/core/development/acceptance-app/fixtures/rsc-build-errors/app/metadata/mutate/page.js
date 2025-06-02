@@ -1,11 +1,11 @@
-export default function page(props) {
-  return <p>mutate</p>
+export default function page(_props) {
+	return <p>mutate</p>;
 }
 
-export async function generateMetadata(props, parent) {
-  const parentMetadata = await parent
+export async function generateMetadata(_props, parent) {
+	const parentMetadata = await parent;
 
-  return {
-    ...parentMetadata,
-  }
+	return {
+		...parentMetadata,
+	};
 }

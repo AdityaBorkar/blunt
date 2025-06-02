@@ -1,16 +1,16 @@
-'use client'
+'use client';
 
 function useThrowError() {
-  if (typeof window !== 'undefined') {
-    Promise.reject('string in rejected promise')
-  }
+	if (typeof window !== 'undefined') {
+		Promise.reject('string in rejected promise');
+	}
 }
 
 function useErrorHook() {
-  useThrowError()
+	useThrowError();
 }
 
 export default function Page() {
-  useErrorHook()
-  return <p>hello world</p>
+	useErrorHook();
+	return <p>hello world</p>;
 }

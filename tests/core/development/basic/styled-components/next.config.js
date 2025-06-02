@@ -1,7 +1,7 @@
 module.exports = {
-  compiler: {
-    styledComponents: {
-      displayName: true,
-    },
-  },
-}
+	compiler: {
+		styledComponents: {
+			displayName: true,
+		},
+	},
+};

@@ -1,11 +1,11 @@
-import { TestPage } from '../../../components/page'
+import { TestPage } from '../../../components/page';
 
-export const experimental_ppr = true
+export const experimental_ppr = true;
 
 export default async function Page(props) {
-  const params = await props.params
+	const params = await props.params;
 
-  const { locale } = params
+	const { locale } = params;
 
-  return <TestPage pathname={`/${locale}/about`} />
+	return <TestPage pathname={`/${locale}/about`} />;
 }

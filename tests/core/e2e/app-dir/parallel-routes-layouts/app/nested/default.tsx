@@ -1,3 +1,3 @@
 export default function Page() {
-  return 'default page'
+	return 'default page';
 }

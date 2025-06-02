@@ -1,1 +1,1 @@
-export { default } from '../../../nodejs/interrupted/throws-error/page'
+export { default } from '../../../nodejs/interrupted/throws-error/page';

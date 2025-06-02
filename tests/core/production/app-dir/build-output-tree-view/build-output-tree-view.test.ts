@@ -1,22 +1,22 @@
-import { nextTestSetup } from 'e2e-utils'
-import path from 'path'
+import path from 'node:path';
+import { nextTestSetup } from 'e2e-utils';
 
 describe('build-output-tree-view', () => {
-  describe('with mixed static and dynamic pages and app router routes', () => {
-    const { next } = nextTestSetup({
-      files: path.join(__dirname, 'fixtures/mixed'),
-      skipStart: true,
-      env: {
-        __NEXT_PRIVATE_DETERMINISTIC_BUILD_OUTPUT: '1',
-      },
-    })
+	describe('with mixed static and dynamic pages and app router routes', () => {
+		const { next } = nextTestSetup({
+			env: {
+				__NEXT_PRIVATE_DETERMINISTIC_BUILD_OUTPUT: '1',
+			},
+			files: path.join(__dirname, 'fixtures/mixed'),
+			skipStart: true,
+		});
 
-    beforeAll(() => next.build())
+		beforeAll(() => next.build());
 
-    it('should show info about prerendered and dynamic routes in a tree view', async () => {
-      // TODO: Fix double-listing of the /ppr/[slug] fallback.
+		it('should show info about prerendered and dynamic routes in a tree view', async () => {
+			// TODO: Fix double-listing of the /ppr/[slug] fallback.
 
-      expect(getTreeView(next.cliOutput)).toMatchInlineSnapshot(`
+			expect(getTreeView(next.cliOutput)).toMatchInlineSnapshot(`
        "Route (app)                      Size  First Load JS  Revalidate  Expire
        ┌ ○ /_not-found                N/A kB         N/A kB
        ├ ƒ /api                       N/A kB         N/A kB
@@ -44,23 +44,23 @@ describe('build-output-tree-view', () => {
        ●  (SSG)                prerendered as static HTML (uses generateStaticParams)
        ◐  (Partial Prerender)  prerendered as static HTML with dynamic server-streamed content
        ƒ  (Dynamic)            server-rendered on demand"
-      `)
-    })
-  })
+      `);
+		});
+	});
 
-  describe('with only a few static routes', () => {
-    const { next } = nextTestSetup({
-      files: path.join(__dirname, 'fixtures/minimal-static'),
-      skipStart: true,
-      env: {
-        __NEXT_PRIVATE_DETERMINISTIC_BUILD_OUTPUT: '1',
-      },
-    })
+	describe('with only a few static routes', () => {
+		const { next } = nextTestSetup({
+			env: {
+				__NEXT_PRIVATE_DETERMINISTIC_BUILD_OUTPUT: '1',
+			},
+			files: path.join(__dirname, 'fixtures/minimal-static'),
+			skipStart: true,
+		});
 
-    beforeAll(() => next.build())
+		beforeAll(() => next.build());
 
-    it('should show info about prerendered routes in a compact tree view', async () => {
-      expect(getTreeView(next.cliOutput)).toMatchInlineSnapshot(`
+		it('should show info about prerendered routes in a compact tree view', async () => {
+			expect(getTreeView(next.cliOutput)).toMatchInlineSnapshot(`
        "Route (app)                      Size  First Load JS
        ┌ ○ /                          N/A kB         N/A kB
        └ ○ /_not-found                N/A kB         N/A kB
@@ -71,22 +71,22 @@ describe('build-output-tree-view', () => {
        + First Load JS shared by all  N/A kB
 
        ○  (Static)  prerendered as static content"
-      `)
-    })
-  })
-})
+      `);
+		});
+	});
+});
 
 function getTreeView(cliOutput: string): string {
-  let foundBuildTracesLine = false
-  const lines: string[] = []
+	let foundBuildTracesLine = false;
+	const lines: string[] = [];
 
-  for (const line of cliOutput.split('\n')) {
-    if (foundBuildTracesLine) {
-      lines.push(line)
-    }
+	for (const line of cliOutput.split('\n')) {
+		if (foundBuildTracesLine) {
+			lines.push(line);
+		}
 
-    foundBuildTracesLine ||= line.includes('Collecting build traces')
-  }
+		foundBuildTracesLine ||= line.includes('Collecting build traces');
+	}
 
-  return lines.join('\n').trim()
+	return lines.join('\n').trim();
 }

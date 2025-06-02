@@ -1,7 +1,7 @@
-import { useActionState } from 'react'
+import { useActionState } from 'react';
 
-console.log({ useActionState })
+console.log({ useActionState });
 
 export default function Page() {
-  return null
+	return null;
 }

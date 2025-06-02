@@ -1,10 +1,10 @@
-import React, { type JSX } from 'react'
-import NotAliasedToDTS from 'd-ts-alias'
+import NotAliasedToDTS from 'd-ts-alias';
+import type { JSX } from 'react';
 
 export default function HelloPage(): JSX.Element {
-  return (
-    <div>
-      <NotAliasedToDTS />
-    </div>
-  )
+	return (
+		<div>
+			<NotAliasedToDTS />
+		</div>
+	);
 }

@@ -1,4 +1,4 @@
 export async function inc(value) {
-  'use server'
-  return value + 1
+	'use server';
+	return value + 1;
 }

@@ -1,13 +1,13 @@
-import { NextResponse } from 'next/server'
-import { ImageResponse } from 'next/og'
+import { ImageResponse } from 'next/og';
+import { NextResponse } from 'next/server';
 
 export async function middleware(req) {
-  console.log('middleware', req.url)
-  if (req.nextUrl.pathname === '/a-non-existent-page/to-test-with-middleware') {
-    return new ImageResponse(<div>Hello world</div>, {
-      width: 1200,
-      height: 600,
-    })
-  }
-  return NextResponse.next()
+	console.log('middleware', req.url);
+	if (req.nextUrl.pathname === '/a-non-existent-page/to-test-with-middleware') {
+		return new ImageResponse(<div>Hello world</div>, {
+			height: 600,
+			width: 1200,
+		});
+	}
+	return NextResponse.next();
 }

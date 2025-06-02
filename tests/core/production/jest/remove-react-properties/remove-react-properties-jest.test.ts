@@ -1,18 +1,26 @@
-import { createNext, FileRef } from 'e2e-utils'
-import { NextInstance } from 'e2e-utils'
-import { renderViaHTTP } from 'next-test-utils'
-import path from 'path'
+import path from 'node:path';
+import { createNext, FileRef, type NextInstance } from 'e2e-utils';
+import { renderViaHTTP } from 'next-test-utils';
 
-const appDir = path.join(__dirname, 'app')
+const appDir = path.join(__dirname, 'app');
 
 describe('next/jest', () => {
-  let next: NextInstance
+	let next: NextInstance;
 
-  beforeAll(async () => {
-    next = await createNext({
-      files: {
-        pages: new FileRef(path.join(appDir, 'pages')),
-        'tests/index.test.tsx': `
+	beforeAll(async () => {
+		next = await createNext({
+			buildCommand: `pnpm build`,
+			dependencies: {
+				'@testing-library/jest-dom': '5.16.4',
+				'@testing-library/react': '15.0.2',
+				jest: '29.7.0',
+				'jest-environment-jsdom': '29.7.0',
+			},
+			files: {
+				'jest.config.js': new FileRef(path.join(appDir, 'jest.config.js')),
+				'next.config.js': new FileRef(path.join(appDir, 'next.config.js')),
+				pages: new FileRef(path.join(appDir, 'pages')),
+				'tests/index.test.tsx': `
         import { render, waitFor } from '@testing-library/react'
         import '@testing-library/jest-dom/extend-expect';
 
@@ -28,31 +36,22 @@ describe('next/jest', () => {
         })
         
         `,
-        'jest.config.js': new FileRef(path.join(appDir, 'jest.config.js')),
-        'next.config.js': new FileRef(path.join(appDir, 'next.config.js')),
-        'tsconfig.json': new FileRef(path.join(appDir, 'tsconfig.json')),
-      },
-      dependencies: {
-        jest: '29.7.0',
-        'jest-environment-jsdom': '29.7.0',
-        '@testing-library/react': '15.0.2',
-        '@testing-library/jest-dom': '5.16.4',
-      },
-      packageJson: {
-        scripts: {
-          // Runs jest and bails if jest fails
-          build: 'jest --forceExit tests/index.test.tsx && next build',
-        },
-      },
-      installCommand: 'pnpm i',
-      buildCommand: `pnpm build`,
-    })
-  })
-  afterAll(() => next.destroy())
+				'tsconfig.json': new FileRef(path.join(appDir, 'tsconfig.json')),
+			},
+			installCommand: 'pnpm i',
+			packageJson: {
+				scripts: {
+					// Runs jest and bails if jest fails
+					build: 'jest --forceExit tests/index.test.tsx && next build',
+				},
+			},
+		});
+	});
+	afterAll(() => next.destroy());
 
-  it('data-testid should be removed in production', async () => {
-    const html = await renderViaHTTP(next.url, '/')
+	it('data-testid should be removed in production', async () => {
+		const html = await renderViaHTTP(next.url, '/');
 
-    expect(html).not.toContain('data-testid')
-  })
-})
+		expect(html).not.toContain('data-testid');
+	});
+});

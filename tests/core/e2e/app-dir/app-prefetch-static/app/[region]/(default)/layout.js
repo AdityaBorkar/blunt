@@ -1,13 +1,13 @@
-export const regions = ['SE', 'DE']
+export const regions = ['SE', 'DE'];
 
 export default function Layout({ children }) {
-  return children
+	return children;
 }
 
 export function generateStaticParams() {
-  return regions.map((region) => ({
-    region,
-  }))
+	return regions.map((region) => ({
+		region,
+	}));
 }
 
-export const dynamicParams = false
+export const dynamicParams = false;

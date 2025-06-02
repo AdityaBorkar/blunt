@@ -1,3 +1,3 @@
-export default function handler(req, res) {
-  res.send('pages-api (node)')
+export default function handler(_req, res) {
+	res.send('pages-api (node)');
 }

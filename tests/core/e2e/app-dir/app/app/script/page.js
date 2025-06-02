@@ -1,54 +1,54 @@
-import Script from 'next/script'
+import Script from 'next/script';
 
-import Client from './client'
+import Client from './client';
 
 export default function Page() {
-  return (
-    <div>
-      <h2>next/script</h2>
-      <Client />
-      <Script strategy="lazyOnload" src="/test4.js" />
-      <Script
-        strategy="afterInteractive"
-        src="/test3.js"
-        stylesheets={['/style3.css']}
-      />
-      <Script
-        strategy="beforeInteractive"
-        src="/test1.js"
-        stylesheets={['/style1a.css', '/style1b.css']}
-      />
-      <Script strategy="beforeInteractive" id="1.5">{`
+	return (
+		<div>
+			<h2>next/script</h2>
+			<Client />
+			<Script src="/test4.js" strategy="lazyOnload" />
+			<Script
+				src="/test3.js"
+				strategy="afterInteractive"
+				stylesheets={['/style3.css']}
+			/>
+			<Script
+				src="/test1.js"
+				strategy="beforeInteractive"
+				stylesheets={['/style1a.css', '/style1b.css']}
+			/>
+			<Script id="1.5" strategy="beforeInteractive">{`
         ;(window._script_order = window._script_order || []).push(1.5)
         console.log(window._script_order)
       `}</Script>
-      <Script strategy="beforeInteractive" src="/test2.js" />
-      <Script
-        strategy="beforeInteractive"
-        id="2.5"
-        dangerouslySetInnerHTML={{
-          __html: `
+			<Script src="/test2.js" strategy="beforeInteractive" />
+			<Script
+				dangerouslySetInnerHTML={{
+					__html: `
         ;(window._script_order = window._script_order || []).push(2.5)
         console.log(window._script_order)
         `,
-        }}
-      />
-      <Script
-        strategy="beforeInteractive"
-        src="/noop-test.js"
-        id="script-with-src-noop-test"
-        data-extra-prop="script-with-src"
-      />
-      <Script
-        strategy="beforeInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `
+				}}
+				id="2.5"
+				strategy="beforeInteractive"
+			/>
+			<Script
+				data-extra-prop="script-with-src"
+				id="script-with-src-noop-test"
+				src="/noop-test.js"
+				strategy="beforeInteractive"
+			/>
+			<Script
+				dangerouslySetInnerHTML={{
+					__html: `
         console.log('noop-test-dangerouslySetInnerHTML')
         `,
-        }}
-        id="script-without-src-noop-test-dangerouslySetInnerHTML"
-        data-extra-prop="script-without-src"
-      />
-    </div>
-  )
+				}}
+				data-extra-prop="script-without-src"
+				id="script-without-src-noop-test-dangerouslySetInnerHTML"
+				strategy="beforeInteractive"
+			/>
+		</div>
+	);
 }

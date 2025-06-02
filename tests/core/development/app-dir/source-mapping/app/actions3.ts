@@ -1,5 +1,5 @@
-'use server'
+'use server';
 
 export default async function someName() {
-  return 'default exported named function expression'
+	return 'default exported named function expression';
 }

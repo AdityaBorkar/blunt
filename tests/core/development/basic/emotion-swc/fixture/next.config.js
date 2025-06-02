@@ -1,10 +1,10 @@
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
-  reactStrictMode: true,
-  compiler: {
-    emotion: true,
-  },
-}
+	compiler: {
+		emotion: true,
+	},
+	reactStrictMode: true,
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

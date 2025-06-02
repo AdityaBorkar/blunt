@@ -1,47 +1,48 @@
-import { after, connection } from 'next/server'
-import { cache } from 'react'
-import { cliLog } from '../../../utils/log'
+import { after, connection } from 'next/server';
+import { cache } from 'react';
 
-const thing = cache(() => Symbol('cache me please'))
+import { cliLog } from '../../../utils/log';
 
-export default async function Index(props) {
-  await connection()
-  const valueFromRender = thing()
+const thing = cache(() => Symbol('cache me please'));
 
-  after(async () => {
-    const valueFromAfter = thing()
+export default async function Index(_props) {
+	await connection();
+	const valueFromRender = thing();
 
-    cliLog({
-      source: '[page] /nested-after (after #1)',
-      assertions: {
-        'cache() works in after()': valueFromRender === valueFromAfter,
-      },
-    })
+	after(async () => {
+		const valueFromAfter = thing();
 
-    after(() => {
-      const valueFromAfter = thing()
+		cliLog({
+			assertions: {
+				'cache() works in after()': valueFromRender === valueFromAfter,
+			},
+			source: '[page] /nested-after (after #1)',
+		});
 
-      cliLog({
-        source: '[page] /nested-after (after #2)',
-        assertions: {
-          'cache() works in after()': valueFromRender === valueFromAfter,
-        },
-      })
-    })
+		after(() => {
+			const valueFromAfter = thing();
 
-    await new Promise((resolve) => setTimeout(resolve, 500))
+			cliLog({
+				assertions: {
+					'cache() works in after()': valueFromRender === valueFromAfter,
+				},
+				source: '[page] /nested-after (after #2)',
+			});
+		});
 
-    after(() => {
-      const valueFromAfter = thing()
+		await new Promise((resolve) => setTimeout(resolve, 500));
 
-      cliLog({
-        source: '[page] /nested-after (after #3)',
-        assertions: {
-          'cache() works in after()': valueFromRender === valueFromAfter,
-        },
-      })
-    })
-  })
+		after(() => {
+			const valueFromAfter = thing();
 
-  return <div>Page with nested after()</div>
+			cliLog({
+				assertions: {
+					'cache() works in after()': valueFromRender === valueFromAfter,
+				},
+				source: '[page] /nested-after (after #3)',
+			});
+		});
+	});
+
+	return <div>Page with nested after()</div>;
 }

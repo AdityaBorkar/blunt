@@ -1,10 +1,10 @@
 export default function Layout({ children }) {
-  return (
-    <html>
-      <head />
-      <body>
-        <div>{children}</div>
-      </body>
-    </html>
-  )
+	return (
+		<html>
+			<head />
+			<body>
+				<div>{children}</div>
+			</body>
+		</html>
+	);
 }

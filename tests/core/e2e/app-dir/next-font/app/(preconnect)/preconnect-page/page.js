@@ -1,15 +1,16 @@
-'use client'
-import localFont from 'next/font/local'
+'use client';
+
+import localFont from 'next/font/local';
 
 const pageFont = localFont({
-  src: './page-font-ubuntu-regular.woff2',
-  preload: false,
-})
+	preload: false,
+	src: './page-font-ubuntu-regular.woff2',
+});
 
 export default function Page() {
-  return (
-    <>
-      <p className={pageFont.className}>{JSON.stringify(pageFont)}</p>
-    </>
-  )
+	return (
+		<>
+			<p className={pageFont.className}>{JSON.stringify(pageFont)}</p>
+		</>
+	);
 }

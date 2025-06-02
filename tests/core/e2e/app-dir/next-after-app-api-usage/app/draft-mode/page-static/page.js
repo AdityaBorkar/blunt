@@ -1,6 +1,6 @@
-import { testDraftMode } from '../helpers'
+import { testDraftMode } from '../helpers';
 
 export default function Page() {
-  testDraftMode('/draft-mode/page-static')
-  return null
+	testDraftMode('/draft-mode/page-static');
+	return null;
 }

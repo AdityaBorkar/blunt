@@ -1,17 +1,17 @@
-'use client'
+'use client';
 
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation';
 
 export default function ToggleButton() {
-  const router = useRouter()
+	const router = useRouter();
 
-  return (
-    <button
-      onClick={() =>
-        fetch('/draftmode/sync/toggle').then(() => router.refresh())
-      }
-    >
-      Toggle Draft Mode
-    </button>
-  )
+	return (
+		<button
+			onClick={() =>
+				fetch('/draftmode/sync/toggle').then(() => router.refresh())
+			}
+		>
+			Toggle Draft Mode
+		</button>
+	);
 }

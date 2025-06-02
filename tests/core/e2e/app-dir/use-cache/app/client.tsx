@@ -1,5 +1,5 @@
-'use client'
+'use client';
 
 export function Foo() {
-  return 'foo'
+	return 'foo';
 }

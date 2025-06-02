@@ -1,6 +1,5 @@
-import { SharedPage } from '../../components/shared-page'
-import React from 'react'
+import { SharedPage } from '../../components/shared-page';
 
 export default function Page() {
-  return <SharedPage runtime="node" />
+	return <SharedPage runtime="node" />;
 }

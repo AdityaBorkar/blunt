@@ -1,3 +1,3 @@
-process.env.TEST_NODE_MIDDLEWARE = 'true'
+process.env.TEST_NODE_MIDDLEWARE = 'true';
 
-require('./index.test')
+require('./index.test');

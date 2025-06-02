@@ -1,8 +1,9 @@
-'use client'
-import { revalidatePath } from 'next/cache'
+'use client';
 
-console.log({ revalidatePath })
+import { revalidatePath } from 'next/cache';
+
+console.log({ revalidatePath });
 
 export default function Page() {
-  return null
+	return null;
 }

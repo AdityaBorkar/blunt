@@ -1,5 +1,5 @@
-import { bar } from 'foo'
+import { bar } from 'foo';
 
 export function foo() {
-  bar()
+	bar();
 }

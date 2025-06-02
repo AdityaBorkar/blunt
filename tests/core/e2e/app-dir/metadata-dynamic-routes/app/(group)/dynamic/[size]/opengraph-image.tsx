@@ -1,34 +1,32 @@
-import { ImageResponse } from 'next/og'
+import { ImageResponse } from 'next/og';
 
-export const alt = 'Open Graph'
+export const alt = 'Open Graph';
 
 export default function og({ params }) {
-  const big = params.size === 'big'
-  const background = big ? 'orange' : '#000'
-  return new ImageResponse(
-    (
-      <div
-        style={{
-          width: '100%',
-          height: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: 128,
-        }}
-      >
-        <div
-          style={{
-            width: 200,
-            height: 200,
-            background,
-          }}
-        />
-      </div>
-    ),
-    {
-      width: big === true ? 1200 : 600,
-      height: big === true ? 630 : 315,
-    }
-  )
+	const big = params.size === 'big';
+	const background = big ? 'orange' : '#000';
+	return new ImageResponse(
+		<div
+			style={{
+				alignItems: 'center',
+				display: 'flex',
+				fontSize: 128,
+				height: '100%',
+				justifyContent: 'center',
+				width: '100%',
+			}}
+		>
+			<div
+				style={{
+					background,
+					height: 200,
+					width: 200,
+				}}
+			/>
+		</div>,
+		{
+			height: big === true ? 630 : 315,
+			width: big === true ? 1200 : 600,
+		},
+	);
 }

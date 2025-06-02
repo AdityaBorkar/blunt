@@ -1,29 +1,29 @@
-import { use } from 'react'
-import fs from 'fs'
-import path from 'path'
+import fs from 'node:fs';
+import path from 'node:path';
+import { use } from 'react';
 
 async function getData({ params }) {
-  const data = JSON.parse(
-    fs.readFileSync(
-      path.join(process.cwd(), 'app/dashboard/deployments/[id]/data.json')
-    )
-  )
-  console.log('data.json', data)
+	const data = JSON.parse(
+		fs.readFileSync(
+			path.join(process.cwd(), 'app/dashboard/deployments/[id]/data.json'),
+		),
+	);
+	console.log('data.json', data);
 
-  return {
-    id: params.id,
-  }
+	return {
+		id: params.id,
+	};
 }
 
 export default function DeploymentsPage(props) {
-  console.log('rendering /dashboard/deployments/[id]')
-  const data = use(getData(props))
+	console.log('rendering /dashboard/deployments/[id]');
+	const data = use(getData(props));
 
-  return (
-    <>
-      <p>hello from app/dashboard/deployments/[id]. ID is: {data.id}</p>
-      <span id="my-env">{process.env.NEXT_PUBLIC_TEST_ID}</span>
-      <span id="my-other-env">{`${process.env.NEXT_PUBLIC_TEST_ID}-suffix`}</span>
-    </>
-  )
+	return (
+		<>
+			<p>hello from app/dashboard/deployments/[id]. ID is: {data.id}</p>
+			<span id="my-env">{process.env.NEXT_PUBLIC_TEST_ID}</span>
+			<span id="my-other-env">{`${process.env.NEXT_PUBLIC_TEST_ID}-suffix`}</span>
+		</>
+	);
 }

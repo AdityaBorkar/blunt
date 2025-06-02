@@ -1,12 +1,12 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
-  productionBrowserSourceMaps: true,
-  logging: {
-    fetches: {},
-  },
-  experimental: {
-    serverActions: {
-      allowedOrigins: ['localhost:' + process.env.PORT],
-    },
-  },
-}
+	experimental: {
+		serverActions: {
+			allowedOrigins: [`localhost:${process.env.PORT}`],
+		},
+	},
+	logging: {
+		fetches: {},
+	},
+	productionBrowserSourceMaps: true,
+};

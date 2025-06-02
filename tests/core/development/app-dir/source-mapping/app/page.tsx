@@ -1,60 +1,61 @@
-import { Form } from './form'
-import defaultAction1, { foo, bar, baz, qux } from './actions1'
-import defaultAction2 from './actions2'
-import defaultAction3 from './actions3'
-import Link from 'next/link'
-import { ServerComponent } from './server-component'
+import Link from 'next/link';
+
+import defaultAction1, { bar, baz, foo, qux } from './actions1';
+import defaultAction2 from './actions2';
+import defaultAction3 from './actions3';
+import { Form } from './form';
+import { ServerComponent } from './server-component';
 
 export default function Page() {
-  const action1 = async () => {
-    'use server'
+	const action1 = async () => {
+		'use server';
 
-    return 'declarator arrow function expression'
-  }
+		return 'declarator arrow function expression';
+	};
 
-  async function action2() {
-    'use server'
+	async function action2() {
+		'use server';
 
-    return 'function declaration'
-  }
+		return 'function declaration';
+	}
 
-  return (
-    <main>
-      <ServerComponent />
-      <Form id="form-1" action={defaultAction1} />
-      <Form id="form-2" action={defaultAction2} />
-      <Form id="form-3" action={defaultAction3} />
-      <Form id="form-4" action={foo} />
-      <Form id="form-5" action={bar} />
-      <Form id="form-6" action={baz} />
-      <Form id="form-7" action={qux} />
-      <Form id="form-8" action={action1} />
-      <Form id="form-9" action={action2} />
-      <Form
-        id="form-10"
-        action={async () => {
-          'use server'
+	return (
+		<main>
+			<ServerComponent />
+			<Form action={defaultAction1} id="form-1" />
+			<Form action={defaultAction2} id="form-2" />
+			<Form action={defaultAction3} id="form-3" />
+			<Form action={foo} id="form-4" />
+			<Form action={bar} id="form-5" />
+			<Form action={baz} id="form-6" />
+			<Form action={qux} id="form-7" />
+			<Form action={action1} id="form-8" />
+			<Form action={action2} id="form-9" />
+			<Form
+				action={async () => {
+					'use server';
 
-          return 'arrow function expression'
-        }}
-      />
-      <Form
-        id="form-11"
-        action={async function () {
-          'use server'
+					return 'arrow function expression';
+				}}
+				id="form-10"
+			/>
+			<Form
+				action={async () => {
+					'use server';
 
-          return 'anonymous function expression'
-        }}
-      />
-      <Form
-        id="form-12"
-        action={async function myAction() {
-          'use server'
+					return 'anonymous function expression';
+				}}
+				id="form-11"
+			/>
+			<Form
+				action={async function myAction() {
+					'use server';
 
-          return 'named function expression'
-        }}
-      />
-      <Link href="/client">client component page</Link>
-    </main>
-  )
+					return 'named function expression';
+				}}
+				id="form-12"
+			/>
+			<Link href="/client">client component page</Link>
+		</main>
+	);
 }

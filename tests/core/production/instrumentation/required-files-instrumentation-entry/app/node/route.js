@@ -1,3 +1,3 @@
 export function GET() {
-  return new Response('node')
+	return new Response('node');
 }

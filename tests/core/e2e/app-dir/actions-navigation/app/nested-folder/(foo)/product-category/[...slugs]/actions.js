@@ -1,5 +1,5 @@
-'use server'
+'use server';
 
 export async function addToCart() {
-  return 'Added to cart!'
+	return 'Added to cart!';
 }

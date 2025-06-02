@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-import name from 'esm'
+import name from 'esm';
 
 export function Client() {
-  return <div>{`client ${name}`}</div>
+	return <div>{`client ${name}`}</div>;
 }

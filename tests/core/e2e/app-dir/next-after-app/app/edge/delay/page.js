@@ -1,3 +1,3 @@
-export { default } from '../../nodejs/delay/page'
+export { default } from '../../nodejs/delay/page';
 
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';

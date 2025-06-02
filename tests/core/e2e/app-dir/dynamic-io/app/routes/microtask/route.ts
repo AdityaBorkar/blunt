@@ -1,12 +1,12 @@
-import type { NextRequest } from 'next/server'
+import type { NextRequest } from 'next/server';
 
-import { getSentinelValue } from '../../getSentinelValue'
+import { getSentinelValue } from '../../getSentinelValue';
 
-export async function GET(request: NextRequest) {
-  await Promise.resolve()
-  const response = JSON.stringify({
-    value: getSentinelValue(),
-    message: 'microtask',
-  })
-  return new Response(response)
+export async function GET(_request: NextRequest) {
+	await Promise.resolve();
+	const response = JSON.stringify({
+		message: 'microtask',
+		value: getSentinelValue(),
+	});
+	return new Response(response);
 }

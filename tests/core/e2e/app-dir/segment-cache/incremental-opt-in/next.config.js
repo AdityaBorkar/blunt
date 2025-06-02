@@ -2,11 +2,11 @@
  * @type {import('next').NextConfig}
  */
 const nextConfig = {
-  experimental: {
-    ppr: 'incremental',
-    dynamicIO: true,
-    clientSegmentCache: true,
-  },
-}
+	experimental: {
+		clientSegmentCache: true,
+		dynamicIO: true,
+		ppr: 'incremental',
+	},
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

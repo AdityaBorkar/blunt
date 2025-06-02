@@ -1,5 +1,5 @@
 module.exports = {
-  experimental: {
-    useCache: true,
-  },
-}
+	experimental: {
+		useCache: true,
+	},
+};

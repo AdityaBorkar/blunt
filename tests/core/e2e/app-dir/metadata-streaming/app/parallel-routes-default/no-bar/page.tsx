@@ -1,13 +1,13 @@
-import { connection } from 'next/server'
+import { connection } from 'next/server';
 
 export default function TestPage() {
-  return 'test page'
+	return 'test page';
 }
 
 export async function generateMetadata() {
-  await connection()
-  await new Promise((resolve) => setTimeout(resolve, 3000))
-  return {
-    title: `Dynamic api ${Math.random()}`,
-  }
+	await connection();
+	await new Promise((resolve) => setTimeout(resolve, 3000));
+	return {
+		title: `Dynamic api ${Math.random()}`,
+	};
 }

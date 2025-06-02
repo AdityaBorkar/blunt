@@ -1,7 +1,7 @@
-export default function ShouldNotServeServerDotJs(props) {
-  return (
-    <>
-      <p>hello from app/should-not-serve-server</p>
-    </>
-  )
+export default function ShouldNotServeServerDotJs(_props) {
+	return (
+		<>
+			<p>hello from app/should-not-serve-server</p>
+		</>
+	);
 }

@@ -1,10 +1,10 @@
-import { serverComponentAction } from '../actions'
+import { serverComponentAction } from '../actions';
 
 export default function Page() {
-  return (
-    <form>
-      <input type="text" placeholder="input" />
-      <button formAction={serverComponentAction}>submit</button>
-    </form>
-  )
+	return (
+		<form>
+			<input placeholder="input" type="text" />
+			<button formAction={serverComponentAction}>submit</button>
+		</form>
+	);
 }

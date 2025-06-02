@@ -1,5 +1,5 @@
 module.exports = {
-  experimental: {
-    clientInstrumentationHook: true,
-  },
-}
+	experimental: {
+		clientInstrumentationHook: true,
+	},
+};

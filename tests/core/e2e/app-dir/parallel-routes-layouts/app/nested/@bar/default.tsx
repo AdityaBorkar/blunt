@@ -1,3 +1,3 @@
 export default function Default() {
-  return '@bar default'
+	return '@bar default';
 }

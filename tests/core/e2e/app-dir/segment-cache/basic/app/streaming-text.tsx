@@ -1,26 +1,26 @@
-import { Suspense } from 'react'
-import { connection } from 'next/server'
+import { connection } from 'next/server';
+import { Suspense } from 'react';
 
 async function DynamicText({ text }) {
-  await connection()
-  return text
+	await connection();
+	return text;
 }
 
 export function StreamingText({
-  static: staticText,
-  dynamic,
+	static: staticText,
+	dynamic,
 }: {
-  static: string
-  dynamic: string
+	static: string;
+	dynamic: string;
 }) {
-  return (
-    <div>
-      <div data-streaming-text-static={staticText}>{staticText}</div>
-      <Suspense fallback={<div>Loading... [{dynamic}]</div>}>
-        <div data-streaming-text-dynamic={dynamic}>
-          <DynamicText text={dynamic} />
-        </div>
-      </Suspense>
-    </div>
-  )
+	return (
+		<div>
+			<div data-streaming-text-static={staticText}>{staticText}</div>
+			<Suspense fallback={<div>Loading... [{dynamic}]</div>}>
+				<div data-streaming-text-dynamic={dynamic}>
+					<DynamicText text={dynamic} />
+				</div>
+			</Suspense>
+		</div>
+	);
 }

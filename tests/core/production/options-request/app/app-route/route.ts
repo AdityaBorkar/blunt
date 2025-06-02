@@ -1,5 +1,5 @@
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
-  return Response.json({ foo: 'bar' })
+	return Response.json({ foo: 'bar' });
 }

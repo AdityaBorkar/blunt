@@ -1,3 +1,3 @@
 export default function Target() {
-  return <div id="target-page">Target</div>
+	return <div id="target-page">Target</div>;
 }

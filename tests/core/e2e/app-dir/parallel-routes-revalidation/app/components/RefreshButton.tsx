@@ -1,16 +1,17 @@
-'use client'
-import { useRouter } from 'next/navigation'
+'use client';
+
+import { useRouter } from 'next/navigation';
 
 export function RefreshButton() {
-  const router = useRouter()
+	const router = useRouter();
 
-  return (
-    <button
-      id="refresh-button"
-      style={{ color: 'red', padding: '10px' }}
-      onClick={() => router.refresh()}
-    >
-      Refresh
-    </button>
-  )
+	return (
+		<button
+			id="refresh-button"
+			onClick={() => router.refresh()}
+			style={{ color: 'red', padding: '10px' }}
+		>
+			Refresh
+		</button>
+	);
 }

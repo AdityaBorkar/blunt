@@ -1,17 +1,17 @@
-'use client'
+'use client';
 
-import { revalidate } from './actions/revalidate'
+import { revalidate } from './actions/revalidate';
 
 export default function RevalidateViaForm({ tag }: { tag: string }) {
-  const handleRevalidate = async () => {
-    await revalidate(tag)
-  }
+	const handleRevalidate = async () => {
+		await revalidate(tag);
+	};
 
-  return (
-    <form action={handleRevalidate}>
-      <button type="submit" id="submit-form" className="underline">
-        Revalidate via form
-      </button>
-    </form>
-  )
+	return (
+		<form action={handleRevalidate}>
+			<button className="underline" id="submit-form" type="submit">
+				Revalidate via form
+			</button>
+		</form>
+	);
 }

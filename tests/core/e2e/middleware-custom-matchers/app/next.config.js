@@ -1,5 +1,5 @@
 module.exports = {
-  experimental: {
-    nodeMiddleware: true,
-  },
-}
+	experimental: {
+		nodeMiddleware: true,
+	},
+};

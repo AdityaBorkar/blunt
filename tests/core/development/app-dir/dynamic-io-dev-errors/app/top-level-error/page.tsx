@@ -1,5 +1,5 @@
 export default async function Page() {
-  throw new Error('Kaputt!')
+	throw new Error('Kaputt!');
 
-  return <p>This page always errors.</p>
+	return <p>This page always errors.</p>;
 }

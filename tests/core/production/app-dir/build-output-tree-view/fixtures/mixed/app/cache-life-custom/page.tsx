@@ -1,9 +1,9 @@
-'use cache'
+'use cache';
 
-import { unstable_cacheLife } from 'next/cache'
+import { unstable_cacheLife } from 'next/cache';
 
 export default async function Page() {
-  unstable_cacheLife({ revalidate: 412, expire: 8940 })
+	unstable_cacheLife({ expire: 8940, revalidate: 412 });
 
-  return <p>hello world</p>
+	return <p>hello world</p>;
 }

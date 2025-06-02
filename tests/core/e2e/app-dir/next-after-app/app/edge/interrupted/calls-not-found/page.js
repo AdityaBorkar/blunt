@@ -1,1 +1,1 @@
-export { default } from '../../../nodejs/interrupted/calls-not-found/page'
+export { default } from '../../../nodejs/interrupted/calls-not-found/page';

@@ -1,7 +1,7 @@
 export default function Page() {
-  return <p>hello world</p>
+	return <p>hello world</p>;
 }
 
 export async function getStaticProps() {
-  return { props: {}, revalidate: 300 }
+	return { props: {}, revalidate: 300 };
 }

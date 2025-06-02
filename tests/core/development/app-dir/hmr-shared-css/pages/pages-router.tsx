@@ -1,5 +1,5 @@
-import '../app/styles.css'
+import '../app/styles.css';
 
 export default function PagesRouterPage() {
-  return <p>/pages-router</p>
+	return <p>/pages-router</p>;
 }

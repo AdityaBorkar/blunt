@@ -1,24 +1,24 @@
-import * as path from 'path'
-import { nextTestSetup } from 'e2e-utils'
-import { BrowserInterface } from 'next-webdriver'
+import * as path from 'node:path';
+import { nextTestSetup } from 'e2e-utils';
+import type { BrowserInterface } from 'next-webdriver';
 
 async function assertNoConsoleErrors(browser: BrowserInterface) {
-  const logs = await browser.log()
-  const warningsAndErrors = logs.filter((log) => {
-    return log.source === 'warning' || log.source === 'error'
-  })
+	const logs = await browser.log();
+	const warningsAndErrors = logs.filter((log) => {
+		return log.source === 'warning' || log.source === 'error';
+	});
 
-  expect(warningsAndErrors).toEqual([])
+	expect(warningsAndErrors).toEqual([]);
 }
 
 describe('view-transitions', () => {
-  const { next } = nextTestSetup({
-    files: path.join(__dirname, 'fixtures/default'),
-  })
+	const { next } = nextTestSetup({
+		files: path.join(__dirname, 'fixtures/default'),
+	});
 
-  it('smoketest', async () => {
-    const browser = await next.browser('/basic')
+	it('smoketest', async () => {
+		const browser = await next.browser('/basic');
 
-    await assertNoConsoleErrors(browser)
-  })
-})
+		await assertNoConsoleErrors(browser);
+	});
+});

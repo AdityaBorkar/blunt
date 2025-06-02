@@ -1,7 +1,7 @@
 {
-  "browserslist": [
-    "ie 11",
-    "safari 4",
-    "chrome 28"
-  ]
+	"browserslist": [
+		"ie 11",
+		"safari 4",
+		"chrome 28"
+	]
 }

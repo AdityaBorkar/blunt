@@ -1,5 +1,5 @@
-import Icon from '../public/test.svg'
+import Icon from '../public/test.svg';
 
 export default function Page() {
-  return <Icon />
+	return <Icon />;
 }

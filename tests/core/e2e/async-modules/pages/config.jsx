@@ -1,32 +1,32 @@
-import Head from 'next/head'
+import Head from 'next/head';
 
 export const config = {
-  amp: true,
-}
+	amp: true,
+};
 
-await Promise.resolve('tadaa')
+await Promise.resolve('tadaa');
 
 export default function Config() {
-  const date = new Date()
-  return (
-    <div>
-      <Head>
-        <script
-          async
-          key="amp-timeago"
-          custom-element="amp-timeago"
-          src="https://cdn.ampproject.org/v0/amp-timeago-0.1.js"
-        />
-      </Head>
-      <amp-timeago
-        id="amp-timeago"
-        width="0"
-        height="15"
-        datetime={date.toJSON()}
-        layout="responsive"
-      >
-        fail
-      </amp-timeago>
-    </div>
-  )
+	const date = new Date();
+	return (
+		<div>
+			<Head>
+				<script
+					async
+					custom-element="amp-timeago"
+					key="amp-timeago"
+					src="https://cdn.ampproject.org/v0/amp-timeago-0.1.js"
+				/>
+			</Head>
+			<amp-timeago
+				datetime={date.toJSON()}
+				height="15"
+				id="amp-timeago"
+				layout="responsive"
+				width="0"
+			>
+				fail
+			</amp-timeago>
+		</div>
+	);
 }

@@ -1,11 +1,10 @@
-'use client'
-import React from 'react'
+'use client';
 
 export default function Page() {
-  return (
-    <div>
-      Hello World{' '}
-      {typeof window !== 'undefined' && <span>Hydration Error!</span>}
-    </div>
-  )
+	return (
+		<div>
+			Hello World{' '}
+			{typeof window !== 'undefined' && <span>Hydration Error!</span>}
+		</div>
+	);
 }

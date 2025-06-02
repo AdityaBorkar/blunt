@@ -1,5 +1,5 @@
-'use client'
+'use client';
 
 export function Foo() {
-  return <div id="foo">Foo</div>
+	return <div id="foo">Foo</div>;
 }

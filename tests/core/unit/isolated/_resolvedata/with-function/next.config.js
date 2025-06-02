@@ -1,7 +1,7 @@
 module.exports = (phase, { defaultConfig }) => {
-  return {
-    phase,
-    defaultConfig,
-    customConfig: true,
-  }
-}
+	return {
+		customConfig: true,
+		defaultConfig,
+		phase,
+	};
+};

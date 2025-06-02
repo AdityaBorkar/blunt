@@ -1,15 +1,16 @@
-import 'reflect-metadata'
-import { container, singleton } from 'tsyringe'
+import 'reflect-metadata';
+
+import { container, singleton } from 'tsyringe';
 
 @singleton()
 class HelloService {
-  getHello() {
-    return 'Hello, world!'
-  }
+	getHello() {
+		return 'Hello, world!';
+	}
 }
 
-const helloService = container.resolve(HelloService)
+const helloService = container.resolve(HelloService);
 
-export default function handler(req, res) {
-  res.status(200).json({ message: helloService.getHello() })
+export default function handler(_req, res) {
+	res.status(200).json({ message: helloService.getHello() });
 }

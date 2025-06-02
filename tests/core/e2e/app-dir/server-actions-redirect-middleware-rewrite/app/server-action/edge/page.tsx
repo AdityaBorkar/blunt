@@ -1,13 +1,13 @@
-'use client'
+'use client';
 
-import { redirectAction } from '../_action'
+import { redirectAction } from '../_action';
 
 export default function Page() {
-  return (
-    <form action={redirectAction}>
-      <button type="submit">Submit</button>
-    </form>
-  )
+	return (
+		<form action={redirectAction}>
+			<button type="submit">Submit</button>
+		</form>
+	);
 }
 
-export const runtime = 'edge'
+export const runtime = 'edge';

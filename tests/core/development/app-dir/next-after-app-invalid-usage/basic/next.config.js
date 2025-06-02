@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
-  experimental: {
-    // dynamicIO: true,
-    prerenderEarlyExit: false,
-  },
-}
+	experimental: {
+		// dynamicIO: true,
+		prerenderEarlyExit: false,
+	},
+};

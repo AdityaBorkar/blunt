@@ -1,15 +1,15 @@
 export default async function Page({ searchParams }) {
-  // We don't want the build to fail in production
-  if (process.env.NODE_ENV === 'development') {
-    innerFunction()
-  }
-  return <p>Hello Source Maps</p>
+	// We don't want the build to fail in production
+	if (process.env.NODE_ENV === 'development') {
+		innerFunction();
+	}
+	return <p>Hello Source Maps</p>;
 }
 
 function innerFunction() {
-  innerArrowFunction()
+	innerArrowFunction();
 }
 
 const innerArrowFunction = () => {
-  require('../separate-file')
-}
+	require('../separate-file');
+};

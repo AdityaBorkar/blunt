@@ -1,3 +1,3 @@
-import { barbaz } from './bar'
+import { barbaz } from './bar';
 
-export const foobarbaz = 'foo' + barbaz
+export const foobarbaz = `foo${barbaz}`;

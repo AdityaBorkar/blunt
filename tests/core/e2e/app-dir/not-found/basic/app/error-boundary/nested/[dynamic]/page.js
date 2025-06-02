@@ -1,11 +1,10 @@
-import { notFound } from 'next/navigation'
-import React from 'react'
+import { notFound } from 'next/navigation';
 
 export default async function Page(props) {
-  const params = await props.params
-  if (params.dynamic === 'trigger-not-found') {
-    notFound()
-  }
+	const params = await props.params;
+	if (params.dynamic === 'trigger-not-found') {
+		notFound();
+	}
 
-  return <div>Hello World</div>
+	return <div>Hello World</div>;
 }

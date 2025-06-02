@@ -1,5 +1,5 @@
-export const revalidate = 900
+export const revalidate = 900;
 
 export default function Page() {
-  return <p>hello world</p>
+	return <p>hello world</p>;
 }

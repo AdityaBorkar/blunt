@@ -1,3 +1,3 @@
-process.env.TEST_EDGE = '1'
+process.env.TEST_EDGE = '1';
 
-require('./shared-module-actions.test')
+require('./shared-module-actions.test');

@@ -1,14 +1,14 @@
 module.exports = {
-  rewrites() {
-    return [
-      {
-        source: '/rewrite-me',
-        destination: '/',
-      },
-      {
-        source: '/rewrite-me-dynamic',
-        destination: '/first',
-      },
-    ]
-  },
-}
+	rewrites() {
+		return [
+			{
+				destination: '/',
+				source: '/rewrite-me',
+			},
+			{
+				destination: '/first',
+				source: '/rewrite-me-dynamic',
+			},
+		];
+	},
+};

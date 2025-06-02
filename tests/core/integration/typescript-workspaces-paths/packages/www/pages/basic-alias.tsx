@@ -1,9 +1,9 @@
-import React, { type JSX } from 'react'
-import { World } from '@c/world'
+import { World } from '@c/world';
+import type { JSX } from 'react';
 export default function HelloPage(): JSX.Element {
-  return (
-    <div>
-      <World />
-    </div>
-  )
+	return (
+		<div>
+			<World />
+		</div>
+	);
 }

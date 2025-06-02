@@ -1,16 +1,15 @@
-import React, { type JSX } from 'react'
-
-import { World } from 'components/world'
+import { World } from 'components/world';
+import type { JSX } from 'react';
 
 // External
-import { Counter } from '../../shared/components/counter'
+import { Counter } from '../../shared/components/counter';
 
 export default function HelloPage(): JSX.Element {
-  return (
-    <div>
-      Hello <World />!
-      <br />
-      <Counter />
-    </div>
-  )
+	return (
+		<div>
+			Hello <World />!
+			<br />
+			<Counter />
+		</div>
+	);
 }

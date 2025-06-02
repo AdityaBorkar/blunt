@@ -1,3 +1,3 @@
 export default function Loading() {
-  return <p id="loading">/postpone/isr/[slug]</p>
+	return <p id="loading">/postpone/isr/[slug]</p>;
 }

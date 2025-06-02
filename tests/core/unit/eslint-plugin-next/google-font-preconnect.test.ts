@@ -1,12 +1,46 @@
-import { RuleTester as ESLintTesterV8 } from 'eslint-v8'
-import { RuleTester as ESLintTesterV9 } from 'eslint'
-import { rules } from '@next/eslint-plugin-next'
+import { rules } from '@next/eslint-plugin-next';
+import { RuleTester as ESLintTesterV9 } from 'eslint';
+import { RuleTester as ESLintTesterV8 } from 'eslint-v8';
 
-const NextESLintRule = rules['google-font-preconnect']
+const NextESLintRule = rules['google-font-preconnect'];
 
 const tests = {
-  valid: [
-    `export const Test = () => (
+	invalid: [
+		{
+			code: `
+      export const Test = () => (
+        <div>
+          <link href="https://fonts.gstatic.com"/>
+        </div>
+      )
+    `,
+			errors: [
+				{
+					message:
+						'`rel="preconnect"` is missing from Google Font. See: https://nextjs.org/docs/messages/google-font-preconnect',
+					type: 'JSXOpeningElement',
+				},
+			],
+		},
+		{
+			code: `
+      export const Test = () => (
+        <div>
+          <link rel="preload" href="https://fonts.gstatic.com"/>
+        </div>
+      )
+    `,
+			errors: [
+				{
+					message:
+						'`rel="preconnect"` is missing from Google Font. See: https://nextjs.org/docs/messages/google-font-preconnect',
+					type: 'JSXOpeningElement',
+				},
+			],
+		},
+	],
+	valid: [
+		`export const Test = () => (
         <div>
           <link rel="preconnect" href="https://fonts.gstatic.com"/>
           <link
@@ -20,66 +54,31 @@ const tests = {
         </div>
       )
     `,
-  ],
-
-  invalid: [
-    {
-      code: `
-      export const Test = () => (
-        <div>
-          <link href="https://fonts.gstatic.com"/>
-        </div>
-      )
-    `,
-      errors: [
-        {
-          message:
-            '`rel="preconnect"` is missing from Google Font. See: https://nextjs.org/docs/messages/google-font-preconnect',
-          type: 'JSXOpeningElement',
-        },
-      ],
-    },
-    {
-      code: `
-      export const Test = () => (
-        <div>
-          <link rel="preload" href="https://fonts.gstatic.com"/>
-        </div>
-      )
-    `,
-      errors: [
-        {
-          message:
-            '`rel="preconnect"` is missing from Google Font. See: https://nextjs.org/docs/messages/google-font-preconnect',
-          type: 'JSXOpeningElement',
-        },
-      ],
-    },
-  ],
-}
+	],
+};
 
 describe('google-font-preconnect', () => {
-  new ESLintTesterV8({
-    parserOptions: {
-      ecmaVersion: 2020,
-      sourceType: 'module',
-      ecmaFeatures: {
-        modules: true,
-        jsx: true,
-      },
-    },
-  }).run('eslint-v8', NextESLintRule, tests)
+	new ESLintTesterV8({
+		parserOptions: {
+			ecmaFeatures: {
+				jsx: true,
+				modules: true,
+			},
+			ecmaVersion: 2020,
+			sourceType: 'module',
+		},
+	}).run('eslint-v8', NextESLintRule, tests);
 
-  new ESLintTesterV9({
-    languageOptions: {
-      ecmaVersion: 2020,
-      sourceType: 'module',
-      parserOptions: {
-        ecmaFeatures: {
-          modules: true,
-          jsx: true,
-        },
-      },
-    },
-  }).run('eslint-v9', NextESLintRule, tests)
-})
+	new ESLintTesterV9({
+		languageOptions: {
+			ecmaVersion: 2020,
+			parserOptions: {
+				ecmaFeatures: {
+					jsx: true,
+					modules: true,
+				},
+			},
+			sourceType: 'module',
+		},
+	}).run('eslint-v9', NextESLintRule, tests);
+});

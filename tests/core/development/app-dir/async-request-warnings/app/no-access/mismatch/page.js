@@ -1,5 +1,5 @@
-'use client'
+'use client';
 
 export default function Page() {
-  return typeof window === 'undefined' ? 'server' : 'client'
+	return typeof window === 'undefined' ? 'server' : 'client';
 }

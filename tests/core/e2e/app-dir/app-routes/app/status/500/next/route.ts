@@ -1,11 +1,11 @@
-import { cookies } from 'next/headers'
-import { NextResponse } from 'next/server'
+import { cookies } from 'next/headers';
+import { NextResponse } from 'next/server';
 
 export async function GET() {
-  if (process.env.NEXT_PHASE === 'phase-production-build') {
-    // don't error during build
-    await cookies()
-  } else {
-    return NextResponse.next()
-  }
+	if (process.env.NEXT_PHASE === 'phase-production-build') {
+		// don't error during build
+		await cookies();
+	} else {
+		return NextResponse.next();
+	}
 }

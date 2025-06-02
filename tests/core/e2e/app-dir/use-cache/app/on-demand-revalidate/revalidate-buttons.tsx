@@ -1,32 +1,32 @@
-'use client'
+'use client';
 
-import { useTransition } from 'react'
+import { useTransition } from 'react';
 
 export function RevalidateButtons({
-  revalidatePath,
+	revalidatePath,
 }: {
-  revalidatePath: () => Promise<void>
+	revalidatePath: () => Promise<void>;
 }) {
-  const [isPending, startTransition] = useTransition()
+	const [isPending, startTransition] = useTransition();
 
-  return (
-    <form>
-      <button id="revalidate-path" formAction={revalidatePath}>
-        revalidate with revalidatePath()
-      </button>{' '}
-      <button
-        id="revalidate-api-route"
-        disabled={isPending}
-        formAction={async () => {
-          startTransition(async () => {
-            await fetch('/api/revalidate?path=/on-demand-revalidate', {
-              method: 'POST',
-            })
-          })
-        }}
-      >
-        revalidate with API route
-      </button>
-    </form>
-  )
+	return (
+		<form>
+			<button formAction={revalidatePath} id="revalidate-path">
+				revalidate with revalidatePath()
+			</button>{' '}
+			<button
+				disabled={isPending}
+				formAction={async () => {
+					startTransition(async () => {
+						await fetch('/api/revalidate?path=/on-demand-revalidate', {
+							method: 'POST',
+						});
+					});
+				}}
+				id="revalidate-api-route"
+			>
+				revalidate with API route
+			</button>
+		</form>
+	);
 }

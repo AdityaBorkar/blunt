@@ -1,10 +1,10 @@
-import { NextResponse, NextRequest } from 'next/server'
-import { AsyncLocalStorage } from 'async_hooks'
+import { AsyncLocalStorage } from 'node:async_hooks';
+import { type NextRequest, NextResponse } from 'next/server';
 
-const storage = new AsyncLocalStorage<{}>()
+const storage = new AsyncLocalStorage<{}>();
 
-export async function middleware(request: NextRequest) {
-  storage.run({}, () => {})
+export async function middleware(_request: NextRequest) {
+	storage.run({}, () => {});
 
-  return NextResponse.next()
+	return NextResponse.next();
 }

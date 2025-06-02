@@ -1,15 +1,15 @@
-'use client'
+'use client';
 
-import { redirectAction } from './actions'
+import { redirectAction } from './actions';
 
 export default function Form() {
-  return (
-    <form>
-      <input type="text" name="hidden-info" defaultValue="hi" hidden />
-      <input type="text" name="name" id="client-name" required />
-      <button formAction={redirectAction} type="submit" id="there">
-        Go there
-      </button>
-    </form>
-  )
+	return (
+		<form>
+			<input defaultValue="hi" hidden name="hidden-info" type="text" />
+			<input id="client-name" name="name" required type="text" />
+			<button formAction={redirectAction} id="there" type="submit">
+				Go there
+			</button>
+		</form>
+	);
 }

@@ -1,5 +1,5 @@
-import { ErrorComponent } from '../../component'
+import { ErrorComponent } from '../../component';
 
-export default () => <ErrorComponent name="server-edge" />
+export default () => <ErrorComponent name="server-edge" />;
 
-export const runtime = 'edge'
+export const runtime = 'edge';

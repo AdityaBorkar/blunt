@@ -1,1 +1,1 @@
-export const pathPrefix = '/' + process.env.NEXT_RUNTIME
+export const pathPrefix = `/${process.env.NEXT_RUNTIME}`;

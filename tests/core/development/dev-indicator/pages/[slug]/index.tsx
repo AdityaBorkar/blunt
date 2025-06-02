@@ -1,35 +1,35 @@
-import Link from 'next/link'
+import Link from 'next/link';
 
 export default function Page({ slug }: { slug: string }) {
-  return (
-    <p>
-      hello world {slug} <Link href="/gssp">to /gssp</Link>
-      <Link href="/">to /</Link>
-    </p>
-  )
+	return (
+		<p>
+			hello world {slug} <Link href="/gssp">to /gssp</Link>
+			<Link href="/">to /</Link>
+		</p>
+	);
 }
 
 export const getStaticPaths = async () => {
-  return {
-    paths: [
-      {
-        params: {
-          slug: 'pregenerated',
-        },
-      },
-    ],
-    fallback: true,
-  }
-}
+	return {
+		fallback: true,
+		paths: [
+			{
+				params: {
+					slug: 'pregenerated',
+				},
+			},
+		],
+	};
+};
 
 export const getStaticProps = async ({
-  params,
+	params,
 }: {
-  params: { slug: string }
+	params: { slug: string };
 }) => {
-  return {
-    props: {
-      slug: params.slug,
-    },
-  }
-}
+	return {
+		props: {
+			slug: params.slug,
+		},
+	};
+};

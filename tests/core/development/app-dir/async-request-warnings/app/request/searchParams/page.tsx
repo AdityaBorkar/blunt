@@ -1,27 +1,27 @@
 function Component({
-  searchParams,
+	searchParams,
 }: {
-  searchParams: Record<string, unknown>
+	searchParams: Record<string, unknown>;
 }) {
-  const a = searchParams.slug
-  const b = searchParams.slug
+	const a = searchParams.slug;
+	const b = searchParams.slug;
 
-  const clonedSearchParams = { ...searchParams }
-  return <pre>{JSON.stringify({ clonedSearchParams, a, b }, null, 2)}</pre>
+	const clonedSearchParams = { ...searchParams };
+	return <pre>{JSON.stringify({ a, b, clonedSearchParams }, null, 2)}</pre>;
 }
 
 export default function Page({
-  searchParams,
+	searchParams,
 }: {
-  searchParams: Record<string, unknown>
+	searchParams: Record<string, unknown>;
 }) {
-  const slug = searchParams.slug
+	const slug = searchParams.slug;
 
-  return (
-    <>
-      <pre>{JSON.stringify({ slug }, null, 2)}</pre>
-      <Component searchParams={searchParams} />
-      <Component searchParams={searchParams} />
-    </>
-  )
+	return (
+		<>
+			<pre>{JSON.stringify({ slug }, null, 2)}</pre>
+			<Component searchParams={searchParams} />
+			<Component searchParams={searchParams} />
+		</>
+	);
 }

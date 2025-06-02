@@ -1,28 +1,28 @@
-import { Suspense } from 'react'
+import { Suspense } from 'react';
 
-import { getSentinelValue } from '../../../getSentinelValue'
+import { getSentinelValue } from '../../../getSentinelValue';
 
 export async function generateStaticParams() {
-  return [
-    {
-      lowcard: 'one',
-    },
-  ]
+	return [
+		{
+			lowcard: 'one',
+		},
+	];
 }
 
 export default function LowCardLayout({
-  children,
+	children,
 }: {
-  children: React.ReactNode
+	children: React.ReactNode;
 }) {
-  return (
-    <>
-      <Suspense
-        fallback={<div id="lowcard-fallback">loading lowcard children</div>}
-      >
-        {children}
-      </Suspense>
-      <span id="lowcard">{getSentinelValue()}</span>
-    </>
-  )
+	return (
+		<>
+			<Suspense
+				fallback={<div id="lowcard-fallback">loading lowcard children</div>}
+			>
+				{children}
+			</Suspense>
+			<span id="lowcard">{getSentinelValue()}</span>
+		</>
+	);
 }

@@ -1,5 +1,5 @@
 export default function Page() {
-  return 'app-page (edge)'
+	return 'app-page (edge)';
 }
 
-export const runtime = 'edge'
+export const runtime = 'edge';

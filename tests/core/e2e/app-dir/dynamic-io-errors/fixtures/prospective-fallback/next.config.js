@@ -1,6 +1,6 @@
 module.exports = {
-  experimental: {
-    dynamicIO: true,
-    serverSourceMaps: true,
-  },
-}
+	experimental: {
+		dynamicIO: true,
+		serverSourceMaps: true,
+	},
+};

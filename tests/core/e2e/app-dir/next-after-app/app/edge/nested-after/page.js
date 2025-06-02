@@ -1,1 +1,1 @@
-export { default } from '../../nodejs/nested-after/page'
+export { default } from '../../nodejs/nested-after/page';

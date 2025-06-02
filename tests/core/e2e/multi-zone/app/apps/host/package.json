@@ -1,5 +1,5 @@
 {
-  "version": "0.0.1",
-  "private": true,
-  "name": "host-app"
+	"name": "host-app",
+	"private": true,
+	"version": "0.0.1"
 }

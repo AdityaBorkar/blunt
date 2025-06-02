@@ -1,14 +1,14 @@
-import Foo from '../foo'
+import Foo from '../foo';
 
 // Intermediate component for testing owner stack
 function Inner() {
-  return <Foo />
+	return <Foo />;
 }
 
 export default function Page() {
-  return (
-    <div>
-      <Inner />
-    </div>
-  )
+	return (
+		<div>
+			<Inner />
+		</div>
+	);
 }

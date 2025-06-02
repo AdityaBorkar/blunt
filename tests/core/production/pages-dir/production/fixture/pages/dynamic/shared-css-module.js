@@ -1,17 +1,17 @@
-import dynamic from 'next/dynamic'
+import dynamic from 'next/dynamic';
 
 const First = dynamic(
-  import('../../components/dynamic-css/shared-css-module/with-css')
-)
+	import('../../components/dynamic-css/shared-css-module/with-css'),
+);
 const Second = dynamic(
-  import('../../components/dynamic-css/shared-css-module/with-css-2')
-)
+	import('../../components/dynamic-css/shared-css-module/with-css-2'),
+);
 
 export default function Page() {
-  return (
-    <div>
-      <First />
-      <Second />
-    </div>
-  )
+	return (
+		<div>
+			<First />
+			<Second />
+		</div>
+	);
 }

@@ -1,5 +1,5 @@
-'use cache: remote'
+'use cache: remote';
 
 export default async function Page() {
-  return <p>hello world</p>
+	return <p>hello world</p>;
 }

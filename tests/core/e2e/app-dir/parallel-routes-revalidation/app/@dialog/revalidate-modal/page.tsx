@@ -1,30 +1,30 @@
-import Link from 'next/link'
+import { unstable_expirePath } from 'next/cache';
+import Link from 'next/link';
 
-import { unstable_expirePath } from 'next/cache'
-import { addData } from '../../actions'
+import { addData } from '../../actions';
 
 export default function Page() {
-  async function createItem() {
-    'use server'
+	async function createItem() {
+		'use server';
 
-    await addData(new Date().toISOString())
+		await addData(new Date().toISOString());
 
-    unstable_expirePath('/', 'layout')
-  }
+		unstable_expirePath('/', 'layout');
+	}
 
-  return (
-    <dialog open>
-      <h1>Modal</h1>
+	return (
+		<dialog open>
+			<h1>Modal</h1>
 
-      <br />
+			<br />
 
-      <form action={createItem}>
-        <button type="submit" className="button" id="create-entry">
-          Create New Item
-        </button>
-      </form>
+			<form action={createItem}>
+				<button className="button" id="create-entry" type="submit">
+					Create New Item
+				</button>
+			</form>
 
-      <Link href="/">Close</Link>
-    </dialog>
-  )
+			<Link href="/">Close</Link>
+		</dialog>
+	);
 }

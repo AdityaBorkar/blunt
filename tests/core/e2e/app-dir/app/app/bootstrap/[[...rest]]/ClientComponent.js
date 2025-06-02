@@ -1,11 +1,11 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react';
 
 export function ClientComponent() {
-  const [val, setVal] = useState('initial')
-  useEffect(() => {
-    setVal('[[updated]]')
-  }, [])
-  return <span id="val">{val}</span>
+	const [val, setVal] = useState('initial');
+	useEffect(() => {
+		setVal('[[updated]]');
+	}, []);
+	return <span id="val">{val}</span>;
 }

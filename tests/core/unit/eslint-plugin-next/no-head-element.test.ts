@@ -1,16 +1,64 @@
-import { RuleTester as ESLintTesterV8 } from 'eslint-v8'
-import { RuleTester as ESLintTesterV9 } from 'eslint'
-import { rules } from '@next/eslint-plugin-next'
+import { rules } from '@next/eslint-plugin-next';
+import { RuleTester as ESLintTesterV9 } from 'eslint';
+import { RuleTester as ESLintTesterV8 } from 'eslint-v8';
 
-const NextESLintRule = rules['no-head-element']
+const NextESLintRule = rules['no-head-element'];
 
 const message =
-  'Do not use `<head>` element. Use `<Head />` from `next/head` instead. See: https://nextjs.org/docs/messages/no-head-element'
+	'Do not use `<head>` element. Use `<Head />` from `next/head` instead. See: https://nextjs.org/docs/messages/no-head-element';
 
 const tests = {
-  valid: [
-    {
-      code: `import Head from 'next/head';
+	invalid: [
+		{
+			code: `
+      export class MyComponent {
+        render() {
+          return (
+            <div>
+              <head>
+                <title>My page title</title>
+              </head>
+            </div>
+          );
+        }
+      }`,
+			errors: [
+				{
+					message,
+					type: 'JSXOpeningElement',
+				},
+			],
+			filename: './pages/index.js',
+		},
+		{
+			code: `import Head from 'next/head';
+
+      export class MyComponent {
+        render() {
+          return (
+            <div>
+              <head>
+                <title>My page title</title>
+              </head>
+              <Head>
+                <title>My page title</title>
+              </Head>
+            </div>
+          );
+        }
+      }`,
+			errors: [
+				{
+					message,
+					type: 'JSXOpeningElement',
+				},
+			],
+			filename: 'pages/index.ts',
+		},
+	],
+	valid: [
+		{
+			code: `import Head from 'next/head';
 
       export class MyComponent {
         render() {
@@ -24,10 +72,10 @@ const tests = {
         }
       }
     `,
-      filename: 'pages/index.js',
-    },
-    {
-      code: `import Head from 'next/head';
+			filename: 'pages/index.js',
+		},
+		{
+			code: `import Head from 'next/head';
 
       export class MyComponent {
         render() {
@@ -41,10 +89,10 @@ const tests = {
         }
       }
     `,
-      filename: 'pages/index.tsx',
-    },
-    {
-      code: `
+			filename: 'pages/index.tsx',
+		},
+		{
+			code: `
       export default function Layout({ children }) {
         return (
           <html>
@@ -56,81 +104,33 @@ const tests = {
         );
       }
     `,
-      filename: './app/layout.js',
-    },
-  ],
-  invalid: [
-    {
-      code: `
-      export class MyComponent {
-        render() {
-          return (
-            <div>
-              <head>
-                <title>My page title</title>
-              </head>
-            </div>
-          );
-        }
-      }`,
-      filename: './pages/index.js',
-      errors: [
-        {
-          message,
-          type: 'JSXOpeningElement',
-        },
-      ],
-    },
-    {
-      code: `import Head from 'next/head';
-
-      export class MyComponent {
-        render() {
-          return (
-            <div>
-              <head>
-                <title>My page title</title>
-              </head>
-              <Head>
-                <title>My page title</title>
-              </Head>
-            </div>
-          );
-        }
-      }`,
-      filename: 'pages/index.ts',
-      errors: [
-        {
-          message,
-          type: 'JSXOpeningElement',
-        },
-      ],
-    },
-  ],
-}
+			filename: './app/layout.js',
+		},
+	],
+};
 
 describe('no-head-element', () => {
-  new ESLintTesterV8({
-    parserOptions: {
-      ecmaVersion: 2018,
-      sourceType: 'module',
-      ecmaFeatures: {
-        modules: true,
-        jsx: true,
-      },
-    },
-  }).run('eslint-v8', NextESLintRule, tests)
+	new ESLintTesterV8({
+		parserOptions: {
+			ecmaFeatures: {
+				jsx: true,
+				modules: true,
+			},
+			ecmaVersion: 2018,
+			sourceType: 'module',
+		},
+	}).run('eslint-v8', NextESLintRule, tests);
 
-  new ESLintTesterV9({
-    languageOptions: {
-      ecmaVersion: 2018,
-      sourceType: 'module',
-      parserOptions: {
-        ecmaFeatures: {
-          modules: true,
-          jsx: true,
-        },
-      },
-    },
-  }).run('eslint-v9', NextESLintRule, tests)
-})
+	new ESLintTesterV9({
+		languageOptions: {
+			ecmaVersion: 2018,
+			parserOptions: {
+				ecmaFeatures: {
+					jsx: true,
+					modules: true,
+				},
+			},
+			sourceType: 'module',
+		},
+	}).run('eslint-v9', NextESLintRule, tests);
+});

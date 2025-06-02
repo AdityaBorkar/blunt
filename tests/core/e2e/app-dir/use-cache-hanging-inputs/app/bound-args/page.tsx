@@ -1,25 +1,24 @@
-import { connection } from 'next/server'
-import React from 'react'
+import { connection } from 'next/server';
 
 async function fetchUncachedData() {
-  await connection()
+	await connection();
 
-  return Math.random()
+	return Math.random();
 }
 
 export default async function Page() {
-  const uncachedDataPromise = fetchUncachedData()
+	const uncachedDataPromise = fetchUncachedData();
 
-  const Foo = async () => {
-    'use cache'
+	const Foo = async () => {
+		'use cache';
 
-    return (
-      <>
-        <p>{await uncachedDataPromise}</p>
-        <p>{Math.random()}</p>
-      </>
-    )
-  }
+		return (
+			<>
+				<p>{await uncachedDataPromise}</p>
+				<p>{Math.random()}</p>
+			</>
+		);
+	};
 
-  return <Foo />
+	return <Foo />;
 }

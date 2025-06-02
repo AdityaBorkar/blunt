@@ -1,14 +1,15 @@
-import fs from 'fs'
-import path from 'path'
-import css from '../../components/logo/logo.module.css'
+import fs from 'node:fs';
+import path from 'node:path';
 
-export default (req, res) => {
-  console.log({
-    importedData: css,
-    fsLoadedData: fs.readFileSync(
-      path.join(process.cwd(), 'components', 'logo', 'logo.module.css'),
-      'utf8'
-    ),
-  })
-  res.end('API index works')
-}
+import css from '../../components/logo/logo.module.css';
+
+export default (_req, res) => {
+	console.log({
+		fsLoadedData: fs.readFileSync(
+			path.join(process.cwd(), 'components', 'logo', 'logo.module.css'),
+			'utf8',
+		),
+		importedData: css,
+	});
+	res.end('API index works');
+};

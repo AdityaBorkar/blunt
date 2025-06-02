@@ -1,10 +1,10 @@
-import { NavigateToOther } from './navigate-to-other'
+import { NavigateToOther } from './navigate-to-other';
 export default function Layout({ children }) {
-  return (
-    <>
-      <NavigateToOther />
-      <hr />
-      {children}
-    </>
-  )
+	return (
+		<>
+			<NavigateToOther />
+			<hr />
+			{children}
+		</>
+	);
 }

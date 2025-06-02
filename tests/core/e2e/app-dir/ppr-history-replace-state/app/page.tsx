@@ -1,12 +1,11 @@
-import * as React from 'react'
-import { Input } from './input'
+import { Input } from './input';
 
 export default function Page() {
-  return (
-    <main>
-      <label>
-        Enter a query: <Input />
-      </label>
-    </main>
-  )
+	return (
+		<main>
+			<label>
+				Enter a query: <Input />
+			</label>
+		</main>
+	);
 }

@@ -1,11 +1,11 @@
-import { NextPageContext } from 'next'
-import ErrorComponent from 'next/error'
+import type { NextPageContext } from 'next';
+import ErrorComponent from 'next/error';
 
 class CustomError extends ErrorComponent {
-  static getInitialProps({ res }: NextPageContext) {
-    const statusCode = 500
-    return { statusCode, title: 'CustomError' }
-  }
+	static getInitialProps({ res }: NextPageContext) {
+		const statusCode = 500;
+		return { statusCode, title: 'CustomError' };
+	}
 }
 
-export default CustomError
+export default CustomError;

@@ -1,5 +1,5 @@
-'use client'
+'use client';
 
 export function ClientComponent() {
-  return <div>catchall slot client component</div>
+	return <div>catchall slot client component</div>;
 }

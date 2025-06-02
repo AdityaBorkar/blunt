@@ -1,9 +1,9 @@
-'use client'
+'use client';
 
 function throwError() {
-  throw new Error('Boom')
+	throw new Error('Boom');
 }
 
 export function Thrower() {
-  throwError()
+	throwError();
 }

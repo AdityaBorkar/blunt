@@ -1,12 +1,13 @@
-import type { NextConfig } from 'next'
-import { foo } from '@/foo'
-import { bar } from 'bar'
+import { bar } from 'bar';
+import type { NextConfig } from 'next';
+
+import { foo } from '@/foo';
 
 const nextConfig: NextConfig = {
-  env: {
-    foo,
-    bar,
-  },
-}
+	env: {
+		bar,
+		foo,
+	},
+};
 
-export default nextConfig
+export default nextConfig;

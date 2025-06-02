@@ -1,25 +1,26 @@
 /* eslint-env jest */
-import { createSandbox } from 'development-sandbox'
-import { FileRef, nextTestSetup } from 'e2e-utils'
-import { check, retry } from 'next-test-utils'
-import { outdent } from 'outdent'
-import path from 'path'
 
-const isReact18 = parseInt(process.env.NEXT_TEST_REACT_VERSION) === 18
+import path from 'node:path';
+import { createSandbox } from 'development-sandbox';
+import { FileRef, nextTestSetup } from 'e2e-utils';
+import { check, retry } from 'next-test-utils';
+import { outdent } from 'outdent';
+
+const isReact18 = parseInt(process.env.NEXT_TEST_REACT_VERSION) === 18;
 
 describe('pages/ error recovery', () => {
-  const { next, isTurbopack } = nextTestSetup({
-    files: new FileRef(path.join(__dirname, 'fixtures', 'default-template')),
-    skipStart: true,
-  })
+	const { next, isTurbopack } = nextTestSetup({
+		files: new FileRef(path.join(__dirname, 'fixtures', 'default-template')),
+		skipStart: true,
+	});
 
-  test('logbox: can recover from a syntax error without losing state', async () => {
-    await using sandbox = await createSandbox(next)
-    const { browser, session } = sandbox
+	test('logbox: can recover from a syntax error without losing state', async () => {
+		await using sandbox = await createSandbox(next);
+		const { browser, session } = sandbox;
 
-    await session.patch(
-      'index.js',
-      outdent`
+		await session.patch(
+			'index.js',
+			outdent`
         import { useCallback, useState } from 'react'
 
         export default function Index() {
@@ -32,18 +33,18 @@ describe('pages/ error recovery', () => {
             </main>
           )
         }
-      `
-    )
+      `,
+		);
 
-    await session.evaluate(() => document.querySelector('button').click())
-    expect(
-      await session.evaluate(() => document.querySelector('p').textContent)
-    ).toBe('1')
+		await session.evaluate(() => document.querySelector('button').click());
+		expect(
+			await session.evaluate(() => document.querySelector('p').textContent),
+		).toBe('1');
 
-    await session.patch('index.js', `export default () => <div/`)
+		await session.patch('index.js', `export default () => <div/`);
 
-    if (isTurbopack) {
-      await expect(browser).toDisplayRedbox(`
+		if (isTurbopack) {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Parsing ecmascript source code failed",
@@ -55,9 +56,9 @@ describe('pages/ error recovery', () => {
            |                           ^",
          "stack": [],
        }
-      `)
-    } else if (process.env.NEXT_RSPACK) {
-      await expect({ browser, next }).toDisplayRedbox(`
+      `);
+		} else if (process.env.NEXT_RSPACK) {
+			await expect({ browser, next }).toDisplayRedbox(`
        {
          "count": 1,
          "description": "  × Module build failed:",
@@ -78,9 +79,9 @@ describe('pages/ error recovery', () => {
        ./pages/index.js",
          "stack": [],
        }
-      `)
-    } else {
-      await expect(browser).toDisplayRedbox(`
+      `);
+		} else {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Error:   x Unexpected eof",
@@ -98,12 +99,12 @@ describe('pages/ error recovery', () => {
        ./pages/index.js",
          "stack": [],
        }
-      `)
-    }
+      `);
+		}
 
-    await session.patch(
-      'index.js',
-      outdent`
+		await session.patch(
+			'index.js',
+			outdent`
         import { useCallback, useState } from 'react'
 
         export default function Index() {
@@ -116,24 +117,24 @@ describe('pages/ error recovery', () => {
             </main>
           )
         }
-      `
-    )
+      `,
+		);
 
-    await check(
-      () => session.evaluate(() => document.querySelector('p').textContent),
-      /Count: 1/
-    )
+		await check(
+			() => session.evaluate(() => document.querySelector('p').textContent),
+			/Count: 1/,
+		);
 
-    await session.assertNoRedbox()
-  })
+		await session.assertNoRedbox();
+	});
 
-  test('logbox: can recover from a event handler error', async () => {
-    await using sandbox = await createSandbox(next)
-    const { browser, session } = sandbox
+	test('logbox: can recover from a event handler error', async () => {
+		await using sandbox = await createSandbox(next);
+		const { browser, session } = sandbox;
 
-    await session.patch(
-      'index.js',
-      outdent`
+		await session.patch(
+			'index.js',
+			outdent`
         import { useCallback, useState } from 'react'
 
         export default function Index() {
@@ -149,18 +150,18 @@ describe('pages/ error recovery', () => {
             </main>
           )
         }
-      `
-    )
+      `,
+		);
 
-    expect(
-      await session.evaluate(() => document.querySelector('p').textContent)
-    ).toBe('0')
-    await session.evaluate(() => document.querySelector('button').click())
-    expect(
-      await session.evaluate(() => document.querySelector('p').textContent)
-    ).toBe('1')
+		expect(
+			await session.evaluate(() => document.querySelector('p').textContent),
+		).toBe('0');
+		await session.evaluate(() => document.querySelector('button').click());
+		expect(
+			await session.evaluate(() => document.querySelector('p').textContent),
+		).toBe('1');
 
-    await expect(browser).toDisplayRedbox(`
+		await expect(browser).toDisplayRedbox(`
      {
        "count": 1,
        "description": "Error: oops",
@@ -175,10 +176,10 @@ describe('pages/ error recovery', () => {
          "UtilityScript.<anonymous> <anonymous> (1:44)",
        ],
      }
-    `)
-    await session.patch(
-      'index.js',
-      outdent`
+    `);
+		await session.patch(
+			'index.js',
+			outdent`
         import { useCallback, useState } from 'react'
 
         export default function Index() {
@@ -191,38 +192,38 @@ describe('pages/ error recovery', () => {
             </main>
           )
         }
-      `
-    )
+      `,
+		);
 
-    await session.assertNoRedbox()
+		await session.assertNoRedbox();
 
-    expect(
-      await session.evaluate(() => document.querySelector('p').textContent)
-    ).toBe('Count: 1')
-    await session.evaluate(() => document.querySelector('button').click())
-    expect(
-      await session.evaluate(() => document.querySelector('p').textContent)
-    ).toBe('Count: 2')
+		expect(
+			await session.evaluate(() => document.querySelector('p').textContent),
+		).toBe('Count: 1');
+		await session.evaluate(() => document.querySelector('button').click());
+		expect(
+			await session.evaluate(() => document.querySelector('p').textContent),
+		).toBe('Count: 2');
 
-    await session.assertNoRedbox()
-  })
+		await session.assertNoRedbox();
+	});
 
-  test('logbox: can recover from a component error', async () => {
-    await using sandbox = await createSandbox(next)
-    const { browser, session } = sandbox
+	test('logbox: can recover from a component error', async () => {
+		await using sandbox = await createSandbox(next);
+		const { browser, session } = sandbox;
 
-    await session.write(
-      'child.js',
-      outdent`
+		await session.write(
+			'child.js',
+			outdent`
         export default function Child() {
           return <p>Hello</p>;
         }
-      `
-    )
+      `,
+		);
 
-    await session.patch(
-      'index.js',
-      outdent`
+		await session.patch(
+			'index.js',
+			outdent`
         import Child from './child'
 
         export default function Index() {
@@ -232,28 +233,28 @@ describe('pages/ error recovery', () => {
             </main>
           )
         }
-      `
-    )
+      `,
+		);
 
-    expect(
-      await session.evaluate(() => document.querySelector('p').textContent)
-    ).toBe('Hello')
+		expect(
+			await session.evaluate(() => document.querySelector('p').textContent),
+		).toBe('Hello');
 
-    await session.patch(
-      'child.js',
-      outdent`
+		await session.patch(
+			'child.js',
+			outdent`
         // hello
         export default function Child() {
           throw new Error('oops')
         }
-      `
-    )
+      `,
+		);
 
-    // TODO(veil): ignore-list Webpack runtime (https://linear.app/vercel/issue/NDX-945)
-    // TODO(veil): Don't bail in Turbopack for sources outside of the project (https://linear.app/vercel/issue/NDX-944)
-    // Somehow we end up with two in React 18 due to React's attempt to recover from this error.
-    if (isReact18) {
-      await expect(browser).toDisplayRedbox(`
+		// TODO(veil): ignore-list Webpack runtime (https://linear.app/vercel/issue/NDX-945)
+		// TODO(veil): Don't bail in Turbopack for sources outside of the project (https://linear.app/vercel/issue/NDX-944)
+		// Somehow we end up with two in React 18 due to React's attempt to recover from this error.
+		if (isReact18) {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 2,
          "description": "Error: oops",
@@ -269,9 +270,9 @@ describe('pages/ error recovery', () => {
            "${isTurbopack ? '<FIXME-file-protocol>' : '<FIXME-next-dist-dir>'}",
          ],
        }
-      `)
-    } else {
-      await expect(browser).toDisplayRedbox(`
+      `);
+		} else {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Error: oops",
@@ -287,34 +288,34 @@ describe('pages/ error recovery', () => {
            "${isTurbopack ? '<FIXME-file-protocol>' : '<FIXME-next-dist-dir>'}",
          ],
        }
-      `)
-    }
+      `);
+		}
 
-    const didNotReload = await session.patch(
-      'child.js',
-      outdent`
+		const didNotReload = await session.patch(
+			'child.js',
+			outdent`
         export default function Child() {
           return <p>Hello</p>;
         }
-      `
-    )
+      `,
+		);
 
-    expect(didNotReload).toBe(true)
-    await session.assertNoRedbox()
-    expect(
-      await session.evaluate(() => document.querySelector('p').textContent)
-    ).toBe('Hello')
-  })
+		expect(didNotReload).toBe(true);
+		await session.assertNoRedbox();
+		expect(
+			await session.evaluate(() => document.querySelector('p').textContent),
+		).toBe('Hello');
+	});
 
-  // https://github.com/pmmmwh/react-refresh-webpack-plugin/pull/3#issuecomment-554137262
-  it('render error not shown right after syntax error', async () => {
-    await using sandbox = await createSandbox(next)
-    const { browser, session } = sandbox
+	// https://github.com/pmmmwh/react-refresh-webpack-plugin/pull/3#issuecomment-554137262
+	it('render error not shown right after syntax error', async () => {
+		await using sandbox = await createSandbox(next);
+		const { browser, session } = sandbox;
 
-    // Starting here:
-    await session.patch(
-      'index.js',
-      outdent`
+		// Starting here:
+		await session.patch(
+			'index.js',
+			outdent`
         import * as React from 'react';
         class ClassDefault extends React.Component {
           render() {
@@ -323,17 +324,17 @@ describe('pages/ error recovery', () => {
         }
 
         export default ClassDefault;
-      `
-    )
+      `,
+		);
 
-    expect(
-      await session.evaluate(() => document.querySelector('h1').textContent)
-    ).toBe('Default Export')
+		expect(
+			await session.evaluate(() => document.querySelector('h1').textContent),
+		).toBe('Default Export');
 
-    // Break it with a syntax error:
-    await session.patch(
-      'index.js',
-      outdent`
+		// Break it with a syntax error:
+		await session.patch(
+			'index.js',
+			outdent`
         import * as React from 'react';
 
         class ClassDefault extends React.Component {
@@ -343,11 +344,11 @@ describe('pages/ error recovery', () => {
         }
 
         export default ClassDefault;
-      `
-    )
+      `,
+		);
 
-    if (isTurbopack) {
-      await expect(browser).toDisplayRedbox(`
+		if (isTurbopack) {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Parsing ecmascript source code failed",
@@ -359,9 +360,9 @@ describe('pages/ error recovery', () => {
            |     ^^^^^^",
          "stack": [],
        }
-      `)
-    } else if (process.env.NEXT_RSPACK) {
-      await expect({ browser, next }).toDisplayRedbox(`
+      `);
+		} else if (process.env.NEXT_RSPACK) {
+			await expect({ browser, next }).toDisplayRedbox(`
        {
          "count": 1,
          "description": "  × Module build failed:",
@@ -388,9 +389,9 @@ describe('pages/ error recovery', () => {
        ./pages/index.js",
          "stack": [],
        }
-      `)
-    } else {
-      await expect(browser).toDisplayRedbox(`
+      `);
+		} else {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Error:   x Expected '{', got 'return'",
@@ -414,13 +415,13 @@ describe('pages/ error recovery', () => {
        ./pages/index.js",
          "stack": [],
        }
-      `)
-    }
+      `);
+		}
 
-    // Now change the code to introduce a runtime error without fixing the syntax error:
-    await session.patch(
-      'index.js',
-      outdent`
+		// Now change the code to introduce a runtime error without fixing the syntax error:
+		await session.patch(
+			'index.js',
+			outdent`
         import * as React from 'react';
 
         class ClassDefault extends React.Component {
@@ -431,11 +432,11 @@ describe('pages/ error recovery', () => {
         }
 
         export default ClassDefault;
-      `
-    )
+      `,
+		);
 
-    if (isTurbopack) {
-      await expect(browser).toDisplayRedbox(`
+		if (isTurbopack) {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Parsing ecmascript source code failed",
@@ -447,9 +448,9 @@ describe('pages/ error recovery', () => {
            |     ^^^^^",
          "stack": [],
        }
-      `)
-    } else if (process.env.NEXT_RSPACK) {
-      await expect({ browser, next }).toDisplayRedbox(`
+      `);
+		} else if (process.env.NEXT_RSPACK) {
+			await expect({ browser, next }).toDisplayRedbox(`
        {
          "count": 1,
          "description": "  × Module build failed:",
@@ -477,9 +478,9 @@ describe('pages/ error recovery', () => {
        ./pages/index.js",
          "stack": [],
        }
-      `)
-    } else {
-      await expect({ browser, next }).toDisplayRedbox(`
+      `);
+		} else {
+			await expect({ browser, next }).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Error:   x Expected '{', got 'throw'",
@@ -504,13 +505,13 @@ describe('pages/ error recovery', () => {
        ./pages/index.js",
          "stack": [],
        }
-      `)
-    }
+      `);
+		}
 
-    // Now fix the syntax error:
-    await session.patch(
-      'index.js',
-      outdent`
+		// Now fix the syntax error:
+		await session.patch(
+			'index.js',
+			outdent`
         import * as React from 'react';
 
         class ClassDefault extends React.Component {
@@ -521,19 +522,19 @@ describe('pages/ error recovery', () => {
         }
 
         export default ClassDefault;
-      `
-    )
+      `,
+		);
 
-    // wait for patch to get applied
-    await retry(async () => {
-      await expect(session.getRedboxSource()).resolves.toInclude('render() {')
-    })
+		// wait for patch to get applied
+		await retry(async () => {
+			await expect(session.getRedboxSource()).resolves.toInclude('render() {');
+		});
 
-    // TODO(veil): ignore-list Webpack runtime (https://linear.app/vercel/issue/NDX-945)
-    // TODO(veil): Don't bail in Turbopack for sources outside of the project (https://linear.app/vercel/issue/NDX-944)
-    // Somehow we end up with two in React 18 due to React's attempt to recover from this error.
-    if (isReact18) {
-      await expect(browser).toDisplayRedbox(`
+		// TODO(veil): ignore-list Webpack runtime (https://linear.app/vercel/issue/NDX-945)
+		// TODO(veil): Don't bail in Turbopack for sources outside of the project (https://linear.app/vercel/issue/NDX-944)
+		// Somehow we end up with two in React 18 due to React's attempt to recover from this error.
+		if (isReact18) {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 2,
          "description": "Error: nooo",
@@ -549,10 +550,10 @@ describe('pages/ error recovery', () => {
            "${isTurbopack ? '<FIXME-file-protocol>' : '<FIXME-next-dist-dir>'}",
          ],
        }
-      `)
-    } else {
-      if (process.env.NEXT_RSPACK) {
-        await expect(browser).toDisplayRedbox(`
+      `);
+		} else {
+			if (process.env.NEXT_RSPACK) {
+				await expect(browser).toDisplayRedbox(`
          {
            "count": 1,
            "description": "Error: nooo",
@@ -565,9 +566,9 @@ describe('pages/ error recovery', () => {
              "ClassDefault.render index.js (5:11)",
            ],
          }
-        `)
-      } else {
-        await expect(browser).toDisplayRedbox(`
+        `);
+			} else {
+				await expect(browser).toDisplayRedbox(`
          {
            "count": 1,
            "description": "Error: nooo",
@@ -583,20 +584,20 @@ describe('pages/ error recovery', () => {
              "${isTurbopack ? '<FIXME-file-protocol>' : '<FIXME-next-dist-dir>'}",
            ],
          }
-        `)
-      }
-    }
-  })
+        `);
+			}
+		}
+	});
 
-  // https://github.com/pmmmwh/react-refresh-webpack-plugin/pull/3#issuecomment-554144016
-  it('stuck error', async () => {
-    await using sandbox = await createSandbox(next)
-    const { browser, session } = sandbox
+	// https://github.com/pmmmwh/react-refresh-webpack-plugin/pull/3#issuecomment-554144016
+	it('stuck error', async () => {
+		await using sandbox = await createSandbox(next);
+		const { browser, session } = sandbox;
 
-    // We start here.
-    await session.patch(
-      'index.js',
-      outdent`
+		// We start here.
+		await session.patch(
+			'index.js',
+			outdent`
         import * as React from 'react';
 
         function FunctionDefault() {
@@ -604,39 +605,39 @@ describe('pages/ error recovery', () => {
         }
 
         export default FunctionDefault;
-      `
-    )
+      `,
+		);
 
-    // We add a new file. Let's call it Foo.js.
-    await session.write(
-      'Foo.js',
-      outdent`
+		// We add a new file. Let's call it Foo.js.
+		await session.write(
+			'Foo.js',
+			outdent`
         // intentionally skips export
         export default function Foo() {
           return React.createElement('h1', null, 'Foo');
         }
-      `
-    )
+      `,
+		);
 
-    // We edit our first file to use it.
-    await session.patch(
-      'index.js',
-      outdent`
+		// We edit our first file to use it.
+		await session.patch(
+			'index.js',
+			outdent`
         import * as React from 'react';
         import Foo from './Foo';
         function FunctionDefault() {
           return <Foo />;
         }
         export default FunctionDefault;
-      `
-    )
+      `,
+		);
 
-    // TODO(veil): ignore-list Webpack runtime (https://linear.app/vercel/issue/NDX-945)
-    // TODO(veil): Don't bail in Turbopack for sources outside of the project (https://linear.app/vercel/issue/NDX-944)
-    // We get an error because Foo didn't import React. Fair.
-    // Somehow we end up with two in React 18 due to React's attempt to recover from this error.
-    if (isReact18) {
-      await expect(browser).toDisplayRedbox(`
+		// TODO(veil): ignore-list Webpack runtime (https://linear.app/vercel/issue/NDX-945)
+		// TODO(veil): Don't bail in Turbopack for sources outside of the project (https://linear.app/vercel/issue/NDX-944)
+		// We get an error because Foo didn't import React. Fair.
+		// Somehow we end up with two in React 18 due to React's attempt to recover from this error.
+		if (isReact18) {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 2,
          "description": "ReferenceError: React is not defined",
@@ -652,9 +653,9 @@ describe('pages/ error recovery', () => {
            "${isTurbopack ? '<FIXME-file-protocol>' : '<FIXME-next-dist-dir>'}",
          ],
        }
-      `)
-    } else {
-      await expect(browser).toDisplayRedbox(`
+      `);
+		} else {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "ReferenceError: React is not defined",
@@ -670,44 +671,44 @@ describe('pages/ error recovery', () => {
            "${isTurbopack ? '<FIXME-file-protocol>' : '<FIXME-next-dist-dir>'}",
          ],
        }
-      `)
-    }
+      `);
+		}
 
-    // Let's add that to Foo.
-    await session.patch(
-      'Foo.js',
-      outdent`
+		// Let's add that to Foo.
+		await session.patch(
+			'Foo.js',
+			outdent`
         import * as React from 'react';
         export default function Foo() {
           return React.createElement('h1', null, 'Foo');
         }
-      `
-    )
+      `,
+		);
 
-    // Expected: this fixes the problem
-    await session.assertNoRedbox()
-  })
+		// Expected: this fixes the problem
+		await session.assertNoRedbox();
+	});
 
-  // https://github.com/pmmmwh/react-refresh-webpack-plugin/pull/3#issuecomment-554150098
-  test('syntax > runtime error', async () => {
-    await using sandbox = await createSandbox(next)
-    const { browser, session } = sandbox
+	// https://github.com/pmmmwh/react-refresh-webpack-plugin/pull/3#issuecomment-554150098
+	test('syntax > runtime error', async () => {
+		await using sandbox = await createSandbox(next);
+		const { browser, session } = sandbox;
 
-    // Start here.
-    await session.patch(
-      'index.js',
-      outdent`
+		// Start here.
+		await session.patch(
+			'index.js',
+			outdent`
         import * as React from 'react';
 
         export default function FunctionNamed() {
           return <div />
         }
-      `
-    )
-    // TODO: this acts weird without above step
-    await session.patch(
-      'index.js',
-      outdent`
+      `,
+		);
+		// TODO: this acts weird without above step
+		await session.patch(
+			'index.js',
+			outdent`
         import * as React from 'react';
         let i = 0
         setInterval(() => {
@@ -717,12 +718,12 @@ describe('pages/ error recovery', () => {
         export default function FunctionNamed() {
           return <div />
         }
-      `
-    )
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+      `,
+		);
+		await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    if (process.env.NEXT_RSPACK) {
-      await expect(browser).toDisplayRedbox(`
+		if (process.env.NEXT_RSPACK) {
+			await expect(browser).toDisplayRedbox(`
             {
               "count": 1,
               "description": "Error: no 1",
@@ -735,9 +736,9 @@ describe('pages/ error recovery', () => {
                 "<unknown> index.js (5:9)",
               ],
             }
-          `)
-    } else {
-      await expect(browser).toDisplayRedbox(`
+          `);
+		} else {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Error: no 1",
@@ -750,28 +751,28 @@ describe('pages/ error recovery', () => {
            "eval index.js (5:9)",
          ],
        }
-      `)
-    }
+      `);
+		}
 
-    // Make a syntax error.
-    await session.patch(
-      'index.js',
-      outdent`
+		// Make a syntax error.
+		await session.patch(
+			'index.js',
+			outdent`
         import * as React from 'react';
         let i = 0
         setInterval(() => {
           i++
           throw Error('no ' + i)
         }, 1000)
-        export default function FunctionNamed() {`
-    )
+        export default function FunctionNamed() {`,
+		);
 
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+		await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    if (isTurbopack) {
-      // TODO: Remove this branching once import traces are implemented in Turbopack
+		if (isTurbopack) {
+			// TODO: Remove this branching once import traces are implemented in Turbopack
 
-      await expect(browser).toDisplayRedbox(`
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Parsing ecmascript source code failed",
@@ -783,9 +784,9 @@ describe('pages/ error recovery', () => {
            |                                         ^",
          "stack": [],
        }
-      `)
-    } else if (process.env.NEXT_RSPACK) {
-      await expect({ browser, next }).toDisplayRedbox(`
+      `);
+		} else if (process.env.NEXT_RSPACK) {
+			await expect({ browser, next }).toDisplayRedbox(`
        {
          "count": 1,
          "description": "  × Module build failed:",
@@ -810,9 +811,9 @@ describe('pages/ error recovery', () => {
        ./pages/index.js",
          "stack": [],
        }
-      `)
-    } else {
-      await expect(browser).toDisplayRedbox(`
+      `);
+		} else {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Error:   x Expected '}', got '<eof>'",
@@ -834,15 +835,15 @@ describe('pages/ error recovery', () => {
        ./pages/index.js",
          "stack": [],
        }
-      `)
-    }
+      `);
+		}
 
-    // Test that runtime error does not take over:
-    await new Promise((resolve) => setTimeout(resolve, 2000))
+		// Test that runtime error does not take over:
+		await new Promise((resolve) => setTimeout(resolve, 2000));
 
-    if (isTurbopack) {
-      // TODO: Remove this branching once import traces are implemented in Turbopack
-      await expect(browser).toDisplayRedbox(`
+		if (isTurbopack) {
+			// TODO: Remove this branching once import traces are implemented in Turbopack
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Parsing ecmascript source code failed",
@@ -854,9 +855,9 @@ describe('pages/ error recovery', () => {
            |                                         ^",
          "stack": [],
        }
-      `)
-    } else if (process.env.NEXT_RSPACK) {
-      await expect({ browser, next }).toDisplayRedbox(`
+      `);
+		} else if (process.env.NEXT_RSPACK) {
+			await expect({ browser, next }).toDisplayRedbox(`
        {
          "count": 1,
          "description": "  × Module build failed:",
@@ -881,9 +882,9 @@ describe('pages/ error recovery', () => {
        ./pages/index.js",
          "stack": [],
        }
-      `)
-    } else {
-      await expect({ browser, next }).toDisplayRedbox(`
+      `);
+		} else {
+			await expect({ browser, next }).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Error:   x Expected '}', got '<eof>'",
@@ -905,7 +906,7 @@ describe('pages/ error recovery', () => {
        ./pages/index.js",
          "stack": [],
        }
-      `)
-    }
-  })
-})
+      `);
+		}
+	});
+});

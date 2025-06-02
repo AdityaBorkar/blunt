@@ -1,15 +1,15 @@
-import { redText } from './index.module.scss'
+import { redText } from './index.module.scss';
 
 function Home() {
-  return (
-    <>
-      <div id="verify-red" className={redText}>
-        This text should be red.
-      </div>
-      <br />
-      <input key={'' + Math.random()} id="text-input" type="text" />
-    </>
-  )
+	return (
+		<>
+			<div className={redText} id="verify-red">
+				This text should be red.
+			</div>
+			<br />
+			<input id="text-input" key={`${Math.random()}`} type="text" />
+		</>
+	);
 }
 
-export default Home
+export default Home;

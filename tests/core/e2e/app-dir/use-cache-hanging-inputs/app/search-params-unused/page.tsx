@@ -1,9 +1,9 @@
-'use cache'
+'use cache';
 
 export default async function Page({
-  searchParams,
+	searchParams,
 }: {
-  searchParams: Promise<{ n: string }>
+	searchParams: Promise<{ n: string }>;
 }) {
-  return <p>search params not used</p>
+	return <p>search params not used</p>;
 }

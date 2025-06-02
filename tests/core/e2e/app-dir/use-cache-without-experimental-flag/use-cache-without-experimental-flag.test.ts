@@ -1,36 +1,36 @@
-import { nextTestSetup } from 'e2e-utils'
-import { NextConfig } from 'next'
+import { nextTestSetup } from 'e2e-utils';
+import type { NextConfig } from 'next';
 import {
-  assertHasRedbox,
-  assertNoRedbox,
-  getRedboxDescription,
-  getRedboxSource,
-  retry,
-} from 'next-test-utils'
-import stripAnsi from 'strip-ansi'
+	assertHasRedbox,
+	assertNoRedbox,
+	getRedboxDescription,
+	getRedboxSource,
+	retry,
+} from 'next-test-utils';
+import stripAnsi from 'strip-ansi';
 
 const nextConfigWithUseCache: NextConfig = {
-  experimental: { useCache: true },
-}
+	experimental: { useCache: true },
+};
 
 describe('use-cache-without-experimental-flag', () => {
-  const { next, isNextStart, isTurbopack, skipped } = nextTestSetup({
-    files: __dirname,
-    skipStart: process.env.NEXT_TEST_MODE !== 'dev',
-    skipDeployment: true,
-  })
+	const { next, isNextStart, isTurbopack, skipped } = nextTestSetup({
+		files: __dirname,
+		skipDeployment: true,
+		skipStart: process.env.NEXT_TEST_MODE !== 'dev',
+	});
 
-  if (skipped) {
-    return
-  }
+	if (skipped) {
+		return;
+	}
 
-  if (isNextStart) {
-    it('should fail the build with an error', async () => {
-      const { cliOutput } = await next.build()
-      const buildOutput = getBuildOutput(cliOutput)
+	if (isNextStart) {
+		it('should fail the build with an error', async () => {
+			const { cliOutput } = await next.build();
+			const buildOutput = getBuildOutput(cliOutput);
 
-      if (isTurbopack) {
-        expect(buildOutput).toMatchInlineSnapshot(`
+			if (isTurbopack) {
+				expect(buildOutput).toMatchInlineSnapshot(`
          "Error: Turbopack build failed with 1 errors:
          ./app/page.tsx:1:1
          Ecmascript file had an error
@@ -48,9 +48,9 @@ describe('use-cache-without-experimental-flag', () => {
 
              at <unknown> (./app/page.tsx:1:1)
          "
-        `)
-      } else {
-        expect(buildOutput).toMatchInlineSnapshot(`
+        `);
+			} else {
+				expect(buildOutput).toMatchInlineSnapshot(`
          "
          ./app/page.tsx
          Error:   x To use "use cache", please enable the experimental feature flag "useCache" in your Next.js config.
@@ -71,30 +71,30 @@ describe('use-cache-without-experimental-flag', () => {
 
          > Build failed because of webpack errors
          "
-        `)
-      }
-    })
-  } else {
-    it('should show a build error', async () => {
-      const browser = await next.browser('/')
+        `);
+			}
+		});
+	} else {
+		it('should show a build error', async () => {
+			const browser = await next.browser('/');
 
-      await assertHasRedbox(browser)
+			await assertHasRedbox(browser);
 
-      const errorDescription = await getRedboxDescription(browser)
-      const errorSource = await getRedboxSource(browser)
+			const errorDescription = await getRedboxDescription(browser);
+			const errorSource = await getRedboxSource(browser);
 
-      if (isTurbopack) {
-        expect(errorDescription).toMatchInlineSnapshot(
-          `"Ecmascript file had an error"`
-        )
-      } else {
-        expect(errorDescription).toMatchInlineSnapshot(
-          `"Error:   x To use "use cache", please enable the experimental feature flag "useCache" in your Next.js config."`
-        )
-      }
+			if (isTurbopack) {
+				expect(errorDescription).toMatchInlineSnapshot(
+					`"Ecmascript file had an error"`,
+				);
+			} else {
+				expect(errorDescription).toMatchInlineSnapshot(
+					`"Error:   x To use "use cache", please enable the experimental feature flag "useCache" in your Next.js config."`,
+				);
+			}
 
-      if (isTurbopack) {
-        expect(errorSource).toMatchInlineSnapshot(`
+			if (isTurbopack) {
+				expect(errorSource).toMatchInlineSnapshot(`
            "./app/page.tsx (1:1)
            Ecmascript file had an error
            > 1 | 'use cache'
@@ -106,9 +106,9 @@ describe('use-cache-without-experimental-flag', () => {
            To use "use cache", please enable the experimental feature flag "useCache" in your Next.js config.
 
            Read more: https://nextjs.org/docs/canary/app/api-reference/directives/use-cache#usage"
-          `)
-      } else {
-        expect(errorSource).toMatchInlineSnapshot(`
+          `);
+			} else {
+				expect(errorSource).toMatchInlineSnapshot(`
            "./app/page.tsx
            Error:   x To use "use cache", please enable the experimental feature flag "useCache" in your Next.js config.
              | 
@@ -121,46 +121,46 @@ describe('use-cache-without-experimental-flag', () => {
             3 | export default async function Page() {
             4 |   return <p>hello world</p>
               \`----"
-          `)
-      }
-    })
+          `);
+			}
+		});
 
-    it('should recover from the build error if useCache flag is set', async () => {
-      const browser = await next.browser('/')
+		it('should recover from the build error if useCache flag is set', async () => {
+			const browser = await next.browser('/');
 
-      await assertHasRedbox(browser)
+			await assertHasRedbox(browser);
 
-      await next.patchFile(
-        'next.config.js',
-        `module.exports = ${JSON.stringify(nextConfigWithUseCache)}`,
-        () =>
-          retry(async () => {
-            expect(await browser.elementByCss('p').text()).toBe('hello world')
-            await assertNoRedbox(browser)
-          })
-      )
-    })
-  }
-})
+			await next.patchFile(
+				'next.config.js',
+				`module.exports = ${JSON.stringify(nextConfigWithUseCache)}`,
+				() =>
+					retry(async () => {
+						expect(await browser.elementByCss('p').text()).toBe('hello world');
+						await assertNoRedbox(browser);
+					}),
+			);
+		});
+	}
+});
 
 function getBuildOutput(cliOutput: string): string {
-  const lines: string[] = []
-  let skipLines = true
+	const lines: string[] = [];
+	let skipLines = true;
 
-  for (const line of cliOutput.split('\n')) {
-    if (!skipLines) {
-      if (line.includes('at turbopackBuild')) {
-        break
-      }
+	for (const line of cliOutput.split('\n')) {
+		if (!skipLines) {
+			if (line.includes('at turbopackBuild')) {
+				break;
+			}
 
-      lines.push(stripAnsi(line))
-    } else if (
-      line.includes('Build error occurred') ||
-      line.includes('Failed to compile')
-    ) {
-      skipLines = false
-    }
-  }
+			lines.push(stripAnsi(line));
+		} else if (
+			line.includes('Build error occurred') ||
+			line.includes('Failed to compile')
+		) {
+			skipLines = false;
+		}
+	}
 
-  return lines.join('\n')
+	return lines.join('\n');
 }

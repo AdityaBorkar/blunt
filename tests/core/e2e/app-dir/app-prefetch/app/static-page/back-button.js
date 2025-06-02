@@ -1,15 +1,15 @@
-'use client'
+'use client';
 
 export function BackButton() {
-  return (
-    <button
-      type="button"
-      id="go-back"
-      onClick={() => {
-        window.history.back()
-      }}
-    >
-      Go back
-    </button>
-  )
+	return (
+		<button
+			id="go-back"
+			onClick={() => {
+				window.history.back();
+			}}
+			type="button"
+		>
+			Go back
+		</button>
+	);
 }

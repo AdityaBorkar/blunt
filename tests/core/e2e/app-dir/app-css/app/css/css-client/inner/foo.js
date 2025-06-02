@@ -1,11 +1,11 @@
-'use client'
+'use client';
 
-import styles from './ClientComponent.module.css'
+import styles from './ClientComponent.module.css';
 
 export default function ClientComponent() {
-  return (
-    <div id="client-component" className={styles.yuge}>
-      Client Component
-    </div>
-  )
+	return (
+		<div className={styles.yuge} id="client-component">
+			Client Component
+		</div>
+	);
 }

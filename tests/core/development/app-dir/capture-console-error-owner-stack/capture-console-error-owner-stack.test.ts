@@ -1,16 +1,16 @@
-import { nextTestSetup } from 'e2e-utils'
-import { assertNoRedbox, assertNoConsoleErrors } from 'next-test-utils'
+import { nextTestSetup } from 'e2e-utils';
+import { assertNoConsoleErrors, assertNoRedbox } from 'next-test-utils';
 
 describe('app-dir - capture-console-error-owner-stack', () => {
-  const { next } = nextTestSetup({
-    files: __dirname,
-  })
+	const { next } = nextTestSetup({
+		files: __dirname,
+	});
 
-  it('should capture browser console error and format the error message', async () => {
-    const browser = await next.browser('/browser/event')
-    await browser.elementByCss('button').click()
+	it('should capture browser console error and format the error message', async () => {
+		const browser = await next.browser('/browser/event');
+		await browser.elementByCss('button').click();
 
-    await expect(browser).toDisplayCollapsedRedbox(`
+		await expect(browser).toDisplayCollapsedRedbox(`
      {
        "count": 1,
        "description": "trigger an console <error>",
@@ -25,13 +25,13 @@ describe('app-dir - capture-console-error-owner-stack', () => {
          "Page app/browser/event/page.js (5:5)",
        ],
      }
-    `)
-  })
+    `);
+	});
 
-  it('should capture browser console error in render and dedupe if necessary', async () => {
-    const browser = await next.browser('/browser/render')
+	it('should capture browser console error in render and dedupe if necessary', async () => {
+		const browser = await next.browser('/browser/render');
 
-    await expect(browser).toDisplayCollapsedRedbox(`
+		await expect(browser).toDisplayCollapsedRedbox(`
      {
        "count": 1,
        "description": "trigger an console.error in render",
@@ -44,13 +44,13 @@ describe('app-dir - capture-console-error-owner-stack', () => {
          "Page app/browser/render/page.js (4:11)",
        ],
      }
-    `)
-  })
+    `);
+	});
 
-  it('should capture browser console error in render and dedupe when multi same errors logged', async () => {
-    const browser = await next.browser('/browser/render')
+	it('should capture browser console error in render and dedupe when multi same errors logged', async () => {
+		const browser = await next.browser('/browser/render');
 
-    await expect(browser).toDisplayCollapsedRedbox(`
+		await expect(browser).toDisplayCollapsedRedbox(`
      {
        "count": 1,
        "description": "trigger an console.error in render",
@@ -63,13 +63,13 @@ describe('app-dir - capture-console-error-owner-stack', () => {
          "Page app/browser/render/page.js (4:11)",
        ],
      }
-    `)
-  })
+    `);
+	});
 
-  it('should capture server replay string error from console error', async () => {
-    const browser = await next.browser('/ssr')
+	it('should capture server replay string error from console error', async () => {
+		const browser = await next.browser('/ssr');
 
-    await expect(browser).toDisplayCollapsedRedbox(`
+		await expect(browser).toDisplayCollapsedRedbox(`
      {
        "count": 1,
        "description": "ssr console error:client",
@@ -82,13 +82,13 @@ describe('app-dir - capture-console-error-owner-stack', () => {
          "Page app/ssr/page.js (4:11)",
        ],
      }
-    `)
-  })
+    `);
+	});
 
-  it('should capture server replay error instance from console error', async () => {
-    const browser = await next.browser('/ssr-error-instance')
+	it('should capture server replay error instance from console error', async () => {
+		const browser = await next.browser('/ssr-error-instance');
 
-    await expect(browser).toDisplayCollapsedRedbox(`
+		await expect(browser).toDisplayCollapsedRedbox(`
      {
        "count": 1,
        "description": "Error: page error",
@@ -101,13 +101,13 @@ describe('app-dir - capture-console-error-owner-stack', () => {
          "Page app/ssr-error-instance/page.js (4:17)",
        ],
      }
-    `)
-  })
+    `);
+	});
 
-  it('should be able to capture rsc logged error', async () => {
-    const browser = await next.browser('/rsc')
+	it('should be able to capture rsc logged error', async () => {
+		const browser = await next.browser('/rsc');
 
-    await expect(browser).toDisplayCollapsedRedbox(`
+		await expect(browser).toDisplayCollapsedRedbox(`
        {
          "count": 1,
          "description": "Error: boom",
@@ -122,14 +122,14 @@ describe('app-dir - capture-console-error-owner-stack', () => {
            "Page <anonymous> (0:0)",
          ],
        }
-      `)
-  })
+      `);
+	});
 
-  it('should display the error message in error event when event.error is not present', async () => {
-    const browser = await next.browser('/browser/error-event')
-    await browser.elementByCss('button').click()
+	it('should display the error message in error event when event.error is not present', async () => {
+		const browser = await next.browser('/browser/error-event');
+		await browser.elementByCss('button').click();
 
-    await assertNoRedbox(browser)
-    await assertNoConsoleErrors(browser)
-  })
-})
+		await assertNoRedbox(browser);
+		await assertNoConsoleErrors(browser);
+	});
+});

@@ -1,19 +1,19 @@
-'use client'
+'use client';
 
-import { useCallback } from 'react'
+import { useCallback } from 'react';
 
 const Button = ({ message }: { message: string }) => {
-  const handleClick = useCallback(() => {
-    throw new Error(message)
-  }, [message])
+	const handleClick = useCallback(() => {
+		throw new Error(message);
+	}, [message]);
 
-  return (
-    <button type="button" onClick={handleClick}>
-      Click me
-    </button>
-  )
-}
+	return (
+		<button onClick={handleClick} type="button">
+			Click me
+		</button>
+	);
+};
 
 export default function Page() {
-  return <Button message="Kaputt!" />
+	return <Button message="Kaputt!" />;
 }

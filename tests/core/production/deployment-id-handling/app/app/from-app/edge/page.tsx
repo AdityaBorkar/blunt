@@ -1,27 +1,29 @@
-'use client'
-import testImage from '../../../public/test.jpg'
-import Image from 'next/image'
+'use client';
+
+import Image from 'next/image';
+
+import testImage from '../../../public/test.jpg';
 
 export default function Page() {
-  return (
-    <>
-      <p>hello app edge</p>
-      <Image src={testImage} alt="test" />
-      <p id="deploymentId">{process.env.NEXT_DEPLOYMENT_ID}</p>
+	return (
+		<>
+			<p>hello app edge</p>
+			<Image alt="test" src={testImage} />
+			<p id="deploymentId">{process.env.NEXT_DEPLOYMENT_ID}</p>
 
-      <button
-        onClick={() => {
-          import('../../../data').then((mod) => {
-            console.log('loaded data', mod)
-          })
-        }}
-        id="dynamic-import"
-      >
-        click me
-      </button>
-    </>
-  )
+			<button
+				id="dynamic-import"
+				onClick={() => {
+					import('../../../data').then((mod) => {
+						console.log('loaded data', mod);
+					});
+				}}
+			>
+				click me
+			</button>
+		</>
+	);
 }
 
-export const runtime = 'edge'
-export const preferredRegion = 'iad1'
+export const runtime = 'edge';
+export const preferredRegion = 'iad1';

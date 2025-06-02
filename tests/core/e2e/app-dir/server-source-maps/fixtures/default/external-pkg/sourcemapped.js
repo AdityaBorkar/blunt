@@ -1,4 +1,4 @@
 export function runExternalSourceMapped(fn) {
-    return fn();
+	return fn();
 }
 //# sourceMappingURL=sourcemapped.js.map

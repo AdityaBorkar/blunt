@@ -1,9 +1,9 @@
-import { redirect } from 'next/navigation'
+import { redirect } from 'next/navigation';
 
 export default function page() {
-  return 'redirect page'
+	return 'redirect page';
 }
 
 export async function generateMetadata() {
-  redirect('/async/redirect/dest')
+	redirect('/async/redirect/dest');
 }

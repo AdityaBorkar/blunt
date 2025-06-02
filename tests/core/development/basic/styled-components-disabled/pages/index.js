@@ -1,4 +1,5 @@
-import styled, { css } from 'styled-components'
+import styled, { css } from 'styled-components';
+
 const Button = styled.a`
   /* This renders the buttons above... Edit me! */
   display: inline-block;
@@ -13,26 +14,26 @@ const Button = styled.a`
   /* The GitHub button is a primary button
    * edit this to target it specifically! */
   ${(props) =>
-    props.primary &&
-    css`
+		props.primary &&
+		css`
       background: white;
       color: black;
     `}
-`
+`;
 
 export default function Home() {
-  return (
-    <div>
-      <Button
-        href="https://github.com/styled-components/styled-components"
-        target="_blank"
-        rel="noopener"
-        primary
-      >
-        GitHub
-      </Button>
+	return (
+		<div>
+			<Button
+				href="https://github.com/styled-components/styled-components"
+				primary
+				rel="noopener"
+				target="_blank"
+			>
+				GitHub
+			</Button>
 
-      <Button href="/docs">Documentation</Button>
-    </div>
-  )
+			<Button href="/docs">Documentation</Button>
+		</div>
+	);
 }

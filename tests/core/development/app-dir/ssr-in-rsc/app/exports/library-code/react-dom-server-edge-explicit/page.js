@@ -1,9 +1,9 @@
-import * as ReactDOMServerEdge from 'internal-pkg/server.edge'
+import * as ReactDOMServerEdge from 'internal-pkg/server.edge';
 
 export default function Page() {
-  return (
-    <>
-      <pre>{JSON.stringify(ReactDOMServerEdge, null, 2)}</pre>
-    </>
-  )
+	return (
+		<>
+			<pre>{JSON.stringify(ReactDOMServerEdge, null, 2)}</pre>
+		</>
+	);
 }

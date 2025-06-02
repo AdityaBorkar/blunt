@@ -1,5 +1,5 @@
 export default function page() {
-  return 'dynamic route [id] page'
+	return 'dynamic route [id] page';
 }
 
-export const runtime = 'edge'
+export const runtime = 'edge';

@@ -1,9 +1,9 @@
-import Nav from './nav'
+import Nav from './nav';
 
 export default function Page() {
-  return (
-    <div>
-      <Nav />
-    </div>
-  )
+	return (
+		<div>
+			<Nav />
+		</div>
+	);
 }

@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-import { useEffect } from 'react'
+import { useEffect } from 'react';
 
 /**
  * This page is to verify that the Dev Tools surface animates as expected and without jank:
@@ -20,16 +20,16 @@ import { useEffect } from 'react'
 
 // Play with this between `1` and `2`
 // to make sure the surface doesn't animate the plural form (s)
-const ERROR_COUNT = 2
+const ERROR_COUNT = 2;
 
 export default function Page() {
-  const clx = typeof window === 'undefined' ? 'server' : 'client'
+	const clx = typeof window === 'undefined' ? 'server' : 'client';
 
-  useEffect(() => {
-    setTimeout(() => {
-      throw new Error('runtime error')
-    }, 2000)
-  }, [])
+	useEffect(() => {
+		setTimeout(() => {
+			throw new Error('runtime error');
+		}, 2000);
+	}, []);
 
-  return <p className={clx}>{ERROR_COUNT >= 2 && <p>hey</p>}</p>
+	return <p className={clx}>{ERROR_COUNT >= 2 && <p>hey</p>}</p>;
 }

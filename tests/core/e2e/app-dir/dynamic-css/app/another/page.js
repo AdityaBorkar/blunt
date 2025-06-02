@@ -1,11 +1,11 @@
-'use client'
+'use client';
 
-import dynamicApi from 'next/dynamic'
+import dynamicApi from 'next/dynamic';
 
-const AsyncBar = dynamicApi(() => import('../../components/bar'))
+const AsyncBar = dynamicApi(() => import('../../components/bar'));
 
 export default function Page() {
-  return <AsyncBar />
+	return <AsyncBar />;
 }
 
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';

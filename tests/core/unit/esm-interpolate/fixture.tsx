@@ -1,8 +1,7 @@
-import React from 'react'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
 
 export const Foo = () => {
-  const router = useRouter()
+	const router = useRouter();
 
-  return <div>{router.pathname}</div>
-}
+	return <div>{router.pathname}</div>;
+};

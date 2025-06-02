@@ -1,17 +1,17 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { type NextRequest, NextResponse } from 'next/server';
 
-export const revalidate = 1
+export const revalidate = 1;
 
 export function generateStaticParams() {
-  console.log('generateStaticParams static/[slug]')
-  return [{ slug: 'first' }, { slug: 'second' }]
+	console.log('generateStaticParams static/[slug]');
+	return [{ slug: 'first' }, { slug: 'second' }];
 }
 
 export const GET = async (
-  req: NextRequest,
-  props: { params: Promise<{ slug: string }> }
+	_req: NextRequest,
+	props: { params: Promise<{ slug: string }> },
 ) => {
-  const params = await props.params
-  const resolvedParams = await params
-  return NextResponse.json({ params: resolvedParams, now: Date.now() })
-}
+	const params = await props.params;
+	const resolvedParams = await params;
+	return NextResponse.json({ now: Date.now(), params: resolvedParams });
+};

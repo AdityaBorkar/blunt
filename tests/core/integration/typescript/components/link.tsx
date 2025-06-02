@@ -1,11 +1,10 @@
-import React from 'react'
-import Link, { LinkProps } from 'next/link'
+import Link, { type LinkProps } from 'next/link';
 
 export default () => {
-  const props: LinkProps = {
-    href: '/page',
-    as: '/as-page',
-  }
+	const props: LinkProps = {
+		as: '/as-page',
+		href: '/page',
+	};
 
-  return <Link {...props}>Test</Link>
-}
+	return <Link {...props}>Test</Link>;
+};

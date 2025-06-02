@@ -1,11 +1,10 @@
-import * as React from 'react'
-import Link from 'next/link'
+import Link from 'next/link';
 
 export default function Page() {
-  return (
-    <>
-      <h1>Navigation worked!</h1>
-      <Link href="/">Go back</Link>
-    </>
-  )
+	return (
+		<>
+			<h1>Navigation worked!</h1>
+			<Link href="/">Go back</Link>
+		</>
+	);
 }

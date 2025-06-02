@@ -1,15 +1,13 @@
 export async function getServerSideProps() {
-  return {
-    props: (async function () {
-      return {
-        text: 'promise',
-      }
-    })(),
-  }
+	return {
+		props: (async () => ({
+			text: 'promise',
+		}))(),
+	};
 }
 
 export default ({ text }) => (
-  <>
-    <div>hello {text}</div>
-  </>
-)
+	<>
+		<div>hello {text}</div>
+	</>
+);

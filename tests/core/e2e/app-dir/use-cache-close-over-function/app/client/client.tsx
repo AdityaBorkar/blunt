@@ -1,14 +1,14 @@
-'use client'
+'use client';
 
-import { useActionState } from 'react'
+import { useActionState } from 'react';
 
 export function Client({ getValue }) {
-  const [result, formAction] = useActionState(getValue, 0)
+	const [result, formAction] = useActionState(getValue, 0);
 
-  return (
-    <form action={formAction}>
-      <p>{result}</p>
-      <button>Submit</button>
-    </form>
-  )
+	return (
+		<form action={formAction}>
+			<p>{result}</p>
+			<button>Submit</button>
+		</form>
+	);
 }

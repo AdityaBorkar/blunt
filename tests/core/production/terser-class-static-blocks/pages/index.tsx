@@ -6,13 +6,13 @@
  * @copyright 2024 Vercel Inc
  */
 class TestClass {
-  static text = 'hello world'
+	static text = 'hello world';
 }
 
 export default function Page() {
-  return (
-    <div>
-      <p>{TestClass.text}</p>
-    </div>
-  )
+	return (
+		<div>
+			<p>{TestClass.text}</p>
+		</div>
+	);
 }

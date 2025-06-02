@@ -1,4 +1,4 @@
 {
-  "name": "env-config",
-  "dependencies": {}
+	"dependencies": {},
+	"name": "env-config"
 }

@@ -1,7 +1,7 @@
-import type { NextConfig } from 'next'
+import type { NextConfig } from 'next';
 
 export default {
-  env: {
-    foo: 'foo',
-  },
-} satisfies NextConfig
+	env: {
+		foo: 'foo',
+	},
+} satisfies NextConfig;

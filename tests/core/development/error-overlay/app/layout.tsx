@@ -1,13 +1,13 @@
-import React from 'react'
+import type React from 'react';
 
 export default function RootLayout({
-  children,
+	children,
 }: {
-  children: React.ReactNode
+	children: React.ReactNode;
 }) {
-  return (
-    <html>
-      <body>{children}</body>
-    </html>
-  )
+	return (
+		<html>
+			<body>{children}</body>
+		</html>
+	);
 }

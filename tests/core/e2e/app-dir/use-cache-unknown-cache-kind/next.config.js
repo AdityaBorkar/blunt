@@ -2,11 +2,11 @@
  * @type {import('next').NextConfig}
  */
 const nextConfig = {
-  experimental: {
-    dynamicIO: true,
-    cacheHandlers: {}, // overwrite the default config
-    prerenderEarlyExit: false,
-  },
-}
+	experimental: {
+		cacheHandlers: {},
+		dynamicIO: true, // overwrite the default config
+		prerenderEarlyExit: false,
+	},
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

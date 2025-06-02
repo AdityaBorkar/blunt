@@ -1,3 +1,3 @@
 export default function Page() {
-  return 'default @bar'
+	return 'default @bar';
 }

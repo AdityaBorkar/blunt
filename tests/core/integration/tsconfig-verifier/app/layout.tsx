@@ -1,12 +1,11 @@
-import React from 'react'
 export default function RootLayout({
-  children,
+	children,
 }: {
-  children: import('react').ReactNode
+	children: import('react').ReactNode;
 }) {
-  return (
-    <html>
-      <body>{children}</body>
-    </html>
-  )
+	return (
+		<html>
+			<body>{children}</body>
+		</html>
+	);
 }

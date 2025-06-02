@@ -1,8 +1,8 @@
-import dynamic from 'next/dynamic'
+import dynamic from 'next/dynamic';
 
 const Hello = dynamic(import('../../components/hello1'), {
-  ssr: false,
-  loading: () => <p>LOADING</p>,
-})
+	loading: () => <p>LOADING</p>,
+	ssr: false,
+});
 
-export default Hello
+export default Hello;

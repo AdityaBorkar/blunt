@@ -1,3 +1,3 @@
-export { default } from '../page'
+export { default } from '../page';
 
-export const runtime = 'edge'
+export const runtime = 'edge';

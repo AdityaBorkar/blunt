@@ -1,15 +1,15 @@
-import { inc, get } from './action'
+import { get, inc } from './action';
 
 export async function Server() {
-  const x = await get()
-  return (
-    <>
-      <h2 id="value">Value = {x}</h2>
-      <form>
-        <button id="server-inc" formAction={inc}>
-          Inc
-        </button>
-      </form>
-    </>
-  )
+	const x = await get();
+	return (
+		<>
+			<h2 id="value">Value = {x}</h2>
+			<form>
+				<button formAction={inc} id="server-inc">
+					Inc
+				</button>
+			</form>
+		</>
+	);
 }

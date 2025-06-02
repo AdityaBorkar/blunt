@@ -1,5 +1,5 @@
-import { StreamingText } from '../streaming-text'
+import { StreamingText } from '../streaming-text';
 
 export default function Page() {
-  return <StreamingText static="Static in page" dynamic="Dynamic in page" />
+	return <StreamingText dynamic="Dynamic in page" static="Static in page" />;
 }

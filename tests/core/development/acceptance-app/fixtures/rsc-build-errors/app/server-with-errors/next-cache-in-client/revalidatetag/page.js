@@ -1,8 +1,9 @@
-'use client'
-import { revalidateTag } from 'next/cache'
+'use client';
 
-console.log({ revalidateTag })
+import { revalidateTag } from 'next/cache';
+
+console.log({ revalidateTag });
 
 export default function Page() {
-  return null
+	return null;
 }

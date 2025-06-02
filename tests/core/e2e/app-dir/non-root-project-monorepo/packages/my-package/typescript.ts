@@ -1,1 +1,1 @@
-export const text: string = 'Hello Typescript'
+export const text: string = 'Hello Typescript';

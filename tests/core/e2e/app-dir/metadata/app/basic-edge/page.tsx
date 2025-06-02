@@ -1,40 +1,41 @@
-import type { Metadata } from 'next'
-import Link from 'next/link'
-import Client from './client'
+import type { Metadata } from 'next';
+import Link from 'next/link';
 
-export const runtime = 'edge'
+import Client from './client';
+
+export const runtime = 'edge';
 
 export default function Page() {
-  return (
-    <div id="basic">
-      <Link id="to-index" href="/">
-        to index
-      </Link>
-      <br />
-      <Link href="/title-template/extra/inner" id="to-nested">
-        to /title-template/extra/inner
-      </Link>
-      <Client />
-    </div>
-  )
+	return (
+		<div id="basic">
+			<Link href="/" id="to-index">
+				to index
+			</Link>
+			<br />
+			<Link href="/title-template/extra/inner" id="to-nested">
+				to /title-template/extra/inner
+			</Link>
+			<Client />
+		</div>
+	);
 }
 
 export const metadata: Metadata = {
-  generator: 'next.js',
-  applicationName: 'test',
-  referrer: 'origin-when-cross-origin',
-  keywords: ['next.js', 'react', 'javascript'],
-  authors: [{ name: 'huozhi' }, { name: 'tree', url: 'https://tree.com' }],
-  manifest: '/api/manifest',
-  robots: 'index, follow',
-  alternates: {},
-  pagination: {
-    previous: '/basic?page=1',
-    next: '/basic?page=3',
-  },
-  formatDetection: {
-    email: false,
-    address: false,
-    telephone: false,
-  },
-}
+	alternates: {},
+	applicationName: 'test',
+	authors: [{ name: 'huozhi' }, { name: 'tree', url: 'https://tree.com' }],
+	formatDetection: {
+		address: false,
+		email: false,
+		telephone: false,
+	},
+	generator: 'next.js',
+	keywords: ['next.js', 'react', 'javascript'],
+	manifest: '/api/manifest',
+	pagination: {
+		next: '/basic?page=3',
+		previous: '/basic?page=1',
+	},
+	referrer: 'origin-when-cross-origin',
+	robots: 'index, follow',
+};

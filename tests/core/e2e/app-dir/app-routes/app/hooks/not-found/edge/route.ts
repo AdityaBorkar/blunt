@@ -1,7 +1,7 @@
-import { notFound } from 'next/navigation'
+import { notFound } from 'next/navigation';
 
 export async function GET() {
-  notFound()
+	notFound();
 }
 
-export const runtime = 'edge'
+export const runtime = 'edge';

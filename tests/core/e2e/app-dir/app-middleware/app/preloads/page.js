@@ -1,13 +1,13 @@
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
+import { Inter } from 'next/font/google';
+import Image from 'next/image';
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ['latin'] });
 
 export default function Page() {
-  return (
-    <>
-      <Image priority src="/favicon.ico" alt="favicon" width={16} height={16} />
-      <h1 className={inter.className}>Hello World</h1>
-    </>
-  )
+	return (
+		<>
+			<Image alt="favicon" height={16} priority src="/favicon.ico" width={16} />
+			<h1 className={inter.className}>Hello World</h1>
+		</>
+	);
 }

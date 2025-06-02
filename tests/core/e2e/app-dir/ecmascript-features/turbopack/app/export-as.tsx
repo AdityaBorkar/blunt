@@ -1,3 +1,3 @@
-let x = 1
+const x = 1;
 
-export { x as abc }
+export { x as abc };

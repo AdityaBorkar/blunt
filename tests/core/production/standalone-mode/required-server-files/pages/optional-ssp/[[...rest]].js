@@ -1,13 +1,13 @@
 export const getServerSideProps = ({ query, params }) => {
-  return {
-    props: {
-      random: Math.random(),
-      query: query,
-      params: params || null,
-    },
-  }
-}
+	return {
+		props: {
+			params: params || null,
+			query: query,
+			random: Math.random(),
+		},
+	};
+};
 
 export default function Page(props) {
-  return <p id="props">{JSON.stringify(props)}</p>
+	return <p id="props">{JSON.stringify(props)}</p>;
 }

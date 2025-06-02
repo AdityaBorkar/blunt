@@ -1,5 +1,5 @@
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>
+	return <>{children}</>;
 }
 
-export const maxDuration = 1
+export const maxDuration = 1;

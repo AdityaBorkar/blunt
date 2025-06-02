@@ -1,10 +1,9 @@
-import React from 'react'
-import classes from './red.module.css'
+import classes from './red.module.css';
 
 export function RedButton() {
-  return (
-    <button id="red-button" className={classes.button}>
-      Red Button
-    </button>
-  )
+	return (
+		<button className={classes.button} id="red-button">
+			Red Button
+		</button>
+	);
 }

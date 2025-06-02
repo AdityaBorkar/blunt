@@ -1,3 +1,3 @@
 export default function Page() {
-  return <div>Subroute</div>
+	return <div>Subroute</div>;
 }

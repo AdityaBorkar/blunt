@@ -1,5 +1,5 @@
 module.exports = {
-  experimental: {
-    optimizePackageImports: ['my-lib', 'mixed-lib'],
-  },
-}
+	experimental: {
+		optimizePackageImports: ['my-lib', 'mixed-lib'],
+	},
+};

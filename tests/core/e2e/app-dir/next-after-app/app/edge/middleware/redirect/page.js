@@ -1,1 +1,1 @@
-export { default } from '../../../nodejs/middleware/redirect/page'
+export { default } from '../../../nodejs/middleware/redirect/page';

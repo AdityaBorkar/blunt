@@ -1,14 +1,14 @@
-import { nextTestSetup } from 'e2e-utils'
+import { nextTestSetup } from 'e2e-utils';
 
 describe('app-dir - owner-stack-invalid-element-type', () => {
-  const { next } = nextTestSetup({
-    files: __dirname,
-  })
+	const { next } = nextTestSetup({
+		files: __dirname,
+	});
 
-  it('should catch invalid element from a browser only component', async () => {
-    const browser = await next.browser('/browser')
+	it('should catch invalid element from a browser only component', async () => {
+		const browser = await next.browser('/browser');
 
-    await expect(browser).toDisplayRedbox(`
+		await expect(browser).toDisplayRedbox(`
      {
        "count": 1,
        "description": "Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: object. You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
@@ -25,13 +25,13 @@ describe('app-dir - owner-stack-invalid-element-type', () => {
          "Page app/browser/page.js (15:10)",
        ],
      }
-    `)
-  })
+    `);
+	});
 
-  it('should catch invalid element from a rsc component', async () => {
-    const browser = await next.browser('/rsc')
+	it('should catch invalid element from a rsc component', async () => {
+		const browser = await next.browser('/rsc');
 
-    await expect(browser).toDisplayRedbox(`
+		await expect(browser).toDisplayRedbox(`
      {
        "count": 1,
        "description": "Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: object. You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
@@ -47,13 +47,13 @@ describe('app-dir - owner-stack-invalid-element-type', () => {
          "Page app/rsc/page.js (11:7)",
        ],
      }
-    `)
-  })
+    `);
+	});
 
-  it('should catch invalid element from on ssr client component', async () => {
-    const browser = await next.browser('/ssr')
+	it('should catch invalid element from on ssr client component', async () => {
+		const browser = await next.browser('/ssr');
 
-    await expect(browser).toDisplayRedbox(`
+		await expect(browser).toDisplayRedbox(`
      {
        "count": 1,
        "description": "Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: object. You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
@@ -69,6 +69,6 @@ describe('app-dir - owner-stack-invalid-element-type', () => {
          "Page app/ssr/page.js (13:7)",
        ],
      }
-    `)
-  })
-})
+    `);
+	});
+});

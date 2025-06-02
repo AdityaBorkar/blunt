@@ -1,15 +1,15 @@
-'use server'
+'use server';
 
-import { redirect } from 'next/navigation'
+import { redirect } from 'next/navigation';
 
 export async function relativeRedirect() {
-  return redirect('./subpage')
+	return redirect('./subpage');
 }
 
 export async function multiRelativeRedirect() {
-  return redirect('../subpage')
+	return redirect('../subpage');
 }
 
 export async function absoluteRedirect() {
-  return redirect('/subpage')
+	return redirect('/subpage');
 }

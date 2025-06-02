@@ -1,3 +1,3 @@
 export function runExternal(fn) {
-  return fn()
+	return fn();
 }

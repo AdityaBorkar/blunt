@@ -1,3 +1,3 @@
-export default function Page(props) {
-  return <p>/[slug]/[project]</p>
+export default function Page(_props) {
+	return <p>/[slug]/[project]</p>;
 }

@@ -2,7 +2,7 @@
  * @type {import('next').NextConfig}
  */
 const nextConfig = {
-  basePath: '/base',
-}
+	basePath: '/base',
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
 export {
-  ClientModExportA,
-  ClientModExportB,
-  ClientModExportC,
-} from './client-module'
+	ClientModExportA,
+	ClientModExportB,
+	ClientModExportC,
+} from './client-module';

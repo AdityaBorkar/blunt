@@ -1,10 +1,10 @@
 /** @type {import('next').NextConfig} */
 const config = {
-  experimental: {
-    outputFileTracingExcludes: {
-      '*': ['anyvaluewillcauseit'],
-    },
-  },
-}
+	experimental: {
+		outputFileTracingExcludes: {
+			'*': ['anyvaluewillcauseit'],
+		},
+	},
+};
 
-module.exports = config
+module.exports = config;

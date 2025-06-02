@@ -1,11 +1,11 @@
-import { ShouldFallbackThrowContainer } from './some-page/client'
+import { ShouldFallbackThrowContainer } from './some-page/client';
 
 export default function Root({ children }) {
-  return (
-    <html>
-      <body>
-        <ShouldFallbackThrowContainer>{children}</ShouldFallbackThrowContainer>
-      </body>
-    </html>
-  )
+	return (
+		<html>
+			<body>
+				<ShouldFallbackThrowContainer>{children}</ShouldFallbackThrowContainer>
+			</body>
+		</html>
+	);
 }

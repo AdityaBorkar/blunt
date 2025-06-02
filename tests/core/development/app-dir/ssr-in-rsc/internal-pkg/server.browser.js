@@ -1,10 +1,9 @@
-import * as ReactDOMServerEdge from 'react-dom/server.browser'
 // Fine to drop once React is on ESM
-import ReactDOMServerEdgeDefault from 'react-dom/server.browser'
+import ReactDOMServerEdgeDefault, * as ReactDOMServerEdge from 'react-dom/server.browser';
 
 const moduleShape = {
-  default: Object.keys(ReactDOMServerEdgeDefault).sort(),
-  named: Object.keys(ReactDOMServerEdge).sort(),
-}
+	default: Object.keys(ReactDOMServerEdgeDefault).sort(),
+	named: Object.keys(ReactDOMServerEdge).sort(),
+};
 
-export default moduleShape
+export default moduleShape;

@@ -1,8 +1,8 @@
 function throwError() {
-  throw new Error('Boom')
+	throw new Error('Boom');
 }
 
 export default function Page() {
-  throwError()
-  return null
+	throwError();
+	return null;
 }

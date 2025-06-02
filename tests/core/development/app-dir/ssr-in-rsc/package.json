@@ -1,5 +1,5 @@
 {
-  "dependencies": {
-    "internal-pkg": "link:./internal-pkg"
-  }
+	"dependencies": {
+		"internal-pkg": "link:./internal-pkg"
+	}
 }

@@ -1,19 +1,19 @@
 {
-  "name": "next-app",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "internal-pkg": "link:./internal-pkg"
-  },
-  "exports": {
-    ".": {
-      "default": "./index.js"
-    }
-  }
+	"dependencies": {
+		"internal-pkg": "link:./internal-pkg"
+	},
+	"exports": {
+		".": {
+			"default": "./index.js"
+		}
+	},
+	"name": "next-app",
+	"private": true,
+	"scripts": {
+		"build": "next build",
+		"dev": "next dev",
+		"lint": "next lint",
+		"start": "next start"
+	},
+	"version": "0.1.0"
 }

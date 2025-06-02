@@ -1,15 +1,15 @@
-import { Suspense } from 'react'
-import { connection } from 'next/server'
+import { connection } from 'next/server';
+import { Suspense } from 'react';
 
 async function Content() {
-  await connection()
-  return 'Dynamic Content'
+	await connection();
+	return 'Dynamic Content';
 }
 
 export default function PPRDisabled() {
-  return (
-    <Suspense fallback="Loading...">
-      <Content />
-    </Suspense>
-  )
+	return (
+		<Suspense fallback="Loading...">
+			<Content />
+		</Suspense>
+	);
 }

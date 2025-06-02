@@ -1,1 +1,1 @@
-export const condition = 'default'
+export const condition = 'default';

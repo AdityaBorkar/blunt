@@ -1,23 +1,23 @@
-import { createSandbox } from 'development-sandbox'
-import { FileRef, nextTestSetup } from 'e2e-utils'
-import { outdent } from 'outdent'
-import path from 'path'
+import path from 'node:path';
+import { createSandbox } from 'development-sandbox';
+import { FileRef, nextTestSetup } from 'e2e-utils';
+import { outdent } from 'outdent';
 
-const isRspack = process.env.NEXT_RSPACK !== undefined
+const isRspack = process.env.NEXT_RSPACK !== undefined;
 
 describe('ReactRefreshLogBox _app _document', () => {
-  const { isTurbopack, next } = nextTestSetup({
-    files: new FileRef(path.join(__dirname, 'fixtures', 'default-template')),
-    skipStart: true,
-  })
+	const { isTurbopack, next } = nextTestSetup({
+		files: new FileRef(path.join(__dirname, 'fixtures', 'default-template')),
+		skipStart: true,
+	});
 
-  test('empty _app shows logbox', async () => {
-    await using sandbox = await createSandbox(
-      next,
-      new Map([['pages/_app.js', ``]])
-    )
-    const { browser, session } = sandbox
-    await expect(browser).toDisplayRedbox(`
+	test('empty _app shows logbox', async () => {
+		await using sandbox = await createSandbox(
+			next,
+			new Map([['pages/_app.js', ``]]),
+		);
+		const { browser, session } = sandbox;
+		await expect(browser).toDisplayRedbox(`
      {
        "count": 1,
        "description": "Error: The default export is not a React Component in page: "/_app"",
@@ -26,31 +26,31 @@ describe('ReactRefreshLogBox _app _document', () => {
        "source": null,
        "stack": [],
      }
-    `)
-    expect(await session.getRedboxDescription()).toMatchInlineSnapshot(
-      `"Error: The default export is not a React Component in page: "/_app""`
-    )
+    `);
+		expect(await session.getRedboxDescription()).toMatchInlineSnapshot(
+			`"Error: The default export is not a React Component in page: "/_app""`,
+		);
 
-    await session.patch(
-      'pages/_app.js',
-      outdent`
+		await session.patch(
+			'pages/_app.js',
+			outdent`
         function MyApp({ Component, pageProps }) {
           return <Component {...pageProps} />;
         }
         export default MyApp
-      `
-    )
-    await session.assertNoRedbox()
-  })
+      `,
+		);
+		await session.assertNoRedbox();
+	});
 
-  test('empty _document shows logbox', async () => {
-    await using sandbox = await createSandbox(
-      next,
-      new Map([['pages/_document.js', ``]])
-    )
-    const { browser, session } = sandbox
+	test('empty _document shows logbox', async () => {
+		await using sandbox = await createSandbox(
+			next,
+			new Map([['pages/_document.js', ``]]),
+		);
+		const { browser, session } = sandbox;
 
-    await expect(browser).toDisplayRedbox(`
+		await expect(browser).toDisplayRedbox(`
      {
        "count": 1,
        "description": "Error: The default export is not a React Component in page: "/_document"",
@@ -59,11 +59,11 @@ describe('ReactRefreshLogBox _app _document', () => {
        "source": null,
        "stack": [],
      }
-    `)
+    `);
 
-    await session.patch(
-      'pages/_document.js',
-      outdent`
+		await session.patch(
+			'pages/_document.js',
+			outdent`
         import Document, { Html, Head, Main, NextScript } from 'next/document'
 
         class MyDocument extends Document {
@@ -86,30 +86,30 @@ describe('ReactRefreshLogBox _app _document', () => {
         }
 
         export default MyDocument
-      `
-    )
-    await session.assertNoRedbox()
-  })
+      `,
+		);
+		await session.assertNoRedbox();
+	});
 
-  test('_app syntax error shows logbox', async () => {
-    await using sandbox = await createSandbox(
-      next,
-      new Map([
-        [
-          'pages/_app.js',
-          outdent`
+	test('_app syntax error shows logbox', async () => {
+		await using sandbox = await createSandbox(
+			next,
+			new Map([
+				[
+					'pages/_app.js',
+					outdent`
             function MyApp({ Component, pageProps }) {
               return <<Component {...pageProps} />;
             }
             export default MyApp
           `,
-        ],
-      ])
-    )
-    const { browser, session } = sandbox
+				],
+			]),
+		);
+		const { browser, session } = sandbox;
 
-    if (isTurbopack) {
-      await expect(browser).toDisplayRedbox(`
+		if (isTurbopack) {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Parsing ecmascript source code failed",
@@ -121,9 +121,9 @@ describe('ReactRefreshLogBox _app _document', () => {
            |           ^",
          "stack": [],
        }
-      `)
-    } else if (isRspack) {
-      await expect({ browser, next }).toDisplayRedbox(`
+      `);
+		} else if (isRspack) {
+			await expect({ browser, next }).toDisplayRedbox(`
        {
          "count": 1,
          "description": "  × Module build failed:",
@@ -154,9 +154,9 @@ describe('ReactRefreshLogBox _app _document', () => {
          ╰─▶ Syntax Error",
          "stack": [],
        }
-      `)
-    } else {
-      await expect(browser).toDisplayRedbox(`
+      `);
+		} else {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Error:   x Expression expected",
@@ -183,28 +183,28 @@ describe('ReactRefreshLogBox _app _document', () => {
            Syntax Error",
          "stack": [],
        }
-      `)
-    }
+      `);
+		}
 
-    await session.patch(
-      'pages/_app.js',
-      outdent`
+		await session.patch(
+			'pages/_app.js',
+			outdent`
         function MyApp({ Component, pageProps }) {
           return <Component {...pageProps} />;
         }
         export default MyApp
-      `
-    )
-    await session.assertNoRedbox()
-  })
+      `,
+		);
+		await session.assertNoRedbox();
+	});
 
-  test('_document syntax error shows logbox', async () => {
-    await using sandbox = await createSandbox(
-      next,
-      new Map([
-        [
-          'pages/_document.js',
-          outdent`
+	test('_document syntax error shows logbox', async () => {
+		await using sandbox = await createSandbox(
+			next,
+			new Map([
+				[
+					'pages/_document.js',
+					outdent`
             import Document, { Html, Head, Main, NextScript } from 'next/document'
 
             class MyDocument extends Document {{
@@ -228,12 +228,12 @@ describe('ReactRefreshLogBox _app _document', () => {
 
             export default MyDocument
           `,
-        ],
-      ])
-    )
-    const { browser, session } = sandbox
-    if (isTurbopack) {
-      await expect(browser).toDisplayRedbox(`
+				],
+			]),
+		);
+		const { browser, session } = sandbox;
+		if (isTurbopack) {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Parsing ecmascript source code failed",
@@ -245,9 +245,9 @@ describe('ReactRefreshLogBox _app _document', () => {
            |                                    ^",
          "stack": [],
        }
-      `)
-    } else if (isRspack) {
-      await expect({ browser, next }).toDisplayRedbox(`
+      `);
+		} else if (isRspack) {
+			await expect({ browser, next }).toDisplayRedbox(`
        {
          "count": 1,
          "description": "  × Module build failed:",
@@ -271,9 +271,9 @@ describe('ReactRefreshLogBox _app _document', () => {
          ╰─▶ Syntax Error",
          "stack": [],
        }
-      `)
-    } else {
-      await expect(browser).toDisplayRedbox(`
+      `);
+		} else {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Error:   x Unexpected token \`{\`. Expected identifier, string literal, numeric literal or [ for the computed key",
@@ -294,12 +294,12 @@ describe('ReactRefreshLogBox _app _document', () => {
            Syntax Error",
          "stack": [],
        }
-      `)
-    }
+      `);
+		}
 
-    await session.patch(
-      'pages/_document.js',
-      outdent`
+		await session.patch(
+			'pages/_document.js',
+			outdent`
         import Document, { Html, Head, Main, NextScript } from 'next/document'
 
         class MyDocument extends Document {
@@ -322,8 +322,8 @@ describe('ReactRefreshLogBox _app _document', () => {
         }
 
         export default MyDocument
-      `
-    )
-    await session.assertNoRedbox()
-  })
-})
+      `,
+		);
+		await session.assertNoRedbox();
+	});
+});

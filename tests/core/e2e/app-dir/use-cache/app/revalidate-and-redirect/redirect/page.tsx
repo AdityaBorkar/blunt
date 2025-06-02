@@ -1,31 +1,31 @@
-import { revalidatePath, revalidateTag } from 'next/cache'
-import { redirect } from 'next/navigation'
+import { revalidatePath, revalidateTag } from 'next/cache';
+import { redirect } from 'next/navigation';
 
 export default function Page() {
-  return (
-    <form>
-      <button
-        id="revalidate-tag-redirect"
-        formAction={async () => {
-          'use server'
+	return (
+		<form>
+			<button
+				formAction={async () => {
+					'use server';
 
-          revalidateTag('revalidate-and-redirect')
-          redirect('/revalidate-and-redirect')
-        }}
-      >
-        Revalidate tag and redirect
-      </button>{' '}
-      <button
-        id="revalidate-path-redirect"
-        formAction={async () => {
-          'use server'
+					revalidateTag('revalidate-and-redirect');
+					redirect('/revalidate-and-redirect');
+				}}
+				id="revalidate-tag-redirect"
+			>
+				Revalidate tag and redirect
+			</button>{' '}
+			<button
+				formAction={async () => {
+					'use server';
 
-          revalidatePath('/revalidate-and-redirect')
-          redirect('/revalidate-and-redirect')
-        }}
-      >
-        Revalidate path and redirect
-      </button>
-    </form>
-  )
+					revalidatePath('/revalidate-and-redirect');
+					redirect('/revalidate-and-redirect');
+				}}
+				id="revalidate-path-redirect"
+			>
+				Revalidate path and redirect
+			</button>
+		</form>
+	);
 }

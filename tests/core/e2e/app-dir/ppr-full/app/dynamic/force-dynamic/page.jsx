@@ -1,12 +1,13 @@
-import React, { Suspense } from 'react'
-import { Dynamic } from '../../../components/dynamic'
+import { Suspense } from 'react';
 
-export const dynamic = 'force-dynamic'
+import { Dynamic } from '../../../components/dynamic';
+
+export const dynamic = 'force-dynamic';
 
 export default () => {
-  return (
-    <Suspense fallback={<Dynamic pathname="/dynamic/force-dynamic" fallback />}>
-      <Dynamic pathname="/dynamic/force-dynamic" />
-    </Suspense>
-  )
-}
+	return (
+		<Suspense fallback={<Dynamic fallback pathname="/dynamic/force-dynamic" />}>
+			<Dynamic pathname="/dynamic/force-dynamic" />
+		</Suspense>
+	);
+};

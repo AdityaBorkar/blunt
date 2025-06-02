@@ -1,3 +1,3 @@
 export default function TrendingPage() {
-  return <h1>Trending</h1>
+	return <h1>Trending</h1>;
 }

@@ -1,25 +1,25 @@
 export const getStaticProps = ({ params }) => {
-  return {
-    props: {
-      random: Math.random(),
-      params: params || null,
-    },
-    revalidate: 1,
-  }
-}
+	return {
+		props: {
+			params: params || null,
+			random: Math.random(),
+		},
+		revalidate: 1,
+	};
+};
 
 export const getStaticPaths = () => {
-  return {
-    paths: [],
-    fallback: true,
-  }
-}
+	return {
+		fallback: true,
+		paths: [],
+	};
+};
 
 export default function Page(props) {
-  return (
-    <>
-      <p id="page">/[slug]/social/[[...rest]]</p>
-      <p id="props">{JSON.stringify(props)}</p>
-    </>
-  )
+	return (
+		<>
+			<p id="page">/[slug]/social/[[...rest]]</p>
+			<p id="props">{JSON.stringify(props)}</p>
+		</>
+	);
 }

@@ -1,17 +1,17 @@
-import React, { Suspense } from 'react'
-import { cookies } from 'next/headers'
+import { cookies } from 'next/headers';
+import { Suspense } from 'react';
 
 export default async function Page() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <Foobar />
-    </Suspense>
-  )
+	return (
+		<Suspense fallback={<div>Loading...</div>}>
+			<Foobar />
+		</Suspense>
+	);
 }
 
 async function Foobar() {
-  try {
-    await cookies()
-  } catch (err) {}
-  return null
+	try {
+		await cookies();
+	} catch (_err) {}
+	return null;
 }

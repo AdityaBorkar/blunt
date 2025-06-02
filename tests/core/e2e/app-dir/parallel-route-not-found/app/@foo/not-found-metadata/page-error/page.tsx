@@ -1,9 +1,9 @@
 export function generateMetadata() {
-  return {
-    title: 'Create Next App',
-  }
+	return {
+		title: 'Create Next App',
+	};
 }
 
 export default function Page() {
-  return <div>@foo slot</div>
+	return <div>@foo slot</div>;
 }

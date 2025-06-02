@@ -1,9 +1,9 @@
-'use server'
+'use server';
 
 export async function addToCart() {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve('Add to cart')
-    }, 1000)
-  })
+	return new Promise((resolve, _reject) => {
+		setTimeout(() => {
+			resolve('Add to cart');
+		}, 1000);
+	});
 }

@@ -1,16 +1,16 @@
-import { nextTestSetup } from 'e2e-utils'
-import { assertNoRedbox, hasErrorToast } from 'next-test-utils'
+import { nextTestSetup } from 'e2e-utils';
+import { assertNoRedbox, hasErrorToast } from 'next-test-utils';
 
 describe('ssr-only-error', () => {
-  const { next } = nextTestSetup({
-    files: __dirname,
-  })
+	const { next } = nextTestSetup({
+		files: __dirname,
+	});
 
-  it('should show ssr only error in error overlay', async () => {
-    const browser = await next.browser('/')
+	it('should show ssr only error in error overlay', async () => {
+		const browser = await next.browser('/');
 
-    // TODO(veil): Missing Owner Stack
-    await expect(browser).toDisplayCollapsedRedbox(`
+		// TODO(veil): Missing Owner Stack
+		await expect(browser).toDisplayCollapsedRedbox(`
      {
        "count": 1,
        "description": "Error: SSR only error",
@@ -23,32 +23,32 @@ describe('ssr-only-error', () => {
          "Component app/page.tsx (5:11)",
        ],
      }
-    `)
-  })
+    `);
+	});
 
-  it('should not handle internal nextjs errors that will be handled by error boundaries', async () => {
-    const browser = await next.browser('/notfound', {
-      pushErrorAsConsoleLog: true,
-    })
+	it('should not handle internal nextjs errors that will be handled by error boundaries', async () => {
+		const browser = await next.browser('/notfound', {
+			pushErrorAsConsoleLog: true,
+		});
 
-    await assertNoRedbox(browser)
-    expect(await hasErrorToast(browser)).toBe(false)
+		await assertNoRedbox(browser);
+		expect(await hasErrorToast(browser)).toBe(false);
 
-    const text = await browser.elementByCss('body').text()
-    expect(text).toBe('404\nThis page could not be found.')
+		const text = await browser.elementByCss('body').text();
+		expect(text).toBe('404\nThis page could not be found.');
 
-    // Assert there's only one console.error from browser itself
-    const errorLogs = (await browser.log()).filter(
-      (log) => log.source === 'error'
-    )
+		// Assert there's only one console.error from browser itself
+		const errorLogs = (await browser.log()).filter(
+			(log) => log.source === 'error',
+		);
 
-    expect(errorLogs).toEqual([
-      expect.objectContaining({
-        source: 'error',
-        message: expect.stringContaining(
-          'the server responded with a status of 404'
-        ),
-      }),
-    ])
-  })
-})
+		expect(errorLogs).toEqual([
+			expect.objectContaining({
+				message: expect.stringContaining(
+					'the server responded with a status of 404',
+				),
+				source: 'error',
+			}),
+		]);
+	});
+});

@@ -1,5 +1,5 @@
-'use client'
+'use client';
 
 export default function Page() {
-  throw new Error('client-page-error')
+	throw new Error('client-page-error');
 }

@@ -1,23 +1,23 @@
-import { nextTestSetup } from 'e2e-utils'
-import { retry } from 'next-test-utils'
+import { nextTestSetup } from 'e2e-utils';
+import { retry } from 'next-test-utils';
 
 describe('typed-env', () => {
-  const { next } = nextTestSetup({
-    files: __dirname,
-    env: {
-      NODE_ENV: 'production',
-    },
-  })
+	const { next } = nextTestSetup({
+		env: {
+			NODE_ENV: 'production',
+		},
+		files: __dirname,
+	});
 
-  it('should have env types from next config', async () => {
-    await retry(async () => {
-      const envDTS = await next.readFile('.next/types/env.d.ts')
-      // since NODE_ENV is production, env types will
-      // not include development-specific env
-      expect(envDTS).not.toContain('FROM_ENV_DEV')
-      expect(envDTS).not.toContain('FROM_ENV_DEV_LOCAL')
+	it('should have env types from next config', async () => {
+		await retry(async () => {
+			const envDTS = await next.readFile('.next/types/env.d.ts');
+			// since NODE_ENV is production, env types will
+			// not include development-specific env
+			expect(envDTS).not.toContain('FROM_ENV_DEV');
+			expect(envDTS).not.toContain('FROM_ENV_DEV_LOCAL');
 
-      expect(envDTS).toMatchInlineSnapshot(`
+			expect(envDTS).toMatchInlineSnapshot(`
         "// Type definitions for Next.js environment variables
         declare global {
           namespace NodeJS {
@@ -36,9 +36,9 @@ describe('typed-env', () => {
           }
         }
         export {}"
-      `)
-    })
-  })
+      `);
+		});
+	});
 
-  // TODO: test for deleting .env & updating env.d.ts
-})
+	// TODO: test for deleting .env & updating env.d.ts
+});

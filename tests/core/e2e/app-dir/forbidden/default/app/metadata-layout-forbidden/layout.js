@@ -1,9 +1,9 @@
-import { forbidden } from 'next/navigation'
+import { forbidden } from 'next/navigation';
 
 export async function generateMetadata() {
-  forbidden()
+	forbidden();
 }
 
 export default function layout({ children }) {
-  return children
+	return children;
 }

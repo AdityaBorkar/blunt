@@ -1,9 +1,9 @@
-'use client'
+'use client';
 
-export default function ShouldNotServeClientDotJs(props) {
-  return (
-    <>
-      <p>hello from app/should-not-serve-client</p>
-    </>
-  )
+export default function ShouldNotServeClientDotJs(_props) {
+	return (
+		<>
+			<p>hello from app/should-not-serve-client</p>
+		</>
+	);
 }

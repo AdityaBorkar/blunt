@@ -1,12 +1,12 @@
-'use client'
+'use client';
 
-import { useSearchParams, unauthorized } from 'next/navigation'
+import { unauthorized, useSearchParams } from 'next/navigation';
 
 export default function ForbiddenTrigger() {
-  const searchParams = useSearchParams()
+	const searchParams = useSearchParams();
 
-  if (searchParams.get('root-unauthorized')) {
-    unauthorized()
-  }
-  return null
+	if (searchParams.get('root-unauthorized')) {
+		unauthorized();
+	}
+	return null;
 }

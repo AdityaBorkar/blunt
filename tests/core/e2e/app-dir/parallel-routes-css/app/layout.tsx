@@ -1,20 +1,20 @@
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react';
 
 const RootLayout = ({
-  children,
-  foo,
+	children,
+	foo,
 }: {
-  children: ReactNode
-  foo: ReactNode
+	children: ReactNode;
+	foo: ReactNode;
 }) => {
-  return (
-    <html lang="en">
-      <body>
-        {children}
-        {foo}
-      </body>
-    </html>
-  )
-}
+	return (
+		<html lang="en">
+			<body>
+				{children}
+				{foo}
+			</body>
+		</html>
+	);
+};
 
-export default RootLayout
+export default RootLayout;

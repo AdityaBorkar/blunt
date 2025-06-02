@@ -1,30 +1,30 @@
 module.exports = {
-  output: 'standalone',
-  trailingSlash: true,
-  rewrites() {
-    return {
-      beforeFiles: [
-        {
-          source: '/news/:path/',
-          destination: '/news/:path*/',
-        },
-      ],
-      afterFiles: [
-        {
-          source: '/somewhere',
-          destination: '/',
-        },
-      ],
-      fallback: [
-        {
-          source: '/:path*',
-          destination: '/:path*',
-        },
-        {
-          source: '/(.*)',
-          destination: '/seo-redirects',
-        },
-      ],
-    }
-  },
-}
+	output: 'standalone',
+	rewrites() {
+		return {
+			afterFiles: [
+				{
+					destination: '/',
+					source: '/somewhere',
+				},
+			],
+			beforeFiles: [
+				{
+					destination: '/news/:path*/',
+					source: '/news/:path/',
+				},
+			],
+			fallback: [
+				{
+					destination: '/:path*',
+					source: '/:path*',
+				},
+				{
+					destination: '/seo-redirects',
+					source: '/(.*)',
+				},
+			],
+		};
+	},
+	trailingSlash: true,
+};

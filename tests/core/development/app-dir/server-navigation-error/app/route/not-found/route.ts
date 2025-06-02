@@ -1,5 +1,5 @@
-import { notFound } from 'next/navigation'
+import { notFound } from 'next/navigation';
 
-export async function GET(req) {
-  notFound()
+export async function GET(_req) {
+	notFound();
 }

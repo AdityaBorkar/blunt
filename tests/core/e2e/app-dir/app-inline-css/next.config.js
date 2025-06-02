@@ -1,5 +1,5 @@
 module.exports = {
-  experimental: {
-    inlineCss: true,
-  },
-}
+	experimental: {
+		inlineCss: true,
+	},
+};

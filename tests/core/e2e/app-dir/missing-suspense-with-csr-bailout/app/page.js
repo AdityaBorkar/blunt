@@ -1,17 +1,17 @@
-'use client'
+'use client';
 
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation';
 
 function SearchParams() {
-  useSearchParams()
-  return null
+	useSearchParams();
+	return null;
 }
 
 export default function Page() {
-  return (
-    <>
-      <SearchParams />
-      <div>Page</div>
-    </>
-  )
+	return (
+		<>
+			<SearchParams />
+			<div>Page</div>
+		</>
+	);
 }

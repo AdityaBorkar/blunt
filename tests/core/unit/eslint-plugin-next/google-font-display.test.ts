@@ -1,12 +1,102 @@
-import { RuleTester as ESLintTesterV8 } from 'eslint-v8'
-import { RuleTester as ESLintTesterV9 } from 'eslint'
-import { rules } from '@next/eslint-plugin-next'
+import { rules } from '@next/eslint-plugin-next';
+import { RuleTester as ESLintTesterV9 } from 'eslint';
+import { RuleTester as ESLintTesterV8 } from 'eslint-v8';
 
-const NextESLintRule = rules['google-font-display']
+const NextESLintRule = rules['google-font-display'];
 
 const tests = {
-  valid: [
-    `import Head from "next/head";
+	invalid: [
+		{
+			code: `import Head from "next/head";
+
+      export default Test = () => {
+       return (
+         <Head>
+           <link
+             href="https://fonts.googleapis.com/css2?family=Krona+One"
+             rel="stylesheet"
+           />
+         </Head>
+       );
+      };
+     `,
+			errors: [
+				{
+					message:
+						'A font-display parameter is missing (adding `&display=optional` is recommended). See: https://nextjs.org/docs/messages/google-font-display',
+					type: 'JSXOpeningElement',
+				},
+			],
+		},
+		{
+			code: `import Head from "next/head";
+
+      export default Test = () => {
+       return (
+         <Head>
+           <link
+             href="https://fonts.googleapis.com/css2?family=Krona+One&display=block"
+             rel="stylesheet"
+           />
+         </Head>
+       );
+      };
+     `,
+			errors: [
+				{
+					message:
+						'Block is not recommended. See: https://nextjs.org/docs/messages/google-font-display',
+					type: 'JSXOpeningElement',
+				},
+			],
+		},
+		{
+			code: `import Head from "next/head";
+
+      export default Test = () => {
+       return (
+         <Head>
+           <link
+             href="https://fonts.googleapis.com/css2?family=Krona+One&display=auto"
+             rel="stylesheet"
+           />
+         </Head>
+       );
+      };
+     `,
+			errors: [
+				{
+					message:
+						'Auto is not recommended. See: https://nextjs.org/docs/messages/google-font-display',
+					type: 'JSXOpeningElement',
+				},
+			],
+		},
+		{
+			code: `import Head from "next/head";
+
+      export default Test = () => {
+       return (
+         <Head>
+           <link
+             href="https://fonts.googleapis.com/css2?display=fallback&family=Krona+One"
+             rel="stylesheet"
+           />
+         </Head>
+       );
+      };
+     `,
+			errors: [
+				{
+					message:
+						'Fallback is not recommended. See: https://nextjs.org/docs/messages/google-font-display',
+					type: 'JSXOpeningElement',
+				},
+			],
+		},
+	],
+	valid: [
+		`import Head from "next/head";
 
      export default Test = () => {
       return (
@@ -29,7 +119,7 @@ const tests = {
      };
     `,
 
-    `import Document, { Html, Head } from "next/document";
+		`import Document, { Html, Head } from "next/document";
 
      class MyDocument extends Document {
       render() {
@@ -49,7 +139,7 @@ const tests = {
      export default MyDocument;
     `,
 
-    `import Document, { Html, Head } from "next/document";
+		`import Document, { Html, Head } from "next/document";
 
      class MyDocument extends Document {
       render() {
@@ -69,122 +159,31 @@ const tests = {
 
      export default MyDocument;
     `,
-  ],
-
-  invalid: [
-    {
-      code: `import Head from "next/head";
-
-      export default Test = () => {
-       return (
-         <Head>
-           <link
-             href="https://fonts.googleapis.com/css2?family=Krona+One"
-             rel="stylesheet"
-           />
-         </Head>
-       );
-      };
-     `,
-      errors: [
-        {
-          message:
-            'A font-display parameter is missing (adding `&display=optional` is recommended). See: https://nextjs.org/docs/messages/google-font-display',
-          type: 'JSXOpeningElement',
-        },
-      ],
-    },
-    {
-      code: `import Head from "next/head";
-
-      export default Test = () => {
-       return (
-         <Head>
-           <link
-             href="https://fonts.googleapis.com/css2?family=Krona+One&display=block"
-             rel="stylesheet"
-           />
-         </Head>
-       );
-      };
-     `,
-      errors: [
-        {
-          message:
-            'Block is not recommended. See: https://nextjs.org/docs/messages/google-font-display',
-          type: 'JSXOpeningElement',
-        },
-      ],
-    },
-    {
-      code: `import Head from "next/head";
-
-      export default Test = () => {
-       return (
-         <Head>
-           <link
-             href="https://fonts.googleapis.com/css2?family=Krona+One&display=auto"
-             rel="stylesheet"
-           />
-         </Head>
-       );
-      };
-     `,
-      errors: [
-        {
-          message:
-            'Auto is not recommended. See: https://nextjs.org/docs/messages/google-font-display',
-          type: 'JSXOpeningElement',
-        },
-      ],
-    },
-    {
-      code: `import Head from "next/head";
-
-      export default Test = () => {
-       return (
-         <Head>
-           <link
-             href="https://fonts.googleapis.com/css2?display=fallback&family=Krona+One"
-             rel="stylesheet"
-           />
-         </Head>
-       );
-      };
-     `,
-      errors: [
-        {
-          message:
-            'Fallback is not recommended. See: https://nextjs.org/docs/messages/google-font-display',
-          type: 'JSXOpeningElement',
-        },
-      ],
-    },
-  ],
-}
+	],
+};
 
 describe('google-font-display', () => {
-  new ESLintTesterV8({
-    parserOptions: {
-      ecmaVersion: 2020,
-      sourceType: 'module',
-      ecmaFeatures: {
-        modules: true,
-        jsx: true,
-      },
-    },
-  }).run('eslint-v8', NextESLintRule, tests)
+	new ESLintTesterV8({
+		parserOptions: {
+			ecmaFeatures: {
+				jsx: true,
+				modules: true,
+			},
+			ecmaVersion: 2020,
+			sourceType: 'module',
+		},
+	}).run('eslint-v8', NextESLintRule, tests);
 
-  new ESLintTesterV9({
-    languageOptions: {
-      ecmaVersion: 2020,
-      sourceType: 'module',
-      parserOptions: {
-        ecmaFeatures: {
-          modules: true,
-          jsx: true,
-        },
-      },
-    },
-  }).run('eslint-v9', NextESLintRule, tests)
-})
+	new ESLintTesterV9({
+		languageOptions: {
+			ecmaVersion: 2020,
+			parserOptions: {
+				ecmaFeatures: {
+					jsx: true,
+					modules: true,
+				},
+			},
+			sourceType: 'module',
+		},
+	}).run('eslint-v9', NextESLintRule, tests);
+});

@@ -1,5 +1,5 @@
-import { unauthorized } from 'next/navigation'
+import { unauthorized } from 'next/navigation';
 
 export default function page() {
-  unauthorized()
+	unauthorized();
 }

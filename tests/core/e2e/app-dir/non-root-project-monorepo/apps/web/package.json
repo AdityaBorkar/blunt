@@ -1,12 +1,12 @@
 {
-  "name": "web",
-  "version": "0.0.0",
-  "dependencies": {
-    "my-package": "workspace:*"
-  },
-  "scripts": {
-    "dev": "next dev",
-    "start": "next start",
-    "build": "next build"
-  }
+	"dependencies": {
+		"my-package": "workspace:*"
+	},
+	"name": "web",
+	"scripts": {
+		"build": "next build",
+		"dev": "next dev",
+		"start": "next start"
+	},
+	"version": "0.0.0"
 }

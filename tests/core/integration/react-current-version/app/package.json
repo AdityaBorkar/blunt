@@ -1,11 +1,11 @@
 {
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
-  },
-  "dependencies": {
-    "react": "*",
-    "react-dom": "*"
-  }
+	"dependencies": {
+		"react": "*",
+		"react-dom": "*"
+	},
+	"scripts": {
+		"build": "next build",
+		"dev": "next dev",
+		"start": "next start"
+	}
 }

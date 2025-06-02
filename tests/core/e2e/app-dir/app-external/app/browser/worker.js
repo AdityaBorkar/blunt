@@ -1,3 +1,3 @@
-import { value } from 'browser-module'
+import { value } from 'browser-module';
 
-self.postMessage('worker.js:' + value)
+self.postMessage(`worker.js:${value}`);

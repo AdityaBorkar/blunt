@@ -1,1 +1,1 @@
-export default 'worker-dep'
+export default 'worker-dep';

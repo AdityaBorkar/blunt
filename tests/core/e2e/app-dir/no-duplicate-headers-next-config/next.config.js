@@ -2,19 +2,19 @@
  * @type {import('next').NextConfig}
  */
 const nextConfig = {
-  async headers() {
-    return [
-      {
-        source: '/favicon.ico',
-        headers: [
-          {
-            key: 'cache-control',
-            value: 'max-age=1234',
-          },
-        ],
-      },
-    ]
-  },
-}
+	async headers() {
+		return [
+			{
+				headers: [
+					{
+						key: 'cache-control',
+						value: 'max-age=1234',
+					},
+				],
+				source: '/favicon.ico',
+			},
+		];
+	},
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

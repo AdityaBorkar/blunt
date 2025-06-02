@@ -1,1 +1,1 @@
-export { default } from '../../../app/interleaved/a/page'
+export { default } from '../../../app/interleaved/a/page';

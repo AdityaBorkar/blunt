@@ -1,18 +1,18 @@
-'use client'
+'use client';
 
-import { useActionState } from 'react'
+import { useActionState } from 'react';
 
 export function Form({
-  getRandomValue,
+	getRandomValue,
 }: {
-  getRandomValue: () => Promise<number>
+	getRandomValue: () => Promise<number>;
 }) {
-  const [result, formAction, isPending] = useActionState(getRandomValue, -1)
+	const [result, formAction, isPending] = useActionState(getRandomValue, -1);
 
-  return (
-    <form action={formAction}>
-      <button>Submit</button>
-      <p>{isPending ? 'loading...' : result}</p>
-    </form>
-  )
+	return (
+		<form action={formAction}>
+			<button>Submit</button>
+			<p>{isPending ? 'loading...' : result}</p>
+		</form>
+	);
 }

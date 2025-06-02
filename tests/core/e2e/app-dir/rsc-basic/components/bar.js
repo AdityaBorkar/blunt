@@ -1,10 +1,10 @@
-import Foo from './foo'
+import Foo from './foo';
 
 export default function Bar() {
-  return (
-    <div id="bar">
-      {`bar.server.js: `}
-      <Foo />
-    </div>
-  )
+	return (
+		<div id="bar">
+			{`bar.server.js: `}
+			<Foo />
+		</div>
+	);
 }

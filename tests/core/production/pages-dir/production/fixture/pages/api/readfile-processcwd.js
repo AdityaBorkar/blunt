@@ -1,9 +1,10 @@
-import { readFileSync } from 'fs'
-import { join } from 'path'
-const file = join(process.cwd(), 'static/data/item.txt')
-const content = readFileSync(file, 'utf8')
-console.log({ file, content })
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
-export default (req, res) => {
-  res.end(content)
-}
+const file = join(process.cwd(), 'static/data/item.txt');
+const content = readFileSync(file, 'utf8');
+console.log({ content, file });
+
+export default (_req, res) => {
+	res.end(content);
+};

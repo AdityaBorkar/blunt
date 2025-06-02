@@ -1,23 +1,22 @@
-import React from 'react'
-import { setTimeout } from 'timers/promises'
+import { setTimeout } from 'node:timers/promises';
 
 async function fetchUncachedData() {
-  await setTimeout(0)
+	await setTimeout(0);
 
-  return Math.random()
+	return Math.random();
 }
 
 const Foo = async ({ promise }) => {
-  'use cache'
+	'use cache';
 
-  return (
-    <>
-      <p>{await promise}</p>
-      <p>{Math.random()}</p>
-    </>
-  )
-}
+	return (
+		<>
+			<p>{await promise}</p>
+			<p>{Math.random()}</p>
+		</>
+	);
+};
 
 export default async function Page() {
-  return <Foo promise={fetchUncachedData()} />
+	return <Foo promise={fetchUncachedData()} />;
 }

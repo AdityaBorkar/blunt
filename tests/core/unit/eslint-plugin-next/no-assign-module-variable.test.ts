@@ -1,60 +1,60 @@
-import { RuleTester as ESLintTesterV8 } from 'eslint-v8'
-import { RuleTester as ESLintTesterV9 } from 'eslint'
-import { rules } from '@next/eslint-plugin-next'
+import { rules } from '@next/eslint-plugin-next';
+import { RuleTester as ESLintTesterV9 } from 'eslint';
+import { RuleTester as ESLintTesterV8 } from 'eslint-v8';
 
-const NextESLintRule = rules['no-assign-module-variable']
+const NextESLintRule = rules['no-assign-module-variable'];
 
 const tests = {
-  valid: [
-    `
-      let myModule = {};
-
-      export default function MyComponent() {
-        return <></>
-      }
-    `,
-  ],
-  invalid: [
-    {
-      code: `
+	invalid: [
+		{
+			code: `
       let module = {};
 
       export default function MyComponent() {
         return <></>
       }
       `,
-      errors: [
-        {
-          message:
-            'Do not assign to the variable `module`. See: https://nextjs.org/docs/messages/no-assign-module-variable',
-        },
-      ],
-    },
-  ],
-}
+			errors: [
+				{
+					message:
+						'Do not assign to the variable `module`. See: https://nextjs.org/docs/messages/no-assign-module-variable',
+				},
+			],
+		},
+	],
+	valid: [
+		`
+      let myModule = {};
+
+      export default function MyComponent() {
+        return <></>
+      }
+    `,
+	],
+};
 
 describe('no-assign-module-variable', () => {
-  new ESLintTesterV8({
-    parserOptions: {
-      ecmaVersion: 2018,
-      sourceType: 'module',
-      ecmaFeatures: {
-        modules: true,
-        jsx: true,
-      },
-    },
-  }).run('eslint-v8', NextESLintRule, tests)
+	new ESLintTesterV8({
+		parserOptions: {
+			ecmaFeatures: {
+				jsx: true,
+				modules: true,
+			},
+			ecmaVersion: 2018,
+			sourceType: 'module',
+		},
+	}).run('eslint-v8', NextESLintRule, tests);
 
-  new ESLintTesterV9({
-    languageOptions: {
-      ecmaVersion: 2018,
-      sourceType: 'module',
-      parserOptions: {
-        ecmaFeatures: {
-          modules: true,
-          jsx: true,
-        },
-      },
-    },
-  }).run('eslint-v9', NextESLintRule, tests)
-})
+	new ESLintTesterV9({
+		languageOptions: {
+			ecmaVersion: 2018,
+			parserOptions: {
+				ecmaFeatures: {
+					jsx: true,
+					modules: true,
+				},
+			},
+			sourceType: 'module',
+		},
+	}).run('eslint-v9', NextESLintRule, tests);
+});

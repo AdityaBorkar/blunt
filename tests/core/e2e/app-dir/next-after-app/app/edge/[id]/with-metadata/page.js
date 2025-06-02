@@ -1,4 +1,4 @@
 export {
-  default,
-  generateMetadata,
-} from '../../../nodejs/[id]/with-metadata/page'
+	default,
+	generateMetadata,
+} from '../../../nodejs/[id]/with-metadata/page';

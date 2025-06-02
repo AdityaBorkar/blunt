@@ -1,14 +1,14 @@
 export default function layout({ children }) {
-  return children
+	return children;
 }
 
 export const metadata = {
-  metadataBase: 'https://example.com',
-  alternates: {
-    canonical: './',
-    languages: {
-      'en-US': './en-US',
-      'de-DE': './de-DE',
-    },
-  },
-}
+	alternates: {
+		canonical: './',
+		languages: {
+			'de-DE': './de-DE',
+			'en-US': './en-US',
+		},
+	},
+	metadataBase: 'https://example.com',
+};

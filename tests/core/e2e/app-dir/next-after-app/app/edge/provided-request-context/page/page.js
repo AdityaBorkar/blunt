@@ -1,1 +1,1 @@
-export { default } from '../../../nodejs/provided-request-context/page/page'
+export { default } from '../../../nodejs/provided-request-context/page/page';

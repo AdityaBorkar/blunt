@@ -1,60 +1,60 @@
-import { nextTestSetup } from 'e2e-utils'
+import { nextTestSetup } from 'e2e-utils';
 import {
-  hasErrorToast,
-  getToastErrorCount,
-  retry,
-  openRedbox,
-  getRedboxDescription,
-  getRedboxComponentStack,
-  goToNextErrorView,
-  getRedboxDescriptionWarning,
-  getHighlightedDiffLines,
-  assertHasRedbox,
-} from 'next-test-utils'
-import { BrowserInterface } from 'next-webdriver'
+	assertHasRedbox,
+	getHighlightedDiffLines,
+	getRedboxComponentStack,
+	getRedboxDescription,
+	getRedboxDescriptionWarning,
+	getToastErrorCount,
+	goToNextErrorView,
+	hasErrorToast,
+	openRedbox,
+	retry,
+} from 'next-test-utils';
+import type { BrowserInterface } from 'next-webdriver';
 
 describe('hydration-error-count', () => {
-  const { next } = nextTestSetup({
-    files: __dirname,
-  })
+	const { next } = nextTestSetup({
+		files: __dirname,
+	});
 
-  it('should have correct hydration error count for bad nesting', async () => {
-    const browser = await next.browser('/bad-nesting')
+	it('should have correct hydration error count for bad nesting', async () => {
+		const browser = await next.browser('/bad-nesting');
 
-    await retry(async () => {
-      await hasErrorToast(browser)
-      const totalErrorCount = await getToastErrorCount(browser)
+		await retry(async () => {
+			await hasErrorToast(browser);
+			const totalErrorCount = await getToastErrorCount(browser);
 
-      // One hydration error and one warning
-      expect(totalErrorCount).toBe(2)
-    })
-  })
+			// One hydration error and one warning
+			expect(totalErrorCount).toBe(2);
+		});
+	});
 
-  it('should have correct hydration error count for html diff', async () => {
-    const browser = await next.browser('/html-diff')
+	it('should have correct hydration error count for html diff', async () => {
+		const browser = await next.browser('/html-diff');
 
-    await retry(async () => {
-      await hasErrorToast(browser)
-      const totalErrorCount = await getToastErrorCount(browser)
+		await retry(async () => {
+			await hasErrorToast(browser);
+			const totalErrorCount = await getToastErrorCount(browser);
 
-      // One hydration error and one warning
-      expect(totalErrorCount).toBe(1)
-    })
-  })
+			// One hydration error and one warning
+			expect(totalErrorCount).toBe(1);
+		});
+	});
 
-  it('should display correct hydration info in each hydration error view', async () => {
-    const browser = await next.browser('/two-issues')
+	it('should display correct hydration info in each hydration error view', async () => {
+		const browser = await next.browser('/two-issues');
 
-    await openRedbox(browser)
+		await openRedbox(browser);
 
-    const firstError = await getHydrationErrorSnapshot(browser)
-    await goToNextErrorView(browser)
-    const secondError = await getHydrationErrorSnapshot(browser)
+		const firstError = await getHydrationErrorSnapshot(browser);
+		await goToNextErrorView(browser);
+		const secondError = await getHydrationErrorSnapshot(browser);
 
-    // Hydration runtime error
-    // - contains a diff
-    // - has notes
-    expect(firstError).toMatchInlineSnapshot(`
+		// Hydration runtime error
+		// - contains a diff
+		// - has notes
+		expect(firstError).toMatchInlineSnapshot(`
      {
        "description": "In HTML, <p> cannot be a descendant of <p>.
      This will cause a hydration error.",
@@ -86,12 +86,12 @@ describe('hydration-error-count', () => {
        ],
        "notes": null,
      }
-    `)
+    `);
 
-    // Hydration console.error
-    // - contains a diff
-    // - no notes
-    expect(secondError).toMatchInlineSnapshot(`
+		// Hydration console.error
+		// - contains a diff
+		// - no notes
+		expect(secondError).toMatchInlineSnapshot(`
      {
        "description": "Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:",
        "diff": "...
@@ -130,17 +130,17 @@ describe('hydration-error-count', () => {
 
      It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.",
      }
-    `)
-  })
+    `);
+	});
 
-  it('should display runtime error separately from hydration errors', async () => {
-    const browser = await next.browser('/hydration-with-runtime-errors')
-    await assertHasRedbox(browser)
-    expect(await getToastErrorCount(browser)).toBe(3)
+	it('should display runtime error separately from hydration errors', async () => {
+		const browser = await next.browser('/hydration-with-runtime-errors');
+		await assertHasRedbox(browser);
+		expect(await getToastErrorCount(browser)).toBe(3);
 
-    // Move to the last hydration error
-    await goToNextErrorView(browser)
-    expect(browser).toDisplayRedbox(`
+		// Move to the last hydration error
+		await goToNextErrorView(browser);
+		expect(browser).toDisplayRedbox(`
      {
        "componentStack": "...
          <OuterLayoutRouter parallelRouterKey="children" template={<RenderFromTemplateContext>}>
@@ -171,10 +171,10 @@ describe('hydration-error-count', () => {
          "Page app/hydration-with-runtime-errors/page.tsx (12:14)",
        ],
      }
-    `)
+    `);
 
-    await goToNextErrorView(browser)
-    expect(browser).toDisplayRedbox(`
+		await goToNextErrorView(browser);
+		expect(browser).toDisplayRedbox(`
      {
        "count": 3,
        "description": "Error: runtime error",
@@ -187,20 +187,20 @@ describe('hydration-error-count', () => {
          "Page.useEffect app/hydration-with-runtime-errors/page.tsx (7:11)",
        ],
      }
-    `)
-  })
-})
+    `);
+	});
+});
 
 async function getHydrationErrorSnapshot(browser: BrowserInterface) {
-  const description = await getRedboxDescription(browser)
-  const notes = await getRedboxDescriptionWarning(browser)
-  const diff = await getRedboxComponentStack(browser)
-  const highlightedLines = await getHighlightedDiffLines(browser)
+	const description = await getRedboxDescription(browser);
+	const notes = await getRedboxDescriptionWarning(browser);
+	const diff = await getRedboxComponentStack(browser);
+	const highlightedLines = await getHighlightedDiffLines(browser);
 
-  return {
-    description,
-    notes,
-    diff,
-    highlightedLines,
-  }
+	return {
+		description,
+		diff,
+		highlightedLines,
+		notes,
+	};
 }

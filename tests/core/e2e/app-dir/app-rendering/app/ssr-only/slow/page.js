@@ -1,22 +1,22 @@
-import { use } from 'react'
+import { use } from 'react';
 
-let i
+let i;
 async function getData() {
-  await new Promise((resolve) => setTimeout(resolve, 5000))
-  return {
-    message: 'hello from slow page',
-  }
+	await new Promise((resolve) => setTimeout(resolve, 5000));
+	return {
+		message: 'hello from slow page',
+	};
 }
 
-export default function NestedPage(props) {
-  // TODO-APP: refactor this test page to `async function` instead.
-  if (!i) {
-    i = getData()
-  }
-  const data = use(i)
-  return (
-    <>
-      <p id="slow-page-message">{data.message}</p>
-    </>
-  )
+export default function NestedPage(_props) {
+	// TODO-APP: refactor this test page to `async function` instead.
+	if (!i) {
+		i = getData();
+	}
+	const data = use(i);
+	return (
+		<>
+			<p id="slow-page-message">{data.message}</p>
+		</>
+	);
 }

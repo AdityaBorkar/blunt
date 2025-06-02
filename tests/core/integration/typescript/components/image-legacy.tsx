@@ -1,24 +1,23 @@
-import React from 'react'
-import Image, { ImageProps } from 'next/legacy/image'
+import Image, { type ImageProps } from 'next/legacy/image';
 
 export default () => {
-  const props: ImageProps = {
-    alt: 'test-width-height',
-    src: '/noop.jpg',
-    width: 100,
-    height: 100,
-  }
+	const props: ImageProps = {
+		alt: 'test-width-height',
+		height: 100,
+		src: '/noop.jpg',
+		width: 100,
+	};
 
-  const filledProps: ImageProps = {
-    alt: 'test-layout-fill',
-    src: '/noop.jpg',
-    layout: 'fill',
-  }
+	const filledProps: ImageProps = {
+		alt: 'test-layout-fill',
+		layout: 'fill',
+		src: '/noop.jpg',
+	};
 
-  return (
-    <>
-      <Image {...props} />
-      <Image {...filledProps} />
-    </>
-  )
-}
+	return (
+		<>
+			<Image {...props} />
+			<Image {...filledProps} />
+		</>
+	);
+};

@@ -1,5 +1,5 @@
-'use client'
+'use client';
 
 export default async function Page() {
-  return <p id="app-router-client-component-value">hello</p>
+	return <p id="app-router-client-component-value">hello</p>;
 }

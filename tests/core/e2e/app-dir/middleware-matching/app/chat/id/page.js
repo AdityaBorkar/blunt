@@ -1,3 +1,3 @@
 export default function Home() {
-  return <p>Chat/ID</p>
+	return <p>Chat/ID</p>;
 }

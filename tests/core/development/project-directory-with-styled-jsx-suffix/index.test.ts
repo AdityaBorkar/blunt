@@ -1,26 +1,25 @@
-import { createNext } from 'e2e-utils'
-import { NextInstance } from 'e2e-utils'
-import { renderViaHTTP } from 'next-test-utils'
+import { createNext, type NextInstance } from 'e2e-utils';
+import { renderViaHTTP } from 'next-test-utils';
 
 describe('project directory with styled-jsx suffix', () => {
-  let next: NextInstance
+	let next: NextInstance;
 
-  beforeAll(async () => {
-    next = await createNext({
-      files: {
-        'pages/index.js': `
+	beforeAll(async () => {
+		next = await createNext({
+			dirSuffix: '-styled-jsx',
+			files: {
+				'pages/index.js': `
           export default function Page() { 
             return <p>hello world</p>
           } 
         `,
-      },
-      dirSuffix: '-styled-jsx',
-    })
-  })
-  afterAll(() => next.destroy())
+			},
+		});
+	});
+	afterAll(() => next.destroy());
 
-  it('should work', async () => {
-    const html = await renderViaHTTP(next.url, '/')
-    expect(html).toContain('hello world')
-  })
-})
+	it('should work', async () => {
+		const html = await renderViaHTTP(next.url, '/');
+		expect(html).toContain('hello world');
+	});
+});

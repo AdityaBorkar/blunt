@@ -1,5 +1,5 @@
-'use client'
+'use client';
 
 export function ClientComponent() {
-  return <div>ClientComponent</div>
+	return <div>ClientComponent</div>;
 }

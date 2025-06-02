@@ -1,1 +1,1 @@
-export const buildID = Date.now() + Math.random()
+export const buildID = Date.now() + Math.random();

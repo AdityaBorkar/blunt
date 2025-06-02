@@ -1,9 +1,9 @@
-import { StreamingText } from '../../streaming-text'
+import { StreamingText } from '../../streaming-text';
 
 export default function Page() {
-  return (
-    <div id="nav">
-      <StreamingText static="Static in nav" dynamic="Dynamic in nav" />
-    </div>
-  )
+	return (
+		<div id="nav">
+			<StreamingText dynamic="Dynamic in nav" static="Static in nav" />
+		</div>
+	);
 }

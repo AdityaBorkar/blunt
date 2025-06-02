@@ -1,5 +1,5 @@
 module.exports = {
-  experimental: {
-    ppr: true,
-  },
-}
+	experimental: {
+		ppr: true,
+	},
+};

@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
-  experimental: {
-    testProxy: true,
-  },
-}
+	experimental: {
+		testProxy: true,
+	},
+};

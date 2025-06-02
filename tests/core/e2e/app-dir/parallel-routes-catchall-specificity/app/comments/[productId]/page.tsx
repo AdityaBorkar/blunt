@@ -1,7 +1,7 @@
 export default async function Page({
-  params,
+	params,
 }: {
-  params: Promise<{ productId: string }>
+	params: Promise<{ productId: string }>;
 }) {
-  return <h1>{(await params).productId}</h1>
+	return <h1>{(await params).productId}</h1>;
 }

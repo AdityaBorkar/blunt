@@ -1,10 +1,11 @@
-import React, { Suspense } from 'react'
-import { Dynamic } from '../components/dynamic'
+import { Suspense } from 'react';
+
+import { Dynamic } from '../components/dynamic';
 
 export default () => {
-  return (
-    <Suspense fallback={<Dynamic pathname="/" fallback />}>
-      <Dynamic pathname="/" />
-    </Suspense>
-  )
-}
+	return (
+		<Suspense fallback={<Dynamic fallback pathname="/" />}>
+			<Dynamic pathname="/" />
+		</Suspense>
+	);
+};

@@ -1,7 +1,7 @@
-'use cache'
+'use cache';
 
 export default async function Page() {
-  throw new Error('kaputt!')
+	throw new Error('kaputt!');
 
-  return null
+	return null;
 }

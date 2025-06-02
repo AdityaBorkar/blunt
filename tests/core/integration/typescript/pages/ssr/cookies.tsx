@@ -1,18 +1,18 @@
-import { GetServerSideProps } from 'next'
+import type { GetServerSideProps } from 'next';
 
 type Props = {
-  data: string
-  cookies: any
-}
+	data: string;
+	cookies: any;
+};
 
 export const getServerSideProps: GetServerSideProps<Props> = async ({
-  req,
+	req,
 }) => {
-  return {
-    props: { data: 'hello world', cookies: req.cookies },
-  }
-}
+	return {
+		props: { cookies: req.cookies, data: 'hello world' },
+	};
+};
 
 export default function Page({ cookies }: Props) {
-  return <pre id="cookies">{JSON.stringify(cookies)}</pre>
+	return <pre id="cookies">{JSON.stringify(cookies)}</pre>;
 }

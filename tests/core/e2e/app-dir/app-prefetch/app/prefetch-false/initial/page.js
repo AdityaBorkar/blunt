@@ -1,15 +1,15 @@
-import Link from 'next/link'
+import Link from 'next/link';
 
 export default function Page() {
-  return (
-    <>
-      <Link
-        href="/prefetch-false/result"
-        prefetch={false}
-        id="to-prefetch-false-result"
-      >
-        To prefetch false
-      </Link>
-    </>
-  )
+	return (
+		<>
+			<Link
+				href="/prefetch-false/result"
+				id="to-prefetch-false-result"
+				prefetch={false}
+			>
+				To prefetch false
+			</Link>
+		</>
+	);
 }

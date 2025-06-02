@@ -1,5 +1,5 @@
 export function GET() {
-  return new Response('app-route (node)')
+	return new Response('app-route (node)');
 }
 
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';

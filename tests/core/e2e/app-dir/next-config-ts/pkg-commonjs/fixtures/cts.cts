@@ -1,1 +1,1 @@
-export const cts = 'cts'
+export const cts = 'cts';

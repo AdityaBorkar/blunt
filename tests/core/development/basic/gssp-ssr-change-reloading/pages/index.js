@@ -1,27 +1,28 @@
-import { useRouter } from 'next/router'
-import data from '../lib/data.json'
+import { useRouter } from 'next/router';
+
+import data from '../lib/data.json';
 
 export default function Gsp(props) {
-  if (useRouter().isFallback) {
-    return 'Loading...'
-  }
+	if (useRouter().isFallback) {
+		return 'Loading...';
+	}
 
-  return (
-    <>
-      <p id="change">change me</p>
-      <p id="props">{JSON.stringify(props)}</p>
-    </>
-  )
+	return (
+		<>
+			<p id="change">change me</p>
+			<p id="props">{JSON.stringify(props)}</p>
+		</>
+	);
 }
 
 export const getStaticProps = async () => {
-  const count = 1
+	const count = 1;
 
-  return {
-    props: {
-      count,
-      data,
-      random: Math.random(),
-    },
-  }
-}
+	return {
+		props: {
+			count,
+			data,
+			random: Math.random(),
+		},
+	};
+};

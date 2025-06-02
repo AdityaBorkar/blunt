@@ -1,6 +1,6 @@
-import { connection } from 'next/server'
+import { connection } from 'next/server';
 
 export default async function Page() {
-  await connection()
-  return <p>dynamic</p>
+	await connection();
+	return <p>dynamic</p>;
 }

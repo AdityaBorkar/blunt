@@ -1,9 +1,9 @@
-import type { NextConfig } from 'next'
+import type { NextConfig } from 'next';
 
 const nextConfig = {
-  env: {
-    foo: 'foo',
-  },
-} satisfies NextConfig
+	env: {
+		foo: 'foo',
+	},
+} satisfies NextConfig;
 
-export default nextConfig
+export default nextConfig;

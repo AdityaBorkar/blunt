@@ -1,5 +1,5 @@
-This
-is
+This;
+is;
 }}}
 invalid
 js

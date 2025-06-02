@@ -1,11 +1,11 @@
-'use cache'
+'use cache';
 
 export default async function Page({
-  searchParams,
+	searchParams,
 }: {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+	searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  const param = (await searchParams).foo
+	const param = (await searchParams).foo;
 
-  return <p>param: {param}</p>
+	return <p>param: {param}</p>;
 }

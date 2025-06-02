@@ -1,28 +1,28 @@
 async function getRandomValue() {
-  'use cache'
+	'use cache';
 
-  return Math.random()
+	return Math.random();
 }
 
 async function getData() {
-  'use cache'
+	'use cache';
 
-  return fetch('https://next-data-api-endpoint.vercel.app/api/random').then(
-    (res) =>
-      res
-        .text()
-        .then(async (text) => [text, 'foo', await getRandomValue()] as const)
-  )
+	return fetch('https://next-data-api-endpoint.vercel.app/api/random').then(
+		(res) =>
+			res
+				.text()
+				.then(async (text) => [text, 'foo', await getRandomValue()] as const),
+	);
 }
 
 export default async function Page() {
-  const [fetchedRandom, text, mathRandom] = await getData()
+	const [fetchedRandom, text, mathRandom] = await getData();
 
-  return (
-    <div id="container">
-      <p id="fetchedRandom">{fetchedRandom}</p>
-      <p id="text">{text}</p>
-      <p id="mathRandom">{mathRandom}</p>
-    </div>
-  )
+	return (
+		<div id="container">
+			<p id="fetchedRandom">{fetchedRandom}</p>
+			<p id="text">{text}</p>
+			<p id="mathRandom">{mathRandom}</p>
+		</div>
+	);
 }

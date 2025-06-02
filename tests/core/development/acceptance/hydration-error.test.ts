@@ -1,25 +1,25 @@
-import { createSandbox } from 'development-sandbox'
-import { FileRef, nextTestSetup } from 'e2e-utils'
-import path from 'path'
-import { outdent } from 'outdent'
-import { getRedboxTotalErrorCount, retry } from 'next-test-utils'
+import path from 'node:path';
+import { createSandbox } from 'development-sandbox';
+import { FileRef, nextTestSetup } from 'e2e-utils';
+import { getRedboxTotalErrorCount, retry } from 'next-test-utils';
+import { outdent } from 'outdent';
 
-const isReact18 = parseInt(process.env.NEXT_TEST_REACT_VERSION) === 18
+const isReact18 = parseInt(process.env.NEXT_TEST_REACT_VERSION) === 18;
 // https://github.com/facebook/react/blob/main/packages/react-dom/src/__tests__/ReactDOMHydrationDiff-test.js used as a reference
 
 describe('Error overlay for hydration errors in Pages router', () => {
-  const { next } = nextTestSetup({
-    files: new FileRef(path.join(__dirname, 'fixtures', 'default-template')),
-    skipStart: true,
-  })
+	const { next } = nextTestSetup({
+		files: new FileRef(path.join(__dirname, 'fixtures', 'default-template')),
+		skipStart: true,
+	});
 
-  it('includes a React docs link when hydration error does occur', async () => {
-    await using sandbox = await createSandbox(
-      next,
-      new Map([
-        [
-          'index.js',
-          outdent`
+	it('includes a React docs link when hydration error does occur', async () => {
+		await using sandbox = await createSandbox(
+			next,
+			new Map([
+				[
+					'index.js',
+					outdent`
               const isClient = typeof window !== 'undefined'
               export default function Mismatch() {
                   return (
@@ -29,36 +29,36 @@ describe('Error overlay for hydration errors in Pages router', () => {
                   );
                 }
             `,
-        ],
-      ]),
-      '/',
-      { pushErrorAsConsoleLog: true }
-    )
-    const { browser } = sandbox
-    const logs = await browser.log()
-    expect(logs).toEqual(
-      expect.arrayContaining([
-        {
-          message: isReact18
-            ? // React 18 has no link in the hydration message
-              expect.stringContaining('Warning: Text content did not match.')
-            : // TODO: Should probably link to https://nextjs.org/docs/messages/react-hydration-error instead.
-              expect.stringContaining(
-                'https://react.dev/link/hydration-mismatch'
-              ),
-          source: 'error',
-        },
-      ])
-    )
-  })
+				],
+			]),
+			'/',
+			{ pushErrorAsConsoleLog: true },
+		);
+		const { browser } = sandbox;
+		const logs = await browser.log();
+		expect(logs).toEqual(
+			expect.arrayContaining([
+				{
+					message: isReact18
+						? // React 18 has no link in the hydration message
+							expect.stringContaining('Warning: Text content did not match.')
+						: // TODO: Should probably link to https://nextjs.org/docs/messages/react-hydration-error instead.
+							expect.stringContaining(
+								'https://react.dev/link/hydration-mismatch',
+							),
+					source: 'error',
+				},
+			]),
+		);
+	});
 
-  it('should show correct hydration error when client and server render different text', async () => {
-    await using sandbox = await createSandbox(
-      next,
-      new Map([
-        [
-          'index.js',
-          outdent`
+	it('should show correct hydration error when client and server render different text', async () => {
+		await using sandbox = await createSandbox(
+			next,
+			new Map([
+				[
+					'index.js',
+					outdent`
               const isClient = typeof window !== 'undefined'
               export default function Mismatch() {
                   return (
@@ -68,14 +68,14 @@ describe('Error overlay for hydration errors in Pages router', () => {
                   );
                 }
             `,
-        ],
-      ])
-    )
-    const { session, browser } = sandbox
+				],
+			]),
+		);
+		const { session, browser } = sandbox;
 
-    // Pages Router uses React version without Owner Stacks hence the empty `stack`
-    if (isReact18) {
-      await expect(browser).toDisplayRedbox(`
+		// Pages Router uses React version without Owner Stacks hence the empty `stack`
+		if (isReact18) {
+			await expect(browser).toDisplayRedbox(`
        {
          "componentStack": "<Mismatch>
            <div>
@@ -89,9 +89,9 @@ describe('Error overlay for hydration errors in Pages router', () => {
          "source": null,
          "stack": [],
        }
-      `)
-    } else {
-      await expect(browser).toDisplayRedbox(`
+      `);
+		} else {
+			await expect(browser).toDisplayRedbox(`
        {
          "componentStack": "...
            <AppContainer>
@@ -114,12 +114,12 @@ describe('Error overlay for hydration errors in Pages router', () => {
          "source": null,
          "stack": [],
        }
-      `)
-    }
+      `);
+		}
 
-    await session.patch(
-      'index.js',
-      outdent`
+		await session.patch(
+			'index.js',
+			outdent`
       export default function Mismatch() {
         return (
           <div className="parent">
@@ -127,21 +127,21 @@ describe('Error overlay for hydration errors in Pages router', () => {
           </div>
         );
       }
-    `
-    )
+    `,
+		);
 
-    await session.assertNoRedbox()
+		await session.assertNoRedbox();
 
-    expect(await browser.elementByCss('.child').text()).toBe('Value')
-  })
+		expect(await browser.elementByCss('.child').text()).toBe('Value');
+	});
 
-  it('should show correct hydration error when client renders an extra element', async () => {
-    await using sandbox = await createSandbox(
-      next,
-      new Map([
-        [
-          'index.js',
-          outdent`
+	it('should show correct hydration error when client renders an extra element', async () => {
+		await using sandbox = await createSandbox(
+			next,
+			new Map([
+				[
+					'index.js',
+					outdent`
             const isClient = typeof window !== 'undefined'
             export default function Mismatch() {
               return (
@@ -151,17 +151,17 @@ describe('Error overlay for hydration errors in Pages router', () => {
               );
             }
           `,
-        ],
-      ])
-    )
-    const { browser } = sandbox
+				],
+			]),
+		);
+		const { browser } = sandbox;
 
-    await retry(async () => {
-      expect(await getRedboxTotalErrorCount(browser)).toBe(isReact18 ? 3 : 1)
-    })
+		await retry(async () => {
+			expect(await getRedboxTotalErrorCount(browser)).toBe(isReact18 ? 3 : 1);
+		});
 
-    if (isReact18) {
-      await expect(browser).toDisplayRedbox(`
+		if (isReact18) {
+			await expect(browser).toDisplayRedbox(`
        {
          "componentStack": "<Mismatch>
        >   <div>
@@ -173,9 +173,9 @@ describe('Error overlay for hydration errors in Pages router', () => {
          "source": null,
          "stack": [],
        }
-      `)
-    } else {
-      await expect(browser).toDisplayRedbox(`
+      `);
+		} else {
+			await expect(browser).toDisplayRedbox(`
        {
          "componentStack": "...
            <AppContainer>
@@ -196,17 +196,17 @@ describe('Error overlay for hydration errors in Pages router', () => {
          "source": null,
          "stack": [],
        }
-      `)
-    }
-  })
+      `);
+		}
+	});
 
-  it('should show correct hydration error when client renders an extra text node', async () => {
-    await using sandbox = await createSandbox(
-      next,
-      new Map([
-        [
-          'index.js',
-          outdent`
+	it('should show correct hydration error when client renders an extra text node', async () => {
+		await using sandbox = await createSandbox(
+			next,
+			new Map([
+				[
+					'index.js',
+					outdent`
             const isClient = typeof window !== 'undefined'
             export default function Mismatch() {
               return (
@@ -218,17 +218,17 @@ describe('Error overlay for hydration errors in Pages router', () => {
               );
             }
           `,
-        ],
-      ])
-    )
-    const { browser } = sandbox
+				],
+			]),
+		);
+		const { browser } = sandbox;
 
-    await retry(async () => {
-      expect(await getRedboxTotalErrorCount(browser)).toBe(isReact18 ? 3 : 1)
-    })
+		await retry(async () => {
+			expect(await getRedboxTotalErrorCount(browser)).toBe(isReact18 ? 3 : 1);
+		});
 
-    if (isReact18) {
-      await expect(browser).toDisplayRedbox(`
+		if (isReact18) {
+			await expect(browser).toDisplayRedbox(`
        {
          "componentStack": "<Mismatch>
            <div>
@@ -241,9 +241,9 @@ describe('Error overlay for hydration errors in Pages router', () => {
          "source": null,
          "stack": [],
        }
-      `)
-    } else {
-      await expect(browser).toDisplayRedbox(`
+      `);
+		} else {
+			await expect(browser).toDisplayRedbox(`
        {
          "componentStack": "...
            <AppContainer>
@@ -267,17 +267,17 @@ describe('Error overlay for hydration errors in Pages router', () => {
          "source": null,
          "stack": [],
        }
-      `)
-    }
-  })
+      `);
+		}
+	});
 
-  it('should show correct hydration error when server renders an extra element', async () => {
-    await using sandbox = await createSandbox(
-      next,
-      new Map([
-        [
-          'index.js',
-          outdent`
+	it('should show correct hydration error when server renders an extra element', async () => {
+		await using sandbox = await createSandbox(
+			next,
+			new Map([
+				[
+					'index.js',
+					outdent`
             const isClient = typeof window !== 'undefined'
             export default function Mismatch() {
               return (
@@ -287,13 +287,13 @@ describe('Error overlay for hydration errors in Pages router', () => {
               );
             }
           `,
-        ],
-      ])
-    )
-    const { browser } = sandbox
+				],
+			]),
+		);
+		const { browser } = sandbox;
 
-    if (isReact18) {
-      await expect(browser).toDisplayRedbox(`
+		if (isReact18) {
+			await expect(browser).toDisplayRedbox(`
        {
          "componentStack": "<Mismatch>
        >   <div>",
@@ -304,9 +304,9 @@ describe('Error overlay for hydration errors in Pages router', () => {
          "source": null,
          "stack": [],
        }
-      `)
-    } else {
-      await expect(browser).toDisplayRedbox(`
+      `);
+		} else {
+			await expect(browser).toDisplayRedbox(`
        {
          "componentStack": "<Root callbacks={[...]}>
            <Head>
@@ -328,29 +328,29 @@ describe('Error overlay for hydration errors in Pages router', () => {
          "source": null,
          "stack": [],
        }
-      `)
-    }
-  })
+      `);
+		}
+	});
 
-  it('should show correct hydration error when server renders an extra text node', async () => {
-    await using sandbox = await createSandbox(
-      next,
-      new Map([
-        [
-          'index.js',
-          outdent`
+	it('should show correct hydration error when server renders an extra text node', async () => {
+		await using sandbox = await createSandbox(
+			next,
+			new Map([
+				[
+					'index.js',
+					outdent`
             const isClient = typeof window !== 'undefined'
             export default function Mismatch() {
               return <div className="parent">{!isClient && "only"}</div>;
             }
           `,
-        ],
-      ])
-    )
-    const { browser } = sandbox
+				],
+			]),
+		);
+		const { browser } = sandbox;
 
-    if (isReact18) {
-      await expect(browser).toDisplayRedbox(`
+		if (isReact18) {
+			await expect(browser).toDisplayRedbox(`
        {
          "componentStack": "<Mismatch>
            <div>
@@ -363,9 +363,9 @@ describe('Error overlay for hydration errors in Pages router', () => {
          "source": null,
          "stack": [],
        }
-      `)
-    } else {
-      await expect(browser).toDisplayRedbox(`
+      `);
+		} else {
+			await expect(browser).toDisplayRedbox(`
        {
          "componentStack": "<Root callbacks={[...]}>
            <Head>
@@ -387,17 +387,17 @@ describe('Error overlay for hydration errors in Pages router', () => {
          "source": null,
          "stack": [],
        }
-      `)
-    }
-  })
+      `);
+		}
+	});
 
-  it('should show correct hydration error when server renders an extra text node in an invalid place', async () => {
-    await using sandbox = await createSandbox(
-      next,
-      new Map([
-        [
-          'index.js',
-          outdent`
+	it('should show correct hydration error when server renders an extra text node in an invalid place', async () => {
+		await using sandbox = await createSandbox(
+			next,
+			new Map([
+				[
+					'index.js',
+					outdent`
             export default function Page() {
               return (
                 <table>
@@ -408,22 +408,22 @@ describe('Error overlay for hydration errors in Pages router', () => {
               )
             }
           `,
-        ],
-      ])
-    )
-    const { browser } = sandbox
+				],
+			]),
+		);
+		const { browser } = sandbox;
 
-    await retry(async () => {
-      expect(await getRedboxTotalErrorCount(browser)).toBe(
-        isReact18
-          ? 3
-          : // FIXME: Should be 2
-            1
-      )
-    })
+		await retry(async () => {
+			expect(await getRedboxTotalErrorCount(browser)).toBe(
+				isReact18
+					? 3
+					: // FIXME: Should be 2
+						1,
+			);
+		});
 
-    if (isReact18) {
-      await expect(browser).toDisplayRedbox(`
+		if (isReact18) {
+			await expect(browser).toDisplayRedbox(`
        {
          "componentStack": "<Page>
        >   <table>",
@@ -434,9 +434,9 @@ describe('Error overlay for hydration errors in Pages router', () => {
          "source": null,
          "stack": [],
        }
-      `)
-    } else {
-      await expect(browser).toDisplayRedbox(`
+      `);
+		} else {
+			await expect(browser).toDisplayRedbox(`
        {
          "componentStack": "<Root callbacks={[...]}>
            <Head>
@@ -458,17 +458,17 @@ describe('Error overlay for hydration errors in Pages router', () => {
          "source": null,
          "stack": [],
        }
-      `)
-    }
-  })
+      `);
+		}
+	});
 
-  it('should show correct hydration error when server renders an extra whitespace in an invalid place', async () => {
-    await using sandbox = await createSandbox(
-      next,
-      new Map([
-        [
-          'index.js',
-          outdent`
+	it('should show correct hydration error when server renders an extra whitespace in an invalid place', async () => {
+		await using sandbox = await createSandbox(
+			next,
+			new Map([
+				[
+					'index.js',
+					outdent`
             export default function Page() {
               return (
                 <table>
@@ -478,17 +478,17 @@ describe('Error overlay for hydration errors in Pages router', () => {
               )
             }
           `,
-        ],
-      ])
-    )
-    const { browser } = sandbox
+				],
+			]),
+		);
+		const { browser } = sandbox;
 
-    await retry(async () => {
-      expect(await getRedboxTotalErrorCount(browser)).toBe(isReact18 ? 3 : 1)
-    })
+		await retry(async () => {
+			expect(await getRedboxTotalErrorCount(browser)).toBe(isReact18 ? 3 : 1);
+		});
 
-    if (isReact18) {
-      await expect(browser).toDisplayRedbox(`
+		if (isReact18) {
+			await expect(browser).toDisplayRedbox(`
        {
          "componentStack": "<Page>
        >   <table>",
@@ -499,9 +499,9 @@ describe('Error overlay for hydration errors in Pages router', () => {
          "source": null,
          "stack": [],
        }
-      `)
-    } else {
-      await expect(browser).toDisplayRedbox(`
+      `);
+		} else {
+			await expect(browser).toDisplayRedbox(`
        {
          "componentStack": "<Root callbacks={[...]}>
            <Head>
@@ -523,17 +523,17 @@ describe('Error overlay for hydration errors in Pages router', () => {
          "source": null,
          "stack": [],
        }
-      `)
-    }
-  })
+      `);
+		}
+	});
 
-  it('should show correct hydration error when client renders an extra node inside Suspense content', async () => {
-    await using sandbox = await createSandbox(
-      next,
-      new Map([
-        [
-          'index.js',
-          outdent`
+	it('should show correct hydration error when client renders an extra node inside Suspense content', async () => {
+		await using sandbox = await createSandbox(
+			next,
+			new Map([
+				[
+					'index.js',
+					outdent`
             import React from "react"
             const isClient = typeof window !== 'undefined'
             export default function Mismatch() {
@@ -548,17 +548,17 @@ describe('Error overlay for hydration errors in Pages router', () => {
               );
             }
           `,
-        ],
-      ])
-    )
-    const { browser } = sandbox
+				],
+			]),
+		);
+		const { browser } = sandbox;
 
-    await retry(async () => {
-      expect(await getRedboxTotalErrorCount(browser)).toBe(isReact18 ? 3 : 1)
-    })
+		await retry(async () => {
+			expect(await getRedboxTotalErrorCount(browser)).toBe(isReact18 ? 3 : 1);
+		});
 
-    if (isReact18) {
-      await expect(browser).toDisplayRedbox(`
+		if (isReact18) {
+			await expect(browser).toDisplayRedbox(`
        {
          "componentStack": "<Mismatch>
        >   <div>
@@ -571,9 +571,9 @@ describe('Error overlay for hydration errors in Pages router', () => {
          "source": null,
          "stack": [],
        }
-      `)
-    } else {
-      await expect(browser).toDisplayRedbox(`
+      `);
+		} else {
+			await expect(browser).toDisplayRedbox(`
        {
          "componentStack": "...
            <PagesDevOverlay>
@@ -596,17 +596,17 @@ describe('Error overlay for hydration errors in Pages router', () => {
          "source": null,
          "stack": [],
        }
-      `)
-    }
-  })
+      `);
+		}
+	});
 
-  it('should not show a hydration error when using `useId` in a client component', async () => {
-    await using sandbox = await createSandbox(
-      next,
-      new Map([
-        [
-          'index.js',
-          outdent`
+	it('should not show a hydration error when using `useId` in a client component', async () => {
+		await using sandbox = await createSandbox(
+			next,
+			new Map([
+				[
+					'index.js',
+					outdent`
             import { useId } from "react"
 
             export default function Page() {
@@ -618,28 +618,28 @@ describe('Error overlay for hydration errors in Pages router', () => {
               );
             }
           `,
-        ],
-      ])
-    )
-    const { browser } = sandbox
-    const logs = await browser.log()
-    const errors = logs
-      .filter((x) => x.source === 'error')
-      .map((x) => x.message)
-      .join('\n')
+				],
+			]),
+		);
+		const { browser } = sandbox;
+		const logs = await browser.log();
+		const errors = logs
+			.filter((x) => x.source === 'error')
+			.map((x) => x.message)
+			.join('\n');
 
-    expect(errors).not.toInclude(
-      'Warning: Prop `%s` did not match. Server: %s Client: %s'
-    )
-  })
+		expect(errors).not.toInclude(
+			'Warning: Prop `%s` did not match. Server: %s Client: %s',
+		);
+	});
 
-  it('should only show one hydration error when bad nesting happened - p under p', async () => {
-    await using sandbox = await createSandbox(
-      next,
-      new Map([
-        [
-          'index.js',
-          outdent`
+	it('should only show one hydration error when bad nesting happened - p under p', async () => {
+		await using sandbox = await createSandbox(
+			next,
+			new Map([
+				[
+					'index.js',
+					outdent`
             export default function Page() {
               return (
                 <p>
@@ -648,17 +648,17 @@ describe('Error overlay for hydration errors in Pages router', () => {
               )
             }
           `,
-        ],
-      ])
-    )
-    const { browser } = sandbox
+				],
+			]),
+		);
+		const { browser } = sandbox;
 
-    await retry(async () => {
-      expect(await getRedboxTotalErrorCount(browser)).toBe(isReact18 ? 3 : 1)
-    })
+		await retry(async () => {
+			expect(await getRedboxTotalErrorCount(browser)).toBe(isReact18 ? 3 : 1);
+		});
 
-    if (isReact18) {
-      await expect(browser).toDisplayRedbox(`
+		if (isReact18) {
+			await expect(browser).toDisplayRedbox(`
        {
          "componentStack": "<Page>
        >   <p>
@@ -670,9 +670,9 @@ describe('Error overlay for hydration errors in Pages router', () => {
          "source": null,
          "stack": [],
        }
-      `)
-    } else {
-      await expect(browser).toDisplayRedbox(`
+      `);
+		} else {
+			await expect(browser).toDisplayRedbox(`
        {
          "componentStack": "<Root callbacks={[...]}>
            <Head>
@@ -695,17 +695,17 @@ describe('Error overlay for hydration errors in Pages router', () => {
          "source": null,
          "stack": [],
        }
-      `)
-    }
-  })
+      `);
+		}
+	});
 
-  it('should only show one hydration error when bad nesting happened - div under p', async () => {
-    await using sandbox = await createSandbox(
-      next,
-      new Map([
-        [
-          'index.js',
-          outdent`
+	it('should only show one hydration error when bad nesting happened - div under p', async () => {
+		await using sandbox = await createSandbox(
+			next,
+			new Map([
+				[
+					'index.js',
+					outdent`
             export default function Page() {
               return (
                 <div>
@@ -718,17 +718,17 @@ describe('Error overlay for hydration errors in Pages router', () => {
               )
             }
           `,
-        ],
-      ])
-    )
-    const { browser } = sandbox
+				],
+			]),
+		);
+		const { browser } = sandbox;
 
-    await retry(async () => {
-      expect(await getRedboxTotalErrorCount(browser)).toBe(isReact18 ? 3 : 1)
-    })
+		await retry(async () => {
+			expect(await getRedboxTotalErrorCount(browser)).toBe(isReact18 ? 3 : 1);
+		});
 
-    if (isReact18) {
-      await expect(browser).toDisplayRedbox(`
+		if (isReact18) {
+			await expect(browser).toDisplayRedbox(`
        {
          "componentStack": "<Page>
            <div>
@@ -742,9 +742,9 @@ describe('Error overlay for hydration errors in Pages router', () => {
          "source": null,
          "stack": [],
        }
-      `)
-    } else {
-      await expect(browser).toDisplayRedbox(`
+      `);
+		} else {
+			await expect(browser).toDisplayRedbox(`
        {
          "componentStack": "...
            <Container fn={function fn}>
@@ -767,32 +767,32 @@ describe('Error overlay for hydration errors in Pages router', () => {
          "source": null,
          "stack": [],
        }
-      `)
-    }
-  })
+      `);
+		}
+	});
 
-  it('should only show one hydration error when bad nesting happened - div > tr', async () => {
-    await using sandbox = await createSandbox(
-      next,
-      new Map([
-        [
-          'index.js',
-          outdent`
+	it('should only show one hydration error when bad nesting happened - div > tr', async () => {
+		await using sandbox = await createSandbox(
+			next,
+			new Map([
+				[
+					'index.js',
+					outdent`
             export default function Page() {
               return <div><tr></tr></div>
             }
           `,
-        ],
-      ])
-    )
-    const { browser } = sandbox
+				],
+			]),
+		);
+		const { browser } = sandbox;
 
-    await retry(async () => {
-      expect(await getRedboxTotalErrorCount(browser)).toBe(isReact18 ? 3 : 1)
-    })
+		await retry(async () => {
+			expect(await getRedboxTotalErrorCount(browser)).toBe(isReact18 ? 3 : 1);
+		});
 
-    if (isReact18) {
-      await expect(browser).toDisplayRedbox(`
+		if (isReact18) {
+			await expect(browser).toDisplayRedbox(`
        {
          "componentStack": "<Page>
        >   <div>
@@ -804,9 +804,9 @@ describe('Error overlay for hydration errors in Pages router', () => {
          "source": null,
          "stack": [],
        }
-      `)
-    } else {
-      await expect(browser).toDisplayRedbox(`
+      `);
+		} else {
+			await expect(browser).toDisplayRedbox(`
        {
          "componentStack": "<Root callbacks={[...]}>
            <Head>
@@ -829,34 +829,34 @@ describe('Error overlay for hydration errors in Pages router', () => {
          "source": null,
          "stack": [],
        }
-      `)
-    }
-  })
+      `);
+		}
+	});
 
-  it('should show the highlighted bad nesting html snippet when bad nesting happened', async () => {
-    await using sandbox = await createSandbox(
-      next,
-      new Map([
-        [
-          'index.js',
-          outdent`
+	it('should show the highlighted bad nesting html snippet when bad nesting happened', async () => {
+		await using sandbox = await createSandbox(
+			next,
+			new Map([
+				[
+					'index.js',
+					outdent`
             export default function Page() {
               return (
                 <p><span><span><span><span><p>hello world</p></span></span></span></span></p>
               )
             }
           `,
-        ],
-      ])
-    )
-    const { browser } = sandbox
+				],
+			]),
+		);
+		const { browser } = sandbox;
 
-    await retry(async () => {
-      expect(await getRedboxTotalErrorCount(browser)).toBe(isReact18 ? 3 : 1)
-    })
+		await retry(async () => {
+			expect(await getRedboxTotalErrorCount(browser)).toBe(isReact18 ? 3 : 1);
+		});
 
-    if (isReact18) {
-      await expect(browser).toDisplayRedbox(`
+		if (isReact18) {
+			await expect(browser).toDisplayRedbox(`
        {
          "componentStack": "<Page>
            <p>
@@ -872,9 +872,9 @@ describe('Error overlay for hydration errors in Pages router', () => {
          "source": null,
          "stack": [],
        }
-      `)
-    } else {
-      await expect(browser).toDisplayRedbox(`
+      `);
+		} else {
+			await expect(browser).toDisplayRedbox(`
        {
          "componentStack": "<Root callbacks={[...]}>
            <Head>
@@ -901,17 +901,17 @@ describe('Error overlay for hydration errors in Pages router', () => {
          "source": null,
          "stack": [],
        }
-      `)
-    }
-  })
+      `);
+		}
+	});
 
-  it('should show error if script is directly placed under html instead of body', async () => {
-    await using sandbox = await createSandbox(
-      next,
-      new Map([
-        [
-          'pages/_document.js',
-          outdent`
+	it('should show error if script is directly placed under html instead of body', async () => {
+		await using sandbox = await createSandbox(
+			next,
+			new Map([
+				[
+					'pages/_document.js',
+					outdent`
             import { Html, Head, Main, NextScript } from 'next/document'
             import Script from 'next/script'
  
@@ -931,19 +931,19 @@ describe('Error overlay for hydration errors in Pages router', () => {
               )
             }
           `,
-        ],
-        [
-          'index.js',
-          outdent`
+				],
+				[
+					'index.js',
+					outdent`
             export default function Page() {
               return <div>Hello World</div>
             }
           `,
-        ],
-      ])
-    )
-    const { session } = sandbox
-    // FIXME: Should have a redbox just like with App router
-    await session.assertNoRedbox()
-  })
-})
+				],
+			]),
+		);
+		const { session } = sandbox;
+		// FIXME: Should have a redbox just like with App router
+		await session.assertNoRedbox();
+	});
+});

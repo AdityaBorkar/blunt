@@ -1,11 +1,11 @@
-import { Inter } from 'next/font/google'
+import { Inter } from 'next/font/google';
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ['latin'] });
 
 export default function Page() {
-  return (
-    <>
-      <p className={inter.className}>script-nonce</p>
-    </>
-  )
+	return (
+		<>
+			<p className={inter.className}>script-nonce</p>
+		</>
+	);
 }

@@ -1,3 +1,3 @@
 export default function Forbidden() {
-  return <div id="forbidden">{`dynamic/[id] forbidden`}</div>
+	return <div id="forbidden">{`dynamic/[id] forbidden`}</div>;
 }

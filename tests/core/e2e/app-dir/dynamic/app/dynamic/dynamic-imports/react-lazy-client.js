@@ -1,15 +1,15 @@
-'use client'
+'use client';
 
-import { useState, lazy } from 'react'
+import { lazy, useState } from 'react';
 
-const Lazy = lazy(() => import('../text-lazy-client'))
+const Lazy = lazy(() => import('../text-lazy-client'));
 
 export function LazyClientComponent() {
-  let [state] = useState('use client')
-  return (
-    <>
-      <Lazy />
-      <p className="hi">next-dynamic {state}</p>
-    </>
-  )
+	const [state] = useState('use client');
+	return (
+		<>
+			<Lazy />
+			<p className="hi">next-dynamic {state}</p>
+		</>
+	);
 }

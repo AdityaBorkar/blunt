@@ -2,9 +2,9 @@
  * @type {import('next').NextConfig}
  */
 const nextConfig = {
-  experimental: {
-    cssChunking: 'strict',
-  },
-}
+	experimental: {
+		cssChunking: 'strict',
+	},
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

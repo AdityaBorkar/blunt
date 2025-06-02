@@ -1,5 +1,5 @@
-import { redirect } from 'next/navigation'
+import { redirect } from 'next/navigation';
 
-export async function GET(req) {
-  redirect('/')
+export async function GET(_req) {
+	redirect('/');
 }

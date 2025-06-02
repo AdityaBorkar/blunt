@@ -1,5 +1,5 @@
-import Link from 'next/link'
+import Link from 'next/link';
 
 export default function TargetPage() {
-  return <Link href="/">Home</Link>
+	return <Link href="/">Home</Link>;
 }

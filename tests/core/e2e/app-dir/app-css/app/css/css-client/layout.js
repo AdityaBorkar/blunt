@@ -1,14 +1,14 @@
-'use client'
+'use client';
 
-import './client-layout.css'
+import './client-layout.css';
 
-import Foo from './foo'
+import Foo from './foo';
 
 export default function ServerLayout({ children }) {
-  return (
-    <>
-      {children}
-      <Foo />
-    </>
-  )
+	return (
+		<>
+			{children}
+			<Foo />
+		</>
+	);
 }

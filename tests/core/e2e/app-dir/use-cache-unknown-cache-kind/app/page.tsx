@@ -1,5 +1,5 @@
-'use cache: custom'
+'use cache: custom';
 
 export default async function Page() {
-  return <p>hello world</p>
+	return <p>hello world</p>;
 }

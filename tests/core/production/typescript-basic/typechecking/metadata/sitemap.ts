@@ -1,59 +1,59 @@
-import type { MetadataRoute } from 'next'
+import type { MetadataRoute } from 'next';
 // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-;() => {
-  ;({
-    url: '',
-    lastModified: undefined,
-    changeFrequency: undefined,
-    priority: undefined,
-    alternates: undefined,
-    images: undefined,
-    videos: undefined,
-  }) satisfies MetadataRoute.Sitemap[number]
-  ;({
-    url: '',
-    alternates: {
-      languages: undefined,
-    },
-    videos: [
-      {
-        title: '',
-        thumbnail_loc: '',
-        description: '',
-        content_loc: undefined,
-        player_loc: undefined,
-        duration: undefined,
-        expiration_date: undefined,
-        rating: undefined,
-        view_count: undefined,
-        publication_date: undefined,
-        family_friendly: undefined,
-        restriction: undefined,
-        platform: undefined,
-        requires_subscription: undefined,
-        uploader: undefined,
-        live: undefined,
-        tag: undefined,
-      },
-    ],
-  }) satisfies MetadataRoute.Sitemap[number]
-  ;({
-    url: '',
-    alternates: {
-      languages: {
-        en: undefined,
-      },
-    },
-    videos: [
-      {
-        title: '',
-        thumbnail_loc: '',
-        description: '',
-        uploader: {
-          info: undefined,
-          content: undefined,
-        },
-      },
-    ],
-  }) satisfies MetadataRoute.Sitemap[number]
-}
+() => {
+	({
+		alternates: undefined,
+		changeFrequency: undefined,
+		images: undefined,
+		lastModified: undefined,
+		priority: undefined,
+		url: '',
+		videos: undefined,
+	}) satisfies MetadataRoute.Sitemap[number];
+	({
+		alternates: {
+			languages: undefined,
+		},
+		url: '',
+		videos: [
+			{
+				content_loc: undefined,
+				description: '',
+				duration: undefined,
+				expiration_date: undefined,
+				family_friendly: undefined,
+				live: undefined,
+				platform: undefined,
+				player_loc: undefined,
+				publication_date: undefined,
+				rating: undefined,
+				requires_subscription: undefined,
+				restriction: undefined,
+				tag: undefined,
+				thumbnail_loc: '',
+				title: '',
+				uploader: undefined,
+				view_count: undefined,
+			},
+		],
+	}) satisfies MetadataRoute.Sitemap[number];
+	({
+		alternates: {
+			languages: {
+				en: undefined,
+			},
+		},
+		url: '',
+		videos: [
+			{
+				description: '',
+				thumbnail_loc: '',
+				title: '',
+				uploader: {
+					content: undefined,
+					info: undefined,
+				},
+			},
+		],
+	}) satisfies MetadataRoute.Sitemap[number];
+};

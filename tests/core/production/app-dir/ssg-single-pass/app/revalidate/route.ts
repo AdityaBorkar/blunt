@@ -1,8 +1,8 @@
-import { NextResponse } from 'next/server'
-import { unstable_expirePath } from 'next/cache'
+import { unstable_expirePath } from 'next/cache';
+import { NextResponse } from 'next/server';
 
 export async function GET() {
-  unstable_expirePath('/')
+	unstable_expirePath('/');
 
-  return NextResponse.json({ success: true })
+	return NextResponse.json({ success: true });
 }

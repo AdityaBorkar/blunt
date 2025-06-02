@@ -1,3 +1,1 @@
-module.exports = function () {
-  return `export default ("something" as string);`
-}
+module.exports = () => `export default ("something" as string);`;

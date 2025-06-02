@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-import { text } from 'my-package/typescript'
+import { text } from 'my-package/typescript';
 
 export default function Page() {
-  return <p>{text}</p>
+	return <p>{text}</p>;
 }

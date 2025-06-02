@@ -1,13 +1,13 @@
-import { Suspense } from 'react'
+import { Suspense } from 'react';
 
 export default async function Layout({
-  children,
+	children,
 }: {
-  children: React.ReactNode
+	children: React.ReactNode;
 }) {
-  return (
-    <Suspense fallback={<div data-fallback="">loading...</div>}>
-      {children}
-    </Suspense>
-  )
+	return (
+		<Suspense fallback={<div data-fallback="">loading...</div>}>
+			{children}
+		</Suspense>
+	);
 }

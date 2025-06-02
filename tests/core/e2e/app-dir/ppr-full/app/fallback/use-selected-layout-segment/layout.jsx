@@ -1,22 +1,23 @@
-'use client'
-import { useSelectedLayoutSegment } from 'next/navigation'
-import { Suspense, use } from 'react'
+'use client';
+
+import { useSelectedLayoutSegment } from 'next/navigation';
+import { Suspense, use } from 'react';
 
 function Dynamic() {
-  const segment = useSelectedLayoutSegment()
+	const segment = useSelectedLayoutSegment();
 
-  use(new Promise((resolve) => setTimeout(resolve, 1000)))
+	use(new Promise((resolve) => setTimeout(resolve, 1000)));
 
-  return <div data-slug={segment}>{segment}</div>
+	return <div data-slug={segment}>{segment}</div>;
 }
 
 export default function Layout({ children }) {
-  return (
-    <>
-      <Suspense fallback={<div data-fallback>Dynamic Loading...</div>}>
-        <Dynamic />
-      </Suspense>
-      {children}
-    </>
-  )
+	return (
+		<>
+			<Suspense fallback={<div data-fallback>Dynamic Loading...</div>}>
+				<Dynamic />
+			</Suspense>
+			{children}
+		</>
+	);
 }

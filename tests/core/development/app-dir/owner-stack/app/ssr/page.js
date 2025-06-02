@@ -1,14 +1,14 @@
-'use client'
+'use client';
 
 function useThrowError() {
-  throw new Error('ssr error')
+	throw new Error('ssr error');
 }
 
 function useErrorHook() {
-  useThrowError()
+	useThrowError();
 }
 
 export default function Page() {
-  useErrorHook()
-  return <p>hello world</p>
+	useErrorHook();
+	return <p>hello world</p>;
 }

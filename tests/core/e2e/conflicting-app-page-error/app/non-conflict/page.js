@@ -1,3 +1,3 @@
-export default function Page(props) {
-  return <p>non-conflict app</p>
+export default function Page(_props) {
+	return <p>non-conflict app</p>;
 }

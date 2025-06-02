@@ -1,24 +1,5 @@
 {
-	"$schema": "https://biomejs.dev/schemas/2.0.0-beta.1/schema.json",
-	"files": {
-		"ignoreUnknown": false,
-		"includes": [
-			"**",
-			"!**/dist/*",
-			"!**/.next/*",
-			"!**/coverage/*",
-			"!**/CHANGELOG.md",
-			"!**/node_modules/*",
-			"!**/.nx/cache/",
-			"!**/.nx/workspace-data/",
-			"!**/.all-contributorsrc"
-		]
-	},
-	"formatter": {
-		"enabled": true,
-		"indentWidth": 2,
-		"indentStyle": "tab"
-	},
+	"$schema": "https://biomejs.dev/schemas/2.0.0-beta.5/schema.json",
 	"assist": {
 		"actions": {
 			"source": {
@@ -26,68 +7,64 @@
 					"level": "on",
 					"options": {
 						"groups": [
-							[
-								":URL:",
-								":NODE:",
-								":BUN:",
-								":PACKAGE:",
-								":PACKAGE_WITH_PROTOCOL:"
-							],
+							["server-only", "use client", "use server"],
+							":BLANK_LINE:",
+							":URL:",
+							":BLANK_LINE:",
+							[":NODE:", ":BUN:", ":PACKAGE:", ":PACKAGE_WITH_PROTOCOL:"],
+							":BLANK_LINE:",
 							[":ALIAS:", ":PATH:"]
 						]
 					}
-				}
+				},
+				"useSortedAttributes": "on",
+				"useSortedKeys": "on",
+				"useSortedProperties": "on"
 			}
 		}
 	},
-	"linter": {
+	"files": {
+		"ignoreUnknown": false,
+		"includes": [
+			"**",
+			"!**/dist/*",
+			"!**/CHANGELOG.md",
+			"!**/node_modules/*",
+			"!**/.all-contributorsrc",
+			"!**/tests/*" // TODO: THIS IS A TEMPORARY WORKAROUND
+		]
+	},
+	"formatter": {
 		"enabled": true,
-		"rules": {
-			"style": {
-				"useLiteralEnumMembers": "error",
-				"noCommaOperator": "error",
-				"useNodejsImportProtocol": "error",
-				"useAsConstAssertion": "error",
-				"useNumericLiterals": "error",
-				"useEnumInitializers": "error",
-				"useSelfClosingElements": "error",
-				"useConst": "error",
-				"useSingleVarDeclarator": "error",
-				"noUnusedTemplateLiteral": "error",
-				"useNumberNamespace": "error",
-				"noInferrableTypes": "error",
-				"useExponentiationOperator": "error",
-				"useTemplate": "error",
-				"noParameterAssign": "error",
-				"noNonNullAssertion": "error",
-				"useDefaultParameterLast": "error",
-				"noArguments": "error",
-				"useImportType": "error",
-				"useExportType": "error",
-				"noUselessElse": "error",
-				"useShorthandFunctionType": "error"
-			},
-			"nursery": {
-				"useSortedClasses": {
-					"options": {
-						"attributes": ["classList"],
-						"functions": ["clsx", "cva", "tw", "tw.*"]
-					},
-					"fix": "safe",
-					"level": "error"
-				}
-			}
-		}
+		"formatWithErrors": true,
+		"indentStyle": "tab",
+		"indentWidth": 2
 	},
 	"javascript": {
 		"formatter": {
+			"quoteStyle": "single",
 			"semicolons": "always",
-			"quoteStyle": "single"
+			"trailingCommas": "all"
 		}
 	},
 	"json": {
 		"formatter": {
 			"trailingCommas": "none"
+		}
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"nursery": {
+				"useSortedClasses": {
+					"fix": "safe",
+					"level": "error",
+					"options": {
+						"attributes": ["classList", "className"],
+						"functions": ["clsx", "cva", "tw", "tw.*"]
+					}
+				}
+			}
 		}
 	}
 }

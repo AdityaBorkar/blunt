@@ -1,3 +1,3 @@
 export default function Page() {
-  return <div>Redirect</div>
+	return <div>Redirect</div>;
 }

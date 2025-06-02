@@ -1,43 +1,43 @@
-import { GetStaticPaths, GetStaticProps } from 'next'
+import type { GetStaticPaths, GetStaticProps } from 'next';
 
 type Params = {
-  slug: string
-}
+	slug: string;
+};
 
 type Props = {
-  data: string
-  title: string
-}
+	data: string;
+	title: string;
+};
 
 type PreviewData = {
-  title: string
-}
+	title: string;
+};
 
 export const getStaticPaths: GetStaticPaths<Params> = async () => {
-  return {
-    paths: [{ params: { slug: 'test' } }],
-    fallback: false,
-  }
-}
+	return {
+		fallback: false,
+		paths: [{ params: { slug: 'test' } }],
+	};
+};
 
 export const getStaticProps: GetStaticProps<
-  Props,
-  Params,
-  PreviewData
+	Props,
+	Params,
+	PreviewData
 > = async ({ params, previewData }) => {
-  return {
-    props: {
-      data: params!.slug,
-      title: previewData?.title || 'default title',
-    },
-    revalidate: false,
-  }
-}
+	return {
+		props: {
+			data: params?.slug,
+			title: previewData?.title || 'default title',
+		},
+		revalidate: false,
+	};
+};
 
 export default function Page({ data, title }: Props) {
-  return (
-    <h1>
-      {data} {title}
-    </h1>
-  )
+	return (
+		<h1>
+			{data} {title}
+		</h1>
+	);
 }

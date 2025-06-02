@@ -1,1 +1,1 @@
-throw new Error('Expected error')
+throw new Error('Expected error');

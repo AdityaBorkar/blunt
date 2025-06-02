@@ -1,3 +1,3 @@
 export default async function Page() {
-  return <main>hello world</main>
+	return <main>hello world</main>;
 }

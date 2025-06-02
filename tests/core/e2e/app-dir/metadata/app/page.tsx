@@ -1,30 +1,29 @@
-import React from 'react'
-import Link from 'next/link'
+import Link from 'next/link';
 
 export default function Page() {
-  return (
-    <>
-      <header>
-        <meta itemProp="accessibilityControl" content="fullMouseControl" />
-      </header>
-      <p id="index">index page</p>
+	return (
+		<>
+			<header>
+				<meta content="fullMouseControl" itemProp="accessibilityControl" />
+			</header>
+			<p id="index">index page</p>
 
-      <Link href="/basic" id="to-basic">
-        to /basic
-      </Link>
-      <br />
-      <Link href="/title" id="to-title">
-        to /title
-      </Link>
-      <br />
-      <Link href="/title-template/extra/inner" id="to-nested">
-        to /title-template/extra/inner
-      </Link>
-      <br />
-    </>
-  )
+			<Link href="/basic" id="to-basic">
+				to /basic
+			</Link>
+			<br />
+			<Link href="/title" id="to-title">
+				to /title
+			</Link>
+			<br />
+			<Link href="/title-template/extra/inner" id="to-nested">
+				to /title-template/extra/inner
+			</Link>
+			<br />
+		</>
+	);
 }
 
 export const metadata = {
-  title: 'index page',
-}
+	title: 'index page',
+};

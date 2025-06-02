@@ -1,14 +1,15 @@
-import type { MetadataRoute } from 'next'
-import { getSentinelValue } from './sentinel'
-import { setTimeout } from 'timers/promises'
+import { setTimeout } from 'node:timers/promises';
+import type { MetadataRoute } from 'next';
+
+import { getSentinelValue } from './sentinel';
 
 export default async function robots(): Promise<MetadataRoute.Robots> {
-  'use cache'
+	'use cache';
 
-  // Simulate I/O
-  await setTimeout(100)
+	// Simulate I/O
+	await setTimeout(100);
 
-  return {
-    rules: { userAgent: '*', allow: `/${getSentinelValue()}` },
-  }
+	return {
+		rules: { allow: `/${getSentinelValue()}`, userAgent: '*' },
+	};
 }

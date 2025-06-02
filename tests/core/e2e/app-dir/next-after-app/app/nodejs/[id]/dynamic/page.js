@@ -1,24 +1,25 @@
-import { after } from 'next/server'
-import { cache } from 'react'
-import { cliLog } from '../../../../utils/log'
+import { after } from 'next/server';
+import { cache } from 'react';
 
-const thing = cache(() => Symbol('cache me please'))
+import { cliLog } from '../../../../utils/log';
+
+const thing = cache(() => Symbol('cache me please'));
 
 export default async function Index(props) {
-  const params = await props.params
-  const valueFromRender = thing()
+	const params = await props.params;
+	const valueFromRender = thing();
 
-  after(() => {
-    const valueFromAfter = thing()
+	after(() => {
+		const valueFromAfter = thing();
 
-    cliLog({
-      source: '[page] /[id]/dynamic',
-      value: params.id,
-      assertions: {
-        'cache() works in after()': valueFromRender === valueFromAfter,
-      },
-    })
-  })
+		cliLog({
+			assertions: {
+				'cache() works in after()': valueFromRender === valueFromAfter,
+			},
+			source: '[page] /[id]/dynamic',
+			value: params.id,
+		});
+	});
 
-  return <div>Page with after()</div>
+	return <div>Page with after()</div>;
 }

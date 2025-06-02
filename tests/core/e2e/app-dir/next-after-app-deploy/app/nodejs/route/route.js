@@ -1,15 +1,16 @@
-import { after } from 'next/server'
-import { revalidateTimestampPage } from '../../timestamp/revalidate'
-import { pathPrefix } from '../../path-prefix'
+import { after } from 'next/server';
 
-export const runtime = 'nodejs'
-export const dynamic = 'force-dynamic'
+import { pathPrefix } from '../../path-prefix';
+import { revalidateTimestampPage } from '../../timestamp/revalidate';
+
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
-  const data = { message: 'Hello, world!' }
-  after(async () => {
-    await revalidateTimestampPage(pathPrefix + `/route`)
-  })
+	const data = { message: 'Hello, world!' };
+	after(async () => {
+		await revalidateTimestampPage(`${pathPrefix}/route`);
+	});
 
-  return Response.json({ data })
+	return Response.json({ data });
 }

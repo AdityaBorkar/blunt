@@ -1,13 +1,13 @@
-'use client'
+'use client';
 
-import { invokeCallback } from 'interleave'
+import { invokeCallback } from 'interleave';
 
 export default function Page() {
-  const throwError = invokeCallback(() => {
-    throw new Error('interleaved error')
-  }, [])
+	const throwError = invokeCallback(() => {
+		throw new Error('interleaved error');
+	}, []);
 
-  throwError()
+	throwError();
 
-  return <p>fail</p>
+	return <p>fail</p>;
 }

@@ -1,4 +1,4 @@
 export async function middleware() {
-  const noop = () => {}
-  noop()
+	const noop = () => {};
+	noop();
 }

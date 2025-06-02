@@ -1,9 +1,9 @@
-import styles from './style.module.css'
+import styles from './style.module.css';
 
 export default function NestedNotFound() {
-  return (
-    <h1 id="not-found-component" className={styles.red}>
-      Not Found!
-    </h1>
-  )
+	return (
+		<h1 className={styles.red} id="not-found-component">
+			Not Found!
+		</h1>
+	);
 }

@@ -1,1 +1,1 @@
-export { default } from '../../nodejs/middleware/page'
+export { default } from '../../nodejs/middleware/page';

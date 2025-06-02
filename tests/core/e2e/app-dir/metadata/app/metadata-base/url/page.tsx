@@ -1,10 +1,10 @@
 export default function page() {
-  return 'url'
+	return 'url';
 }
 
 export const metadata = {
-  metadataBase: new URL('https://bar.example/url'),
-  alternates: {
-    canonical: 'subpath',
-  },
-}
+	alternates: {
+		canonical: 'subpath',
+	},
+	metadataBase: new URL('https://bar.example/url'),
+};

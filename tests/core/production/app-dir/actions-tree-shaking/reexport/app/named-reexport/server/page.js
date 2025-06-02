@@ -1,12 +1,12 @@
-import { sharedServerLayerAction } from './reexport-action'
+import { sharedServerLayerAction } from './reexport-action';
 
 export default function Page() {
-  return (
-    <div>
-      <form>
-        <input type="text" placeholder="input" />
-        <button formAction={sharedServerLayerAction}>submit</button>
-      </form>
-    </div>
-  )
+	return (
+		<div>
+			<form>
+				<input placeholder="input" type="text" />
+				<button formAction={sharedServerLayerAction}>submit</button>
+			</form>
+		</div>
+	);
 }

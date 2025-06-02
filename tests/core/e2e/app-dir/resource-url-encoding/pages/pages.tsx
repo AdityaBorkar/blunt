@@ -1,8 +1,8 @@
-import dynamic from 'next/dynamic'
-import '../my@style.css'
+import dynamic from 'next/dynamic';
+import '../my@style.css';
 
-const Component = dynamic(() => import('../app/client#component'))
+const Component = dynamic(() => import('../app/client#component'));
 
 export default function Page() {
-  return <Component />
+	return <Component />;
 }

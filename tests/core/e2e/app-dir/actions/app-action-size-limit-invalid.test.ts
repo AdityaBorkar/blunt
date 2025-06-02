@@ -1,157 +1,158 @@
-import { nextTestSetup } from 'e2e-utils'
-import { retry } from 'next-test-utils'
-import stripAnsi from 'strip-ansi'
-import { accountForOverhead } from './account-for-overhead'
+import { nextTestSetup } from 'e2e-utils';
+import { retry } from 'next-test-utils';
+import stripAnsi from 'strip-ansi';
+
+import { accountForOverhead } from './account-for-overhead';
 
 const CONFIG_ERROR =
-  'Server Actions Size Limit must be a valid number or filesize format larger than 1MB'
+	'Server Actions Size Limit must be a valid number or filesize format larger than 1MB';
 
 describe('app-dir action size limit invalid config', () => {
-  const { next, isNextStart, isNextDeploy, skipped } = nextTestSetup({
-    files: __dirname,
-    skipDeployment: true,
-    skipStart: true,
-    dependencies: {
-      nanoid: '4.0.1',
-      'server-only': 'latest',
-    },
-  })
-  if (skipped) return
+	const { next, isNextStart, isNextDeploy, skipped } = nextTestSetup({
+		dependencies: {
+			nanoid: '4.0.1',
+			'server-only': 'latest',
+		},
+		files: __dirname,
+		skipDeployment: true,
+		skipStart: true,
+	});
+	if (skipped) return;
 
-  if (!isNextStart) {
-    it('skip test for development mode', () => {})
-    return
-  }
+	if (!isNextStart) {
+		it('skip test for development mode', () => {});
+		return;
+	}
 
-  const logs: string[] = []
+	const logs: string[] = [];
 
-  beforeAll(() => {
-    const onLog = (log: string) => {
-      logs.push(stripAnsi(log.trim()))
-    }
+	beforeAll(() => {
+		const onLog = (log: string) => {
+			logs.push(stripAnsi(log.trim()));
+		};
 
-    next.on('stdout', onLog)
-    next.on('stderr', onLog)
-  })
+		next.on('stdout', onLog);
+		next.on('stderr', onLog);
+	});
 
-  afterEach(async () => {
-    logs.length = 0
+	afterEach(async () => {
+		logs.length = 0;
 
-    await next.stop()
-  })
+		await next.stop();
+	});
 
-  it('should error if serverActions.bodySizeLimit config is a negative number', async function () {
-    await next.patchFile(
-      'next.config.js',
-      `
+	it('should error if serverActions.bodySizeLimit config is a negative number', async () => {
+		await next.patchFile(
+			'next.config.js',
+			`
       module.exports = {
         experimental: {
           serverActions: { bodySizeLimit: -3000 }
         },
       }
-      `
-    )
-    try {
-      await next.start()
-    } catch {}
-    expect(next.cliOutput).toContain(CONFIG_ERROR)
-  })
+      `,
+		);
+		try {
+			await next.start();
+		} catch {}
+		expect(next.cliOutput).toContain(CONFIG_ERROR);
+	});
 
-  it('should error if serverActions.bodySizeLimit config is invalid', async function () {
-    await next.patchFile(
-      'next.config.js',
-      `
+	it('should error if serverActions.bodySizeLimit config is invalid', async () => {
+		await next.patchFile(
+			'next.config.js',
+			`
       module.exports = {
         experimental: {
           serverActions: { bodySizeLimit: 'testmb' }
         },
       }
-      `
-    )
-    try {
-      await next.start()
-    } catch {}
-    expect(next.cliOutput).toContain(CONFIG_ERROR)
-  })
+      `,
+		);
+		try {
+			await next.start();
+		} catch {}
+		expect(next.cliOutput).toContain(CONFIG_ERROR);
+	});
 
-  it('should error if serverActions.bodySizeLimit config is a negative size', async function () {
-    await next.patchFile(
-      'next.config.js',
-      `
+	it('should error if serverActions.bodySizeLimit config is a negative size', async () => {
+		await next.patchFile(
+			'next.config.js',
+			`
       module.exports = {
         experimental: {
           serverActions: { bodySizeLimit: '-3000mb' }
         },
       }
-      `
-    )
-    try {
-      await next.start()
-    } catch {}
-    expect(next.cliOutput).toContain(CONFIG_ERROR)
-  })
+      `,
+		);
+		try {
+			await next.start();
+		} catch {}
+		expect(next.cliOutput).toContain(CONFIG_ERROR);
+	});
 
-  if (!isNextDeploy) {
-    it('should respect the size set in serverActions.bodySizeLimit', async function () {
-      await next.patchFile(
-        'next.config.js',
-        `
+	if (!isNextDeploy) {
+		it('should respect the size set in serverActions.bodySizeLimit', async () => {
+			await next.patchFile(
+				'next.config.js',
+				`
       module.exports = {
         experimental: {
           serverActions: { bodySizeLimit: '1.5mb' }
         },
       }
-      `
-      )
-      await next.start()
+      `,
+			);
+			await next.start();
 
-      const browser = await next.browser('/file')
-      await browser.elementByCss('#size-1mb').click()
+			const browser = await next.browser('/file');
+			await browser.elementByCss('#size-1mb').click();
 
-      await retry(() => {
-        expect(logs).toContainEqual(`size = ${accountForOverhead(1)}`)
-      })
+			await retry(() => {
+				expect(logs).toContainEqual(`size = ${accountForOverhead(1)}`);
+			});
 
-      await browser.elementByCss('#size-2mb').click()
+			await browser.elementByCss('#size-2mb').click();
 
-      await retry(() => {
-        expect(logs).toContainEqual(
-          expect.stringContaining('Error: Body exceeded 1.5mb limit')
-        )
-        expect(logs).toContainEqual(
-          expect.stringContaining(
-            'To configure the body size limit for Server Actions, see'
-          )
-        )
-      })
-    })
+			await retry(() => {
+				expect(logs).toContainEqual(
+					expect.stringContaining('Error: Body exceeded 1.5mb limit'),
+				);
+				expect(logs).toContainEqual(
+					expect.stringContaining(
+						'To configure the body size limit for Server Actions, see',
+					),
+				);
+			});
+		});
 
-    it('should respect the size set in serverActions.bodySizeLimit when submitting form', async function () {
-      await next.patchFile(
-        'next.config.js',
-        `
+		it('should respect the size set in serverActions.bodySizeLimit when submitting form', async () => {
+			await next.patchFile(
+				'next.config.js',
+				`
       module.exports = {
         experimental: {
           serverActions: { bodySizeLimit: '2mb' }
         },
       }
-      `
-      )
+      `,
+			);
 
-      await next.start()
+			await next.start();
 
-      const browser = await next.browser('/form')
-      await browser.elementByCss('#size-1mb').click()
+			const browser = await next.browser('/form');
+			await browser.elementByCss('#size-1mb').click();
 
-      await retry(() => {
-        expect(logs).toContainEqual(`size = ${accountForOverhead(1)}`)
-      })
+			await retry(() => {
+				expect(logs).toContainEqual(`size = ${accountForOverhead(1)}`);
+			});
 
-      await browser.elementByCss('#size-2mb').click()
+			await browser.elementByCss('#size-2mb').click();
 
-      await retry(() => {
-        expect(logs).toContainEqual(`size = ${accountForOverhead(2)}`)
-      })
-    })
-  }
-})
+			await retry(() => {
+				expect(logs).toContainEqual(`size = ${accountForOverhead(2)}`);
+			});
+		});
+	}
+});

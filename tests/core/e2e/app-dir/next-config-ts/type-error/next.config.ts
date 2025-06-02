@@ -1,12 +1,12 @@
-import type { NextConfig } from 'next'
+import type { NextConfig } from 'next';
 
 // type error
-let foo: number = 'foo'
+const foo: number = 'foo';
 
 const nextConfig: NextConfig = {
-  env: {
-    foo,
-  },
-}
+	env: {
+		foo,
+	},
+};
 
-export default nextConfig
+export default nextConfig;

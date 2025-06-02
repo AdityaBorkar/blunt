@@ -1,21 +1,21 @@
-import { Suspense } from 'react'
-import { notFound } from 'next/navigation'
+import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
 
-import { Dynamic } from '../../../../components/dynamic'
+import { Dynamic } from '../../../../components/dynamic';
 
 const NotFound = () => {
-  notFound()
-}
+	notFound();
+};
 
 export default function NotFoundPage() {
-  return (
-    <>
-      <Suspense
-        fallback={<Dynamic pathname="/navigation/not-found/dynamic" fallback />}
-      >
-        <Dynamic pathname="/navigation/not-found/dynamic" />
-      </Suspense>
-      <NotFound />
-    </>
-  )
+	return (
+		<>
+			<Suspense
+				fallback={<Dynamic fallback pathname="/navigation/not-found/dynamic" />}
+			>
+				<Dynamic pathname="/navigation/not-found/dynamic" />
+			</Suspense>
+			<NotFound />
+		</>
+	);
 }

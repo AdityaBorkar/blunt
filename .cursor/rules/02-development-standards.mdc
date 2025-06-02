@@ -1,0 +1,125 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+# Development Standards & Best Practices
+
+## Code Quality Standards
+
+### TypeScript Requirements
+- **Strict Mode**: All code must use TypeScript strict mode as defined in [blunt/tsconfig.json](mdc:blunt/tsconfig.json)
+- **Type Safety**: No `any` types allowed - use proper typing or generic constraints
+- **Import Organization**: Follow Biome's import grouping rules from [biome.jsonc](mdc:biome.jsonc)
+- **Type Imports**: Use `import type` for type-only imports as enforced by Biome
+
+### Code Formatting & Linting
+All code must follow the [biome.jsonc](mdc:biome.jsonc) configuration:
+
+- **Indentation**: 2-space tabs (indentWidth: 2, indentStyle: "tab")
+- **Quotes**: Single quotes for JavaScript strings
+- **Semicolons**: Always required
+- **Trailing Commas**: None in JSON files
+- **Self-closing Elements**: Required for React components
+
+### File Organization Patterns
+
+#### Core Framework Structure
+```
+blunt/
+├── cli/          # Command-line tools
+├── forms/        # Form handling utilities
+├── media/        # Asset management
+├── navigation/   # Routing system
+├── scripts/      # Build and utility scripts
+├── server/       # Server implementations
+│   ├── dev/      # Development server
+│   └── utils/    # Server utilities
+└── types/        # TypeScript definitions
+```
+
+#### Plugin Structure
+```
+plugins/
+├── biome/              # Biome integration
+├── create-blunt-app/   # Project scaffolding
+└── typescript/         # TS enhancements
+```
+
+## Development Workflow
+
+### Monorepo Management
+- Use **Bun workspaces** as configured in [package.json](mdc:package.json)
+- Install dependencies with `bun install` (never use npm/yarn)
+- Run scripts from workspace root when possible
+
+### Testing Standards
+Comprehensive testing is required across all levels in [tests/](mdc:tests):
+
+- **Unit Tests**: [tests/core/unit/](mdc:tests/core/unit) - Individual function testing
+- **Integration Tests**: [tests/core/integration/](mdc:tests/core/integration) - Component integration
+- **E2E Tests**: [tests/core/e2e/](mdc:tests/core/e2e) - Full application flows
+- **Development Tests**: [tests/core/development/](mdc:tests/core/development) - Dev server functionality
+- **Production Tests**: [tests/core/production/](mdc:tests/core/production) - Production build validation
+
+### Code Review Guidelines
+
+#### Required Checks
+1. **Biome Validation**: All code must pass `bun run biome check`
+2. **Type Checking**: TypeScript compilation must succeed without errors
+3. **Test Coverage**: New features require corresponding tests
+4. **Performance Impact**: Consider bundle size and runtime performance
+
+#### Review Focus Areas
+- **API Consistency**: Ensure new APIs follow existing patterns
+- **Error Handling**: Proper error boundaries and user feedback
+- **Memory Management**: Avoid memory leaks in React components
+- **Bundle Impact**: Consider tree-shaking and code splitting
+
+## Architecture Principles
+
+### Performance First
+- **Bundle Size**: Keep individual modules small and tree-shakeable
+- **Runtime Performance**: Prefer Bun-native APIs over polyfills
+- **Development Speed**: Optimize for fast HMR and builds
+- **Memory Efficiency**: Implement proper cleanup in React hooks
+
+### Simplicity Over Features
+- **Essential Features Only**: No feature bloat - stick to core functionality
+- **Zero Config**: Sensible defaults that work out of the box
+- **Clear APIs**: Self-documenting function and component names
+- **Minimal Dependencies**: Leverage Bun's built-in capabilities
+
+### Type Safety
+- **Strict TypeScript**: No escape hatches with `any` types
+- **Runtime Validation**: Validate external data at boundaries
+- **Generic Constraints**: Use proper generic bounds for reusable code
+- **Export Types**: Make internal types available for plugin development
+
+## Error Handling Patterns
+
+### Server-Side Errors
+- Use proper HTTP status codes
+- Log errors with context for debugging
+- Provide helpful error messages in development
+- Sanitize error responses in production
+
+### Client-Side Errors
+- Implement React Error Boundaries
+- Provide user-friendly error messages
+- Include recovery mechanisms where possible
+- Log errors for monitoring (when configured)
+
+## Security Guidelines
+
+### Input Validation
+- Validate all external inputs (forms, APIs, route parameters)
+- Sanitize user-generated content
+- Use TypeScript for compile-time type checking
+- Implement runtime schema validation for critical paths
+
+### Build Security
+- Keep dependencies minimal and updated
+- Use Bun's built-in security features
+- Avoid dynamic code execution
+- Validate plugin integrity

@@ -1,12 +1,12 @@
-import dynamic from 'next/dynamic'
+import dynamic from 'next/dynamic';
 
 const BrowserLoaded = dynamic(async () => () => <div>Browser hydrated</div>, {
-  ssr: false,
-})
+	ssr: false,
+});
 
 export default () => (
-  <div>
-    <div>Nested 2</div>
-    <BrowserLoaded />
-  </div>
-)
+	<div>
+		<div>Nested 2</div>
+		<BrowserLoaded />
+	</div>
+);

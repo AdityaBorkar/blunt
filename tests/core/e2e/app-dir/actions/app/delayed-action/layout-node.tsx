@@ -1,15 +1,16 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { DataContext } from './context'
+import { useState } from 'react';
+
+import { DataContext } from './context';
 
 export default function Layout({ children }) {
-  const [data, setData] = useState<number | null>(null)
+	const [data, setData] = useState<number | null>(null);
 
-  return (
-    <DataContext.Provider value={{ data, setData }}>
-      <div>{children}</div>
-      <div id="delayed-action-result">{data}</div>
-    </DataContext.Provider>
-  )
+	return (
+		<DataContext.Provider value={{ data, setData }}>
+			<div>{children}</div>
+			<div id="delayed-action-result">{data}</div>
+		</DataContext.Provider>
+	);
 }

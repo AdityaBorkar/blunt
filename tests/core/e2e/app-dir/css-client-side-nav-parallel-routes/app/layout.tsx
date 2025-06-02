@@ -1,16 +1,16 @@
 export default function Root({
-  children,
-  modal,
+	children,
+	modal,
 }: {
-  children: React.ReactNode
-  modal: React.ReactNode
+	children: React.ReactNode;
+	modal: React.ReactNode;
 }) {
-  return (
-    <html>
-      <body>
-        {children}
-        {modal}
-      </body>
-    </html>
-  )
+	return (
+		<html>
+			<body>
+				{children}
+				{modal}
+			</body>
+		</html>
+	);
 }

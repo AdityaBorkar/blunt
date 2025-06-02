@@ -2,7 +2,7 @@
  * @type {import('next').NextConfig}
  */
 const nextConfig = {
-  productionBrowserSourceMaps: true,
-}
+	productionBrowserSourceMaps: true,
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

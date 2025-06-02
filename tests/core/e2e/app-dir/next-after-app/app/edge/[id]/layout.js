@@ -1,1 +1,1 @@
-export { default } from '../../nodejs/[id]/layout'
+export { default } from '../../nodejs/[id]/layout';

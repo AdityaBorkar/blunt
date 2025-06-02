@@ -1,7 +1,7 @@
 export default function SharedLayout({
-  children,
+	children,
 }: {
-  children: React.ReactNode
+	children: React.ReactNode;
 }) {
-  return <div id="has-loading-boundary">{children}</div>
+	return <div id="has-loading-boundary">{children}</div>;
 }

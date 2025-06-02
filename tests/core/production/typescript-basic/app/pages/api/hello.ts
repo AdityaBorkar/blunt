@@ -1,9 +1,9 @@
-import { PageConfig } from 'next'
+import type { PageConfig } from 'next';
 
 export const config: PageConfig = {
-  runtime: 'nodejs',
-}
+	runtime: 'nodejs',
+};
 
-export default function handler(req, res) {
-  res.json({ hello: 'world' })
+export default function handler(_req, res) {
+	res.json({ hello: 'world' });
 }

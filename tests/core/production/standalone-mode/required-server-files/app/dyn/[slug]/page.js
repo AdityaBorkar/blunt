@@ -1,14 +1,14 @@
-import { headers } from 'next/headers'
+import { headers } from 'next/headers';
 
 export default async function Page({ params }) {
-  const data = headers()
+	const data = headers();
 
-  return (
-    <>
-      <p id="page">/dyn/[slug]</p>
-      <p id="params">{JSON.stringify(params)}</p>
-      <p id="now">{Date.now()}</p>
-      <p id="data">{data}</p>
-    </>
-  )
+	return (
+		<>
+			<p id="page">/dyn/[slug]</p>
+			<p id="params">{JSON.stringify(params)}</p>
+			<p id="now">{Date.now()}</p>
+			<p id="data">{data}</p>
+		</>
+	);
 }

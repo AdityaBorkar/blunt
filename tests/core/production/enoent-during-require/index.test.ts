@@ -1,14 +1,14 @@
-import { createNext } from 'e2e-utils'
-import { NextInstance } from 'e2e-utils'
-import { check, renderViaHTTP } from 'next-test-utils'
+import { createNext, type NextInstance } from 'e2e-utils';
+import { check, renderViaHTTP } from 'next-test-utils';
 
 describe('ENOENT during require', () => {
-  let next: NextInstance
+	let next: NextInstance;
 
-  beforeAll(async () => {
-    next = await createNext({
-      files: {
-        'pages/_app.js': `
+	beforeAll(async () => {
+		next = await createNext({
+			dependencies: {},
+			files: {
+				'pages/_app.js': `
           import App from 'next/app'
           
           if (typeof window === 'undefined') {
@@ -18,7 +18,7 @@ describe('ENOENT during require', () => {
           }
           export default App
         `,
-        'pages/index.js': `
+				'pages/index.js': `
           export function getStaticProps() {
             console.log('revalidate /')
             
@@ -34,22 +34,21 @@ describe('ENOENT during require', () => {
             return <p>hello world</p>
           } 
         `,
-      },
-      dependencies: {},
-    })
-  })
-  afterAll(() => next.destroy())
+			},
+		});
+	});
+	afterAll(() => next.destroy());
 
-  it('should show ENOENT error correctly', async () => {
-    await check(async () => {
-      await renderViaHTTP(next.url, '/')
-      console.error(next.cliOutput)
+	it('should show ENOENT error correctly', async () => {
+		await check(async () => {
+			await renderViaHTTP(next.url, '/');
+			console.error(next.cliOutput);
 
-      return next.cliOutput.includes('non-existent-folder')
-        ? 'success'
-        : next.cliOutput
-    }, 'success')
+			return next.cliOutput.includes('non-existent-folder')
+				? 'success'
+				: next.cliOutput;
+		}, 'success');
 
-    expect(next.cliOutput).not.toContain('Cannot destructure property')
-  })
-})
+		expect(next.cliOutput).not.toContain('Cannot destructure property');
+	});
+});

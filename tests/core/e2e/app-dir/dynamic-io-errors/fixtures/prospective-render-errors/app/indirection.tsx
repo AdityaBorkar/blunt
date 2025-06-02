@@ -1,5 +1,5 @@
-'use client'
+'use client';
 
 export function Indirection({ children }: { children: React.ReactNode }) {
-  return children
+	return children;
 }

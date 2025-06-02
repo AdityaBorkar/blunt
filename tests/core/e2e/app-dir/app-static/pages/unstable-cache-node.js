@@ -1,25 +1,25 @@
-import { unstable_cache } from 'next/cache'
+import { unstable_cache } from 'next/cache';
 
 export async function getServerSideProps() {
-  const data = await unstable_cache(async () => {
-    return {
-      random: Math.random(),
-    }
-  })()
+	const data = await unstable_cache(async () => {
+		return {
+			random: Math.random(),
+		};
+	})();
 
-  return {
-    props: {
-      now: Date.now(),
-      data,
-    },
-  }
+	return {
+		props: {
+			data,
+			now: Date.now(),
+		},
+	};
 }
 
 export default function Page(props) {
-  return (
-    <>
-      <p>/unstable-cache-node</p>
-      <p id="props">{JSON.stringify(props)}</p>
-    </>
-  )
+	return (
+		<>
+			<p>/unstable-cache-node</p>
+			<p id="props">{JSON.stringify(props)}</p>
+		</>
+	);
 }

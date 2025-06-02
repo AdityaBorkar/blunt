@@ -1,5 +1,5 @@
-require('next/router')
+require('next/router');
 
 export default function Page() {
-  return <p>just work</p>
+	return <p>just work</p>;
 }

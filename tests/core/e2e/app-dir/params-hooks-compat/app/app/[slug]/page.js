@@ -1,12 +1,13 @@
-'use client'
+'use client';
 
-import { Suspense } from 'react'
-import { ParamsComponent } from '../../../shared/params-component'
+import { Suspense } from 'react';
+
+import { ParamsComponent } from '../../../shared/params-component';
 
 export default function Page() {
-  return (
-    <Suspense>
-      <ParamsComponent />
-    </Suspense>
-  )
+	return (
+		<Suspense>
+			<ParamsComponent />
+		</Suspense>
+	);
 }

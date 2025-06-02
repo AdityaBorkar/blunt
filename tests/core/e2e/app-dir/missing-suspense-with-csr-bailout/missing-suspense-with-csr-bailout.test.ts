@@ -1,76 +1,76 @@
-import { nextTestSetup } from 'e2e-utils'
+import { nextTestSetup } from 'e2e-utils';
 
 describe('missing-suspense-with-csr-bailout', () => {
-  const { next, isNextDev, skipped } = nextTestSetup({
-    files: __dirname,
-    skipStart: true,
-    // This test is skipped when deployed because it's not possible to rename files after deployment.
-    skipDeployment: true,
-  })
+	const { next, isNextDev, skipped } = nextTestSetup({
+		files: __dirname,
+		// This test is skipped when deployed because it's not possible to rename files after deployment.
+		skipDeployment: true,
+		skipStart: true,
+	});
 
-  if (skipped) {
-    return
-  }
+	if (skipped) {
+		return;
+	}
 
-  if (isNextDev) {
-    it.skip('skip test for development mode', () => {})
-    return
-  }
+	if (isNextDev) {
+		it.skip('skip test for development mode', () => {});
+		return;
+	}
 
-  beforeEach(async () => {
-    await next.clean()
-  })
+	beforeEach(async () => {
+		await next.clean();
+	});
 
-  describe('useSearchParams', () => {
-    const message = `useSearchParams() should be wrapped in a suspense boundary at page "/".`
+	describe('useSearchParams', () => {
+		const message = `useSearchParams() should be wrapped in a suspense boundary at page "/".`;
 
-    it('should fail build if useSearchParams is not wrapped in a suspense boundary', async () => {
-      const { exitCode } = await next.build()
-      expect(exitCode).toBe(1)
-      expect(next.cliOutput).toContain(message)
-      // Can show the trace where the searchParams hook is used
-      expect(next.cliOutput).toMatch(/at.*server[\\/]app[\\/]page.js/)
-    })
+		it('should fail build if useSearchParams is not wrapped in a suspense boundary', async () => {
+			const { exitCode } = await next.build();
+			expect(exitCode).toBe(1);
+			expect(next.cliOutput).toContain(message);
+			// Can show the trace where the searchParams hook is used
+			expect(next.cliOutput).toMatch(/at.*server[\\/]app[\\/]page.js/);
+		});
 
-    it('should pass build if useSearchParams is wrapped in a suspense boundary', async () => {
-      await next.renameFile('app/layout.js', 'app/layout-no-suspense.js')
-      await next.renameFile('app/layout-suspense.js', 'app/layout.js')
+		it('should pass build if useSearchParams is wrapped in a suspense boundary', async () => {
+			await next.renameFile('app/layout.js', 'app/layout-no-suspense.js');
+			await next.renameFile('app/layout-suspense.js', 'app/layout.js');
 
-      await expect(next.build()).resolves.toEqual({
-        exitCode: 0,
-        cliOutput: expect.not.stringContaining(message),
-      })
+			await expect(next.build()).resolves.toEqual({
+				cliOutput: expect.not.stringContaining(message),
+				exitCode: 0,
+			});
 
-      await next.renameFile('app/layout.js', 'app/layout-suspense.js')
-      await next.renameFile('app/layout-no-suspense.js', 'app/layout.js')
-    })
-  })
+			await next.renameFile('app/layout.js', 'app/layout-suspense.js');
+			await next.renameFile('app/layout-no-suspense.js', 'app/layout.js');
+		});
+	});
 
-  describe('next/dynamic', () => {
-    beforeEach(async () => {
-      await next.renameFile('app/page.js', 'app/_page.js')
-      await next.start()
-    })
-    afterEach(async () => {
-      await next.renameFile('app/_page.js', 'app/page.js')
-    })
+	describe('next/dynamic', () => {
+		beforeEach(async () => {
+			await next.renameFile('app/page.js', 'app/_page.js');
+			await next.start();
+		});
+		afterEach(async () => {
+			await next.renameFile('app/_page.js', 'app/page.js');
+		});
 
-    it('does not emit errors related to bailing out of client side rendering', async () => {
-      const browser = await next.browser('/dynamic', {
-        pushErrorAsConsoleLog: true,
-      })
+		it('does not emit errors related to bailing out of client side rendering', async () => {
+			const browser = await next.browser('/dynamic', {
+				pushErrorAsConsoleLog: true,
+			});
 
-      try {
-        await browser.waitForElementByCss('#dynamic')
+			try {
+				await browser.waitForElementByCss('#dynamic');
 
-        expect(await browser.log()).not.toContainEqual(
-          expect.objectContaining({
-            source: 'error',
-          })
-        )
-      } finally {
-        await browser.close()
-      }
-    })
-  })
-})
+				expect(await browser.log()).not.toContainEqual(
+					expect.objectContaining({
+						source: 'error',
+					}),
+				);
+			} finally {
+				await browser.close();
+			}
+		});
+	});
+});

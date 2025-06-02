@@ -1,1 +1,1 @@
-export { default } from '../layout-node'
+export { default } from '../layout-node';

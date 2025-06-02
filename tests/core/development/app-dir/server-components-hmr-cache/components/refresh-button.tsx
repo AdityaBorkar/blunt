@@ -1,13 +1,13 @@
-'use client'
+'use client';
 
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation';
 
 export function RefreshButton() {
-  const { refresh } = useRouter()
+	const { refresh } = useRouter();
 
-  return (
-    <button type="button" onClick={refresh}>
-      refresh
-    </button>
-  )
+	return (
+		<button onClick={refresh} type="button">
+			refresh
+		</button>
+	);
 }

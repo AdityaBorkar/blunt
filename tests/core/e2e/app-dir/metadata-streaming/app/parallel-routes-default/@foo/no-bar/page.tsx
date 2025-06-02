@@ -1,3 +1,3 @@
 export default function Page() {
-  return 'no-bar @foo'
+	return 'no-bar @foo';
 }

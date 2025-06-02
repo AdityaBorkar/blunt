@@ -1,13 +1,13 @@
-'use client'
+'use client';
 
-const list = [1, 2, 3]
+const list = [1, 2, 3];
 
 export default function Page() {
-  return (
-    <div>
-      {list.map((item, index) => (
-        <p>{item}</p>
-      ))}
-    </div>
-  )
+	return (
+		<div>
+			{list.map((item, _index) => (
+				<p>{item}</p>
+			))}
+		</div>
+	);
 }

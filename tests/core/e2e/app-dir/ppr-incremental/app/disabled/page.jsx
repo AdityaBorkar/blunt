@@ -1,2 +1,2 @@
-export { default } from '../../lib/page'
-export const experimental_ppr = false
+export { default } from '../../lib/page';
+export const experimental_ppr = false;

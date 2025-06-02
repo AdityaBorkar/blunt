@@ -1,10 +1,9 @@
-/* eslint-env jest */
-/* eslint-disable jest/no-standalone-expect */
-import { join } from 'path'
-import webdriver from 'next-webdriver'
+
+
+import { join } from 'node:path'
+import { createNext, FileRef, type NextInstance } from 'e2e-utils'
 import { fetchViaHTTP } from 'next-test-utils'
-import { createNext, FileRef } from 'e2e-utils'
-import { NextInstance } from 'e2e-utils'
+import webdriver from 'next-webdriver'
 
 const itif = (condition: boolean) => (condition ? it : it.skip)
 

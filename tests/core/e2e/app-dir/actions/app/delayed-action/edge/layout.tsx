@@ -1,1 +1,1 @@
-export { default } from '../layout-edge'
+export { default } from '../layout-edge';

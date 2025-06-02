@@ -1,21 +1,21 @@
 export default function page() {
-  return 'robots'
+	return 'robots';
 }
 
 export const metadata = {
-  robots: {
-    index: false,
-    follow: true,
-    nocache: true,
+	robots: {
+		follow: true,
 
-    googleBot: {
-      index: true,
-      follow: false,
-      noimageindex: true,
+		googleBot: {
+			follow: false,
+			index: true,
+			'max-image-preview': -1,
+			'max-snippet': -1,
 
-      'max-video-preview': 'standard',
-      'max-image-preview': -1,
-      'max-snippet': -1,
-    },
-  },
-}
+			'max-video-preview': 'standard',
+			noimageindex: true,
+		},
+		index: false,
+		nocache: true,
+	},
+};

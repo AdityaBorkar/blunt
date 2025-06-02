@@ -1,6 +1,6 @@
 module.exports = {
-  experimental: {
-    clientRouterFilter: true,
-    clientRouterFilterRedirects: true,
-  },
-}
+	experimental: {
+		clientRouterFilter: true,
+		clientRouterFilterRedirects: true,
+	},
+};

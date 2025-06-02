@@ -1,16 +1,16 @@
 export default function page() {
-  return 'facebook'
+	return 'facebook';
 }
 
 export async function generateMetadata() {
-  const metadata = {
-    facebook: {
-      appId: '12345678',
-      admins: ['120', '122', '124'],
-    },
-    pinterest: {
-      richPin: true,
-    },
-  }
-  return metadata
+	const metadata = {
+		facebook: {
+			admins: ['120', '122', '124'],
+			appId: '12345678',
+		},
+		pinterest: {
+			richPin: true,
+		},
+	};
+	return metadata;
 }

@@ -1,31 +1,32 @@
 /* global location */
-import React from 'react'
-import Link from 'next/link'
+
+import Link from 'next/link';
+import React from 'react';
 
 export default class DynamicPage extends React.Component {
-  static getInitialProps({ query }) {
-    return { text: query.text }
-  }
+	static getInitialProps({ query }) {
+		return { text: query.text };
+	}
 
-  state = {}
+	state = {};
 
-  componentDidMount() {
-    const [, hash] = location.href.split('#')
-    this.setState({ hash })
-  }
+	componentDidMount() {
+		const [, hash] = location.href.split('#');
+		this.setState({ hash });
+	}
 
-  render() {
-    const { text } = this.props
-    const { hash } = this.state
+	render() {
+		const { text } = this.props;
+		const { hash } = this.state;
 
-    return (
-      <div id="dynamic-page">
-        <div>
-          <Link href="/">Go Back</Link>
-        </div>
-        <p>{text}</p>
-        <div id="hash">Hash: {hash}</div>
-      </div>
-    )
-  }
+		return (
+			<div id="dynamic-page">
+				<div>
+					<Link href="/">Go Back</Link>
+				</div>
+				<p>{text}</p>
+				<div id="hash">Hash: {hash}</div>
+			</div>
+		);
+	}
 }

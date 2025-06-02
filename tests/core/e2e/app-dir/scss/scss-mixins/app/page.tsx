@@ -1,9 +1,9 @@
-import styles from './page.module.scss'
+import styles from './page.module.scss';
 
 export default function Home() {
-  return (
-    <h1 className={styles.data} id="the-title">
-      Hello World
-    </h1>
-  )
+	return (
+		<h1 className={styles.data} id="the-title">
+			Hello World
+		</h1>
+	);
 }

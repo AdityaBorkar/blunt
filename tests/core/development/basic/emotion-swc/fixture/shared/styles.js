@@ -1,9 +1,9 @@
-import { css, Global, keyframes } from '@emotion/react'
-import styled from '@emotion/styled'
+import { css, Global, keyframes } from '@emotion/react';
+import styled from '@emotion/styled';
 
 export const globalStyles = (
-  <Global
-    styles={css`
+	<Global
+		styles={css`
       html,
       body {
         padding: 3rem 1rem;
@@ -14,20 +14,20 @@ export const globalStyles = (
         font-size: 24px;
       }
     `}
-  />
-)
+	/>
+);
 
 export const basicStyles = css({
-  backgroundColor: 'white',
-  color: 'cornflowerblue',
-  border: '1px solid lightgreen',
-  borderRight: 'none',
-  borderBottom: 'none',
-  boxShadow: '5px 5px 0 0 lightgreen, 10px 10px 0 0 lightyellow',
-  transition: 'all 0.1s linear',
-  margin: '3rem 0',
-  padding: '1rem 0.5rem',
-})
+	backgroundColor: 'white',
+	border: '1px solid lightgreen',
+	borderBottom: 'none',
+	borderRight: 'none',
+	boxShadow: '5px 5px 0 0 lightgreen, 10px 10px 0 0 lightyellow',
+	color: 'cornflowerblue',
+	margin: '3rem 0',
+	padding: '1rem 0.5rem',
+	transition: 'all 0.1s linear',
+});
 
 export const hoverStyles = css`
   &:hover {
@@ -38,7 +38,7 @@ export const hoverStyles = css`
       -15px -15px 0 0 aqua,
       -30px -30px 0 0 cornflowerblue;
   }
-`
+`;
 export const bounce = keyframes`
   from {
     transform: scale(1.01);
@@ -46,11 +46,11 @@ export const bounce = keyframes`
   to {
     transform: scale(0.99);
   }
-`
+`;
 
 export const Basic = styled.div`
   ${basicStyles};
-`
+`;
 
 export const Combined = styled.div`
   ${basicStyles};
@@ -58,20 +58,20 @@ export const Combined = styled.div`
   & code {
     background-color: linen;
   }
-`
+`;
 
 export const Pink = styled(Basic)({
-  color: 'hotpink',
-})
+	color: 'hotpink',
+});
 
-export const BasicExtended = styled(Basic)``
+export const BasicExtended = styled(Basic)``;
 
 export const ComponentSelectorsExtended = styled.div`
   ${BasicExtended} {
     color: green;
   }
   box-shadow: -5px -5px 0 0 green;
-`
+`;
 
 export const Animated = styled.div`
   ${basicStyles};
@@ -80,4 +80,4 @@ export const Animated = styled.div`
     background-color: linen;
   }
   animation: ${({ animation }) => animation} 0.2s infinite ease-in-out alternate;
-`
+`;

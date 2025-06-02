@@ -1,14 +1,14 @@
-import type { MetadataRoute } from 'next'
+import type { MetadataRoute } from 'next';
 // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-;() => {
-  ;({
-    rules: {
-      userAgent: undefined,
-      allow: undefined,
-      disallow: undefined,
-      crawlDelay: undefined,
-    },
-    sitemap: undefined,
-    host: undefined,
-  }) satisfies MetadataRoute.Robots
-}
+() => {
+	({
+		host: undefined,
+		rules: {
+			allow: undefined,
+			crawlDelay: undefined,
+			disallow: undefined,
+			userAgent: undefined,
+		},
+		sitemap: undefined,
+	}) satisfies MetadataRoute.Robots;
+};

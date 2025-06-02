@@ -1,10 +1,10 @@
-import { revalidateTag } from 'next/cache'
-import { NextRequest, NextResponse } from 'next/server'
+import { revalidateTag } from 'next/cache';
+import { type NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
-  console.log(req.url.toString())
+	console.log(req.url.toString());
 
-  revalidateTag(req.nextUrl.searchParams.get('tag') || '')
+	revalidateTag(req.nextUrl.searchParams.get('tag') || '');
 
-  return NextResponse.json({ success: true })
+	return NextResponse.json({ success: true });
 }

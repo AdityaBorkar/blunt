@@ -1,1 +1,1 @@
-export { default } from '../../../nodejs/[id]/with-action/page'
+export { default } from '../../../nodejs/[id]/with-action/page';

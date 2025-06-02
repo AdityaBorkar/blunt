@@ -1,19 +1,19 @@
-export default function Page(props) {
-  return <p>/import/[slug]</p>
+export default function Page(_props) {
+	return <p>/import/[slug]</p>;
 }
 
 export function getStaticProps() {
-  return {
-    redirect: {
-      destination: '/somewhere',
-      permanent: false,
-    },
-  }
+	return {
+		redirect: {
+			destination: '/somewhere',
+			permanent: false,
+		},
+	};
 }
 
 export function getStaticPaths() {
-  return {
-    paths: [],
-    fallback: true,
-  }
+	return {
+		fallback: true,
+		paths: [],
+	};
 }

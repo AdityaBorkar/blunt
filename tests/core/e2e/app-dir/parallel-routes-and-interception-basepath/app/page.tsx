@@ -1,13 +1,13 @@
-import Link from 'next/link'
+import Link from 'next/link';
 
 export default function Page() {
-  return (
-    <div>
-      <div id="home-page">Home page</div>
-      <br />
-      <Link id="link-to-nested" href="/nested">
-        To Nested
-      </Link>
-    </div>
-  )
+	return (
+		<div>
+			<div id="home-page">Home page</div>
+			<br />
+			<Link href="/nested" id="link-to-nested">
+				To Nested
+			</Link>
+		</div>
+	);
 }

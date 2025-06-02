@@ -1,14 +1,14 @@
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react';
 
 function Layout(props: { foo: ReactNode; bar: ReactNode }) {
-  return (
-    <html>
-      <body>
-        {props.foo}
-        {props.bar}
-      </body>
-    </html>
-  )
+	return (
+		<html>
+			<body>
+				{props.foo}
+				{props.bar}
+			</body>
+		</html>
+	);
 }
 
-export default Layout
+export default Layout;

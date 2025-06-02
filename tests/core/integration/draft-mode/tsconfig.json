@@ -1,32 +1,32 @@
 {
-  "compilerOptions": {
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": false,
-    "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
-    "incremental": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "baseUrl": "../../..",
-    "paths": {
-      "development-sandbox": ["test/lib/development-sandbox"],
-      "next-test-utils": ["test/lib/next-test-utils"],
-      "amp-test-utils": ["test/lib/amp-test-utils"],
-      "next-webdriver": ["test/lib/next-webdriver"],
-      "e2e-utils": ["test/lib/e2e-utils"]
-    },
-    "target": "ES2017"
-  },
-  "include": [
-    "test/integration/draft-mode/next-env.d.ts",
-    "test/integration/draft-mode/**/*.ts",
-    "test/integration/draft-mode/**/*.tsx"
-  ],
-  "exclude": ["node_modules"]
+	"compilerOptions": {
+		"allowJs": true,
+		"baseUrl": "../../..",
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"incremental": true,
+		"isolatedModules": true,
+		"jsx": "preserve",
+		"lib": ["dom", "dom.iterable", "esnext"],
+		"module": "esnext",
+		"moduleResolution": "bundler",
+		"noEmit": true,
+		"paths": {
+			"amp-test-utils": ["test/lib/amp-test-utils"],
+			"development-sandbox": ["test/lib/development-sandbox"],
+			"e2e-utils": ["test/lib/e2e-utils"],
+			"next-test-utils": ["test/lib/next-test-utils"],
+			"next-webdriver": ["test/lib/next-webdriver"]
+		},
+		"resolveJsonModule": true,
+		"skipLibCheck": true,
+		"strict": false,
+		"target": "ES2017"
+	},
+	"exclude": ["node_modules"],
+	"include": [
+		"test/integration/draft-mode/next-env.d.ts",
+		"test/integration/draft-mode/**/*.ts",
+		"test/integration/draft-mode/**/*.tsx"
+	]
 }

@@ -1,10 +1,9 @@
-import path from 'path'
-import { createNext, FileRef } from 'e2e-utils'
-import { NextInstance } from 'e2e-utils'
-import { renderViaHTTP } from 'next-test-utils'
+import path from 'node:path';
+import { createNext, FileRef, type NextInstance } from 'e2e-utils';
+import { renderViaHTTP } from 'next-test-utils';
 
 const files = {
-  'app/layout.jsx': `
+	'app/layout.jsx': `
     export default function AppLayout({ children }) {
       return (
         <html>
@@ -18,7 +17,7 @@ const files = {
       )
     }
   `,
-  'app/page.jsx': `
+	'app/page.jsx': `
     import wasm from '../wasm/add.wasm?module'
     const instance$ = WebAssembly.instantiate(wasm);
 
@@ -34,21 +33,21 @@ const files = {
 
     export const runtime = "edge"
   `,
-  'wasm/add.wasm': new FileRef(path.join(__dirname, 'add.wasm')),
-}
+	'wasm/add.wasm': new FileRef(path.join(__dirname, 'add.wasm')),
+};
 
 describe('app-dir edge runtime with wasm', () => {
-  let next: NextInstance
+	let next: NextInstance;
 
-  beforeAll(async () => {
-    next = await createNext({
-      files,
-    })
-  })
-  afterAll(() => next?.destroy())
+	beforeAll(async () => {
+		next = await createNext({
+			files,
+		});
+	});
+	afterAll(() => next?.destroy());
 
-  it('should have built', async () => {
-    const html = await renderViaHTTP(next.url, '/')
-    expect(html).toContain('1 + 1 is: 2')
-  })
-})
+	it('should have built', async () => {
+		const html = await renderViaHTTP(next.url, '/');
+		expect(html).toContain('1 + 1 is: 2');
+	});
+});

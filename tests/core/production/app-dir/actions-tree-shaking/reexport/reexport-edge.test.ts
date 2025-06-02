@@ -1,3 +1,3 @@
-process.env.TEST_EDGE = '1'
+process.env.TEST_EDGE = '1';
 
-require('./reexport.test')
+require('./reexport.test');

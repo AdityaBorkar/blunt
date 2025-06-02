@@ -1,12 +1,12 @@
 :root {
-  --maxWidth: 1210px;
+	--maxWidth: 1210px;
 }
 
 html,
 body {
-  background: #000;
+	background: #000;
 }
 
 a {
-  color: aqua;
+	color: aqua;
 }

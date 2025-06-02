@@ -1,14 +1,14 @@
 export default function page() {
-  return 'twitter no image'
+	return 'twitter no image';
 }
 
 export const metadata = {
-  twitter: {
-    title: 'Twitter Title',
-    description: 'Twitter Description',
-    siteId: 'siteId',
-    creator: 'creator',
-    creatorId: 'creatorId',
-    images: undefined,
-  },
-}
+	twitter: {
+		creator: 'creator',
+		creatorId: 'creatorId',
+		description: 'Twitter Description',
+		images: undefined,
+		siteId: 'siteId',
+		title: 'Twitter Title',
+	},
+};

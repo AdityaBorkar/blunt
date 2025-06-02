@@ -1,13 +1,13 @@
-import { Metadata } from 'next'
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Product Layout',
-}
+	title: 'Product Layout',
+};
 
 export default function Layout({
-  children,
+	children,
 }: Readonly<{
-  children: React.ReactNode
+	children: React.ReactNode;
 }>) {
-  return <>{children}</>
+	return <>{children}</>;
 }

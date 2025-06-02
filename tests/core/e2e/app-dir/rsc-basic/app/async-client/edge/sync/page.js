@@ -1,3 +1,3 @@
-export { default } from '../../sync/page'
+export { default } from '../../sync/page';
 
-export const runtime = 'edge'
+export const runtime = 'edge';

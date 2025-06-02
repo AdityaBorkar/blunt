@@ -1,86 +1,13 @@
-import { RuleTester as ESLintTesterV8 } from 'eslint-v8'
-import { RuleTester as ESLintTesterV9 } from 'eslint'
-import { rules } from '@next/eslint-plugin-next'
+import { rules } from '@next/eslint-plugin-next';
+import { RuleTester as ESLintTesterV9 } from 'eslint';
+import { RuleTester as ESLintTesterV8 } from 'eslint-v8';
 
-const NextESLintRule = rules['no-styled-jsx-in-document']
+const NextESLintRule = rules['no-styled-jsx-in-document'];
 
 const tests = {
-  valid: [
-    {
-      filename: 'pages/_document.js',
-      code: `import Document, { Html, Head, Main, NextScript } from 'next/document'
-
-        export class MyDocument extends Document {
-          static async getInitialProps(ctx) {
-            const initialProps = await Document.getInitialProps(ctx)
-            return { ...initialProps }
-          }
-
-          render() {
-            return (
-              <Html>
-                <Head />
-                <body>
-                  <Main />
-                  <NextScript />
-                </body>
-              </Html>
-            )
-          }
-        }`,
-    },
-    {
-      filename: 'pages/_document.js',
-      code: `import Document, { Html, Head, Main, NextScript } from 'next/document'
-
-        export class MyDocument extends Document {
-          static async getInitialProps(ctx) {
-            const initialProps = await Document.getInitialProps(ctx)
-            return { ...initialProps }
-          }
-
-          render() {
-            return (
-              <Html>
-                <Head />
-                <style>{"\
-                  body{\
-                    color:red;\
-                  }\
-                "}</style>
-                <style {...{nonce: '123' }}></style>
-                <body>
-                  <Main />
-                  <NextScript />
-                </body>
-              </Html>
-            )
-          }
-        }`,
-    },
-    {
-      filename: 'pages/index.js',
-      code: `
-          export default function Page() {
-            return (
-              <>
-                <p>Hello world</p>
-                <style jsx>{\`
-                  p {
-                    color: orange;
-                  }
-                \`}</style>
-              </>
-            )
-          }
-          `,
-    },
-  ],
-
-  invalid: [
-    {
-      filename: 'pages/_document.js',
-      code: `
+	invalid: [
+		{
+			code: `
             import Document, { Html, Head, Main, NextScript } from 'next/document'
 
             export class MyDocument extends Document {
@@ -106,37 +33,109 @@ const tests = {
                 )
               }
             }`,
-      errors: [
-        {
-          message: `\`styled-jsx\` should not be used in \`pages/_document.js\`. See: https://nextjs.org/docs/messages/no-styled-jsx-in-document`,
-        },
-      ],
-    },
-  ],
-}
+			errors: [
+				{
+					message: `\`styled-jsx\` should not be used in \`pages/_document.js\`. See: https://nextjs.org/docs/messages/no-styled-jsx-in-document`,
+				},
+			],
+			filename: 'pages/_document.js',
+		},
+	],
+	valid: [
+		{
+			code: `import Document, { Html, Head, Main, NextScript } from 'next/document'
+
+        export class MyDocument extends Document {
+          static async getInitialProps(ctx) {
+            const initialProps = await Document.getInitialProps(ctx)
+            return { ...initialProps }
+          }
+
+          render() {
+            return (
+              <Html>
+                <Head />
+                <body>
+                  <Main />
+                  <NextScript />
+                </body>
+              </Html>
+            )
+          }
+        }`,
+			filename: 'pages/_document.js',
+		},
+		{
+			code: `import Document, { Html, Head, Main, NextScript } from 'next/document'
+
+        export class MyDocument extends Document {
+          static async getInitialProps(ctx) {
+            const initialProps = await Document.getInitialProps(ctx)
+            return { ...initialProps }
+          }
+
+          render() {
+            return (
+              <Html>
+                <Head />
+                <style>{"\
+                  body{\
+                    color:red;\
+                  }\
+                "}</style>
+                <style {...{nonce: '123' }}></style>
+                <body>
+                  <Main />
+                  <NextScript />
+                </body>
+              </Html>
+            )
+          }
+        }`,
+			filename: 'pages/_document.js',
+		},
+		{
+			code: `
+          export default function Page() {
+            return (
+              <>
+                <p>Hello world</p>
+                <style jsx>{\`
+                  p {
+                    color: orange;
+                  }
+                \`}</style>
+              </>
+            )
+          }
+          `,
+			filename: 'pages/index.js',
+		},
+	],
+};
 
 describe('no-styled-jsx-in-document', () => {
-  new ESLintTesterV8({
-    parserOptions: {
-      ecmaVersion: 2018,
-      sourceType: 'module',
-      ecmaFeatures: {
-        modules: true,
-        jsx: true,
-      },
-    },
-  }).run('eslint-v8', NextESLintRule, tests)
+	new ESLintTesterV8({
+		parserOptions: {
+			ecmaFeatures: {
+				jsx: true,
+				modules: true,
+			},
+			ecmaVersion: 2018,
+			sourceType: 'module',
+		},
+	}).run('eslint-v8', NextESLintRule, tests);
 
-  new ESLintTesterV9({
-    languageOptions: {
-      ecmaVersion: 2018,
-      sourceType: 'module',
-      parserOptions: {
-        ecmaFeatures: {
-          modules: true,
-          jsx: true,
-        },
-      },
-    },
-  }).run('eslint-v9', NextESLintRule, tests)
-})
+	new ESLintTesterV9({
+		languageOptions: {
+			ecmaVersion: 2018,
+			parserOptions: {
+				ecmaFeatures: {
+					jsx: true,
+					modules: true,
+				},
+			},
+			sourceType: 'module',
+		},
+	}).run('eslint-v9', NextESLintRule, tests);
+});

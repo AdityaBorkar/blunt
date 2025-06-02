@@ -1,5 +1,5 @@
-import React, { type JSX } from 'react'
-import api from '@lib/b-only'
+import api from '@lib/b-only';
+import type { JSX } from 'react';
 export default function ResolveOrder(): JSX.Element {
-  return <div>{api()}</div>
+	return <div>{api()}</div>;
 }

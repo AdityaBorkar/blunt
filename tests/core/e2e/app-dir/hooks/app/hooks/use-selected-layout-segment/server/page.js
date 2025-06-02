@@ -2,8 +2,8 @@
 // import { useSelectedLayoutSegment } from 'next/navigation'
 
 export default function Page() {
-  // This should throw an error.
-  // useSelectedLayoutSegment()
+	// This should throw an error.
+	// useSelectedLayoutSegment()
 
-  return null
+	return null;
 }

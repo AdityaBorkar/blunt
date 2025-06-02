@@ -1,17 +1,17 @@
-import { StreamingText } from '../streaming-text'
+import { StreamingText } from '../streaming-text';
 
 export default function Layout({
-  nav,
-  children,
+	nav,
+	children,
 }: {
-  nav: React.ReactNode
-  children: React.ReactNode
+	nav: React.ReactNode;
+	children: React.ReactNode;
 }) {
-  return (
-    <>
-      <StreamingText static="Static in layout" dynamic="Dynamic in layout" />
-      <div>{nav}</div>
-      <div>{children}</div>
-    </>
-  )
+	return (
+		<>
+			<StreamingText dynamic="Dynamic in layout" static="Static in layout" />
+			<div>{nav}</div>
+			<div>{children}</div>
+		</>
+	);
 }

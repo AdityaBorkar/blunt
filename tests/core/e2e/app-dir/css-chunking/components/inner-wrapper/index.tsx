@@ -1,10 +1,11 @@
-import React from 'react'
-import styles from './innerWrapper.module.css'
+import type React from 'react';
+
+import styles from './innerWrapper.module.css';
 
 export default function InnerWrapper({
-  children,
+	children,
 }: {
-  children: React.ReactNode
+	children: React.ReactNode;
 }) {
-  return <div className={styles.innerWrapper}>{children}</div>
+	return <div className={styles.innerWrapper}>{children}</div>;
 }

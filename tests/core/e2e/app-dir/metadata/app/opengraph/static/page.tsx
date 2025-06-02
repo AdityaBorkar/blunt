@@ -1,9 +1,9 @@
 export default function Page() {
-  return 'opengraph-static'
+	return 'opengraph-static';
 }
 
 export const metadata = {
-  twitter: {
-    card: 'summary_large_image',
-  },
-}
+	twitter: {
+		card: 'summary_large_image',
+	},
+};

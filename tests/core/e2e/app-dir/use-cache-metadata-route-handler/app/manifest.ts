@@ -1,12 +1,13 @@
-import type { MetadataRoute } from 'next'
-import { getSentinelValue } from './sentinel'
-import { setTimeout } from 'timers/promises'
+import { setTimeout } from 'node:timers/promises';
+import type { MetadataRoute } from 'next';
+
+import { getSentinelValue } from './sentinel';
 
 export default async function manifest(): Promise<MetadataRoute.Manifest> {
-  'use cache'
+	'use cache';
 
-  // Simulate I/O
-  await setTimeout(100)
+	// Simulate I/O
+	await setTimeout(100);
 
-  return { name: getSentinelValue() }
+	return { name: getSentinelValue() };
 }

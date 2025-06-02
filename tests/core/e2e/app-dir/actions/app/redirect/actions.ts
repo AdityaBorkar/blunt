@@ -1,23 +1,23 @@
-'use server'
+'use server';
 
-import { redirect } from 'next/navigation'
-import { unstable_expirePath } from 'next/cache'
+import { unstable_expirePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 
 type State = {
-  errors: Record<string, string>
-}
+	errors: Record<string, string>;
+};
 
-export async function action(previousState: State, formData: FormData) {
-  const name = formData.get('name')
-  const revalidate = formData.get('revalidate')
+export async function action(_previousState: State, formData: FormData) {
+	const name = formData.get('name');
+	const revalidate = formData.get('revalidate');
 
-  if (name !== 'justputit') {
-    return { errors: { name: "Only 'justputit' is accepted." } }
-  }
+	if (name !== 'justputit') {
+		return { errors: { name: "Only 'justputit' is accepted." } };
+	}
 
-  if (revalidate === 'on') {
-    unstable_expirePath('/redirect')
-  }
+	if (revalidate === 'on') {
+		unstable_expirePath('/redirect');
+	}
 
-  redirect('/redirect/other')
+	redirect('/redirect/other');
 }

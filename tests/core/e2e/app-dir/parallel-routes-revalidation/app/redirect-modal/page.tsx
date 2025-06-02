@@ -1,14 +1,14 @@
-import { RedirectForm } from '../components/RedirectForm'
-import { redirectAction } from '../actions'
+import { redirectAction } from '../actions';
+import { RedirectForm } from '../components/RedirectForm';
 
 export default function Page() {
-  return (
-    <div>
-      <h1>Page</h1>
+	return (
+		<div>
+			<h1>Page</h1>
 
-      <br />
+			<br />
 
-      <RedirectForm action={redirectAction} />
-    </div>
-  )
+			<RedirectForm action={redirectAction} />
+		</div>
+	);
 }

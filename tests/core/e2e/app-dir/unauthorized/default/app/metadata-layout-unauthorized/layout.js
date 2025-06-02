@@ -1,9 +1,9 @@
-import { unauthorized } from 'next/navigation'
+import { unauthorized } from 'next/navigation';
 
 export async function generateMetadata() {
-  unauthorized()
+	unauthorized();
 }
 
 export default function layout({ children }) {
-  return children
+	return children;
 }

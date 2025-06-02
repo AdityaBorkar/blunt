@@ -1,6 +1,6 @@
 module.exports = {
-  experimental: {
-    ppr: true,
-    clientSegmentCache: true,
-  },
-}
+	experimental: {
+		clientSegmentCache: true,
+		ppr: true,
+	},
+};

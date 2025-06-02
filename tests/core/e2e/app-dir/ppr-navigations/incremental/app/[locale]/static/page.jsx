@@ -1,9 +1,9 @@
-import { TestPage } from '../../../components/page'
+import { TestPage } from '../../../components/page';
 
 export default async function Page(props) {
-  const params = await props.params
+	const params = await props.params;
 
-  const { locale } = params
+	const { locale } = params;
 
-  return <TestPage pathname={`/${locale}/static`} noDynamic />
+	return <TestPage noDynamic pathname={`/${locale}/static`} />;
 }

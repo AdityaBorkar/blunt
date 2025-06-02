@@ -1,5 +1,5 @@
-const value = await Promise.resolve(42)
+const value = await Promise.resolve(42);
 
-export default function (req, res) {
-  res.json({ value })
+export default function (_req, res) {
+	res.json({ value });
 }

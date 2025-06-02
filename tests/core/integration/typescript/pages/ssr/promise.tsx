@@ -1,19 +1,17 @@
-import { GetServerSideProps } from 'next'
+import type { GetServerSideProps } from 'next';
 
 type Props = {
-  data: string
-}
+	data: string;
+};
 
 export const getServerSideProps: GetServerSideProps<Props> = async (
-  context
+	_context,
 ) => {
-  return {
-    props: (async function () {
-      return { data: 'some data' }
-    })(),
-  }
-}
+	return {
+		props: (async () => ({ data: 'some data' }))(),
+	};
+};
 
 export default function Page({ data }: Props) {
-  return <h1> {data} </h1>
+	return <h1> {data} </h1>;
 }

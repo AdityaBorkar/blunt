@@ -1,1 +1,1 @@
-export { default } from '../../nodejs/server-action/page'
+export { default } from '../../nodejs/server-action/page';

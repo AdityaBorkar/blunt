@@ -1,3 +1,3 @@
 export function runInternal(fn) {
-  return fn()
+	return fn();
 }

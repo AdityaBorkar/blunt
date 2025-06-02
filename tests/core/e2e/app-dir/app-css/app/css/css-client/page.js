@@ -1,17 +1,18 @@
-'use client'
+'use client';
 
-import 'next/link'
+import 'next/link';
 
-import './client-page.css'
-import styles from './inner/ClientComponent.module.css'
+import './client-page.css';
+
+import styles from './inner/ClientComponent.module.css';
 
 export default function Page() {
-  return (
-    <>
-      <h1>Page!!!</h1>
-      <div id="css-modules" className={styles.yuge}>
-        huge
-      </div>
-    </>
-  )
+	return (
+		<>
+			<h1>Page!!!</h1>
+			<div className={styles.yuge} id="css-modules">
+				huge
+			</div>
+		</>
+	);
 }

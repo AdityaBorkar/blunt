@@ -1,28 +1,29 @@
 /* eslint-env jest */
-import { createSandbox } from 'development-sandbox'
-import { FileRef, nextTestSetup } from 'e2e-utils'
-import { check } from 'next-test-utils'
-import { outdent } from 'outdent'
-import path from 'path'
+
+import path from 'node:path';
+import { createSandbox } from 'development-sandbox';
+import { FileRef, nextTestSetup } from 'e2e-utils';
+import { check } from 'next-test-utils';
+import { outdent } from 'outdent';
 
 describe('ReactRefreshRegression', () => {
-  const { isTurbopack, next } = nextTestSetup({
-    files: new FileRef(path.join(__dirname, 'fixtures', 'default-template')),
-    skipStart: true,
-    dependencies: {
-      'styled-components': '5.1.0',
-      '@next/mdx': 'canary',
-      '@mdx-js/loader': '2.2.1',
-      '@mdx-js/react': '2.2.1',
-    },
-  })
+	const { isTurbopack, next } = nextTestSetup({
+		dependencies: {
+			'@mdx-js/loader': '2.2.1',
+			'@mdx-js/react': '2.2.1',
+			'@next/mdx': 'canary',
+			'styled-components': '5.1.0',
+		},
+		files: new FileRef(path.join(__dirname, 'fixtures', 'default-template')),
+		skipStart: true,
+	});
 
-  // https://github.com/vercel/next.js/issues/12422
-  test('styled-components hydration mismatch', async () => {
-    const files = new Map([
-      [
-        'pages/_document.js',
-        outdent`
+	// https://github.com/vercel/next.js/issues/12422
+	test('styled-components hydration mismatch', async () => {
+		const files = new Map([
+			[
+				'pages/_document.js',
+				outdent`
           import Document from 'next/document'
           import { ServerStyleSheet } from 'styled-components'
   
@@ -53,16 +54,16 @@ describe('ReactRefreshRegression', () => {
             }
           }
         `,
-      ],
-    ])
+			],
+		]);
 
-    await using sandbox = await createSandbox(next, files)
-    const { session } = sandbox
+		await using sandbox = await createSandbox(next, files);
+		const { session } = sandbox;
 
-    // We start here.
-    await session.patch(
-      'index.js',
-      `
+		// We start here.
+		await session.patch(
+			'index.js',
+			`
         import React from 'react'
         import styled from 'styled-components'
 
@@ -72,21 +73,21 @@ describe('ReactRefreshRegression', () => {
         \`
 
         export default () => <Title>My page</Title>
-      `
-    )
+      `,
+		);
 
-    // Verify no hydration mismatch:
-    await session.assertNoRedbox()
-  })
+		// Verify no hydration mismatch:
+		await session.assertNoRedbox();
+	});
 
-  // https://github.com/vercel/next.js/issues/13978
-  test('can fast refresh a page with getStaticProps', async () => {
-    await using sandbox = await createSandbox(next)
-    const { session } = sandbox
+	// https://github.com/vercel/next.js/issues/13978
+	test('can fast refresh a page with getStaticProps', async () => {
+		await using sandbox = await createSandbox(next);
+		const { session } = sandbox;
 
-    await session.patch(
-      'pages/index.js',
-      `
+		await session.patch(
+			'pages/index.js',
+			`
         import { useCallback, useState } from 'react'
 
         export function getStaticProps() {
@@ -103,20 +104,20 @@ describe('ReactRefreshRegression', () => {
             </main>
           )
         }
-      `
-    )
+      `,
+		);
 
-    expect(
-      await session.evaluate(() => document.querySelector('p').textContent)
-    ).toBe('0')
-    await session.evaluate(() => document.querySelector('button').click())
-    expect(
-      await session.evaluate(() => document.querySelector('p').textContent)
-    ).toBe('1')
+		expect(
+			await session.evaluate(() => document.querySelector('p').textContent),
+		).toBe('0');
+		await session.evaluate(() => document.querySelector('button').click());
+		expect(
+			await session.evaluate(() => document.querySelector('p').textContent),
+		).toBe('1');
 
-    await session.patch(
-      'pages/index.js',
-      `
+		await session.patch(
+			'pages/index.js',
+			`
         import { useCallback, useState } from 'react'
 
         export default function Index() {
@@ -129,26 +130,26 @@ describe('ReactRefreshRegression', () => {
             </main>
           )
         }
-      `
-    )
+      `,
+		);
 
-    expect(
-      await session.evaluate(() => document.querySelector('p').textContent)
-    ).toBe('Count: 1')
-    await session.evaluate(() => document.querySelector('button').click())
-    expect(
-      await session.evaluate(() => document.querySelector('p').textContent)
-    ).toBe('Count: 2')
-  })
+		expect(
+			await session.evaluate(() => document.querySelector('p').textContent),
+		).toBe('Count: 1');
+		await session.evaluate(() => document.querySelector('button').click());
+		expect(
+			await session.evaluate(() => document.querySelector('p').textContent),
+		).toBe('Count: 2');
+	});
 
-  // https://github.com/vercel/next.js/issues/13978
-  test('can fast refresh a page with getServerSideProps', async () => {
-    await using sandbox = await createSandbox(next)
-    const { session } = sandbox
+	// https://github.com/vercel/next.js/issues/13978
+	test('can fast refresh a page with getServerSideProps', async () => {
+		await using sandbox = await createSandbox(next);
+		const { session } = sandbox;
 
-    await session.patch(
-      'pages/index.js',
-      `
+		await session.patch(
+			'pages/index.js',
+			`
         import { useCallback, useState } from 'react'
 
         export function getServerSideProps() {
@@ -165,20 +166,20 @@ describe('ReactRefreshRegression', () => {
             </main>
           )
         }
-      `
-    )
+      `,
+		);
 
-    expect(
-      await session.evaluate(() => document.querySelector('p').textContent)
-    ).toBe('0')
-    await session.evaluate(() => document.querySelector('button').click())
-    expect(
-      await session.evaluate(() => document.querySelector('p').textContent)
-    ).toBe('1')
+		expect(
+			await session.evaluate(() => document.querySelector('p').textContent),
+		).toBe('0');
+		await session.evaluate(() => document.querySelector('button').click());
+		expect(
+			await session.evaluate(() => document.querySelector('p').textContent),
+		).toBe('1');
 
-    await session.patch(
-      'pages/index.js',
-      `
+		await session.patch(
+			'pages/index.js',
+			`
         import { useCallback, useState } from 'react'
 
         export default function Index() {
@@ -191,26 +192,26 @@ describe('ReactRefreshRegression', () => {
             </main>
           )
         }
-      `
-    )
+      `,
+		);
 
-    expect(
-      await session.evaluate(() => document.querySelector('p').textContent)
-    ).toBe('Count: 1')
-    await session.evaluate(() => document.querySelector('button').click())
-    expect(
-      await session.evaluate(() => document.querySelector('p').textContent)
-    ).toBe('Count: 2')
-  })
+		expect(
+			await session.evaluate(() => document.querySelector('p').textContent),
+		).toBe('Count: 1');
+		await session.evaluate(() => document.querySelector('button').click());
+		expect(
+			await session.evaluate(() => document.querySelector('p').textContent),
+		).toBe('Count: 2');
+	});
 
-  // https://github.com/vercel/next.js/issues/13978
-  test('can fast refresh a page with config', async () => {
-    await using sandbox = await createSandbox(next)
-    const { session } = sandbox
+	// https://github.com/vercel/next.js/issues/13978
+	test('can fast refresh a page with config', async () => {
+		await using sandbox = await createSandbox(next);
+		const { session } = sandbox;
 
-    await session.patch(
-      'pages/index.js',
-      `
+		await session.patch(
+			'pages/index.js',
+			`
         import { useCallback, useState } from 'react'
 
         export const config = {}
@@ -225,22 +226,22 @@ describe('ReactRefreshRegression', () => {
             </main>
           )
         }
-      `
-    )
+      `,
+		);
 
-    await check(
-      () => session.evaluate(() => document.querySelector('p').textContent),
-      '0'
-    )
+		await check(
+			() => session.evaluate(() => document.querySelector('p').textContent),
+			'0',
+		);
 
-    await session.evaluate(() => document.querySelector('button').click())
-    expect(
-      await session.evaluate(() => document.querySelector('p').textContent)
-    ).toBe('1')
+		await session.evaluate(() => document.querySelector('button').click());
+		expect(
+			await session.evaluate(() => document.querySelector('p').textContent),
+		).toBe('1');
 
-    await session.patch(
-      'pages/index.js',
-      `
+		await session.patch(
+			'pages/index.js',
+			`
         import { useCallback, useState } from 'react'
 
         export default function Index() {
@@ -253,36 +254,36 @@ describe('ReactRefreshRegression', () => {
             </main>
           )
         }
-      `
-    )
+      `,
+		);
 
-    expect(
-      await session.evaluate(() => document.querySelector('p').textContent)
-    ).toBe('Count: 1')
-    await session.evaluate(() => document.querySelector('button').click())
-    expect(
-      await session.evaluate(() => document.querySelector('p').textContent)
-    ).toBe('Count: 2')
-  })
+		expect(
+			await session.evaluate(() => document.querySelector('p').textContent),
+		).toBe('Count: 1');
+		await session.evaluate(() => document.querySelector('button').click());
+		expect(
+			await session.evaluate(() => document.querySelector('p').textContent),
+		).toBe('Count: 2');
+	});
 
-  // https://github.com/vercel/next.js/issues/11504
-  test('shows an overlay for a server-side error', async () => {
-    await using sandbox = await createSandbox(next)
-    const { browser, session } = sandbox
+	// https://github.com/vercel/next.js/issues/11504
+	test('shows an overlay for a server-side error', async () => {
+		await using sandbox = await createSandbox(next);
+		const { browser, session } = sandbox;
 
-    await session.patch(
-      'pages/index.js',
-      `export default function () { throw new Error('pre boom'); }`
-    )
+		await session.patch(
+			'pages/index.js',
+			`export default function () { throw new Error('pre boom'); }`,
+		);
 
-    const didNotReload = await session.patch(
-      'pages/index.js',
-      `export default function () { throw new Error('boom'); }`
-    )
-    expect(didNotReload).toBe(false)
+		const didNotReload = await session.patch(
+			'pages/index.js',
+			`export default function () { throw new Error('boom'); }`,
+		);
+		expect(didNotReload).toBe(false);
 
-    if (isTurbopack) {
-      await expect(browser).toDisplayRedbox(`
+		if (isTurbopack) {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Error: boom",
@@ -296,9 +297,9 @@ describe('ReactRefreshRegression', () => {
            "{default export} pages/index.js (1:36)",
          ],
        }
-      `)
-    } else {
-      await expect(browser).toDisplayRedbox(`
+      `);
+		} else {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Error: boom",
@@ -311,18 +312,18 @@ describe('ReactRefreshRegression', () => {
            "default pages/index.js (1:36)",
          ],
        }
-      `)
-    }
-  })
+      `);
+		}
+	});
 
-  // https://github.com/vercel/next.js/issues/13574
-  test('custom loader mdx should have Fast Refresh enabled', async () => {
-    await using sandbox = await createSandbox(
-      next,
-      new Map([
-        [
-          'next.config.js',
-          outdent`
+	// https://github.com/vercel/next.js/issues/13574
+	test('custom loader mdx should have Fast Refresh enabled', async () => {
+		await using sandbox = await createSandbox(
+			next,
+			new Map([
+				[
+					'next.config.js',
+					outdent`
               const withMDX = require("@next/mdx")({
                 extension: /\\.mdx?$/,
               });
@@ -330,34 +331,34 @@ describe('ReactRefreshRegression', () => {
                 pageExtensions: ["js", "mdx"],
               });
             `,
-        ],
-        ['pages/mdx.mdx', `Hello World!`],
-      ]),
-      '/mdx'
-    )
-    const { session } = sandbox
-    expect(
-      await session.evaluate(
-        () => document.querySelector('#__next').textContent
-      )
-    ).toBe('Hello World!')
+				],
+				['pages/mdx.mdx', `Hello World!`],
+			]),
+			'/mdx',
+		);
+		const { session } = sandbox;
+		expect(
+			await session.evaluate(
+				() => document.querySelector('#__next').textContent,
+			),
+		).toBe('Hello World!');
 
-    let didNotReload = await session.patch('pages/mdx.mdx', `Hello Foo!`)
-    expect(didNotReload).toBe(true)
-    await session.assertNoRedbox()
-    expect(
-      await session.evaluate(
-        () => document.querySelector('#__next').textContent
-      )
-    ).toBe('Hello Foo!')
+		let didNotReload = await session.patch('pages/mdx.mdx', `Hello Foo!`);
+		expect(didNotReload).toBe(true);
+		await session.assertNoRedbox();
+		expect(
+			await session.evaluate(
+				() => document.querySelector('#__next').textContent,
+			),
+		).toBe('Hello Foo!');
 
-    didNotReload = await session.patch('pages/mdx.mdx', `Hello Bar!`)
-    expect(didNotReload).toBe(true)
-    await session.assertNoRedbox()
-    expect(
-      await session.evaluate(
-        () => document.querySelector('#__next').textContent
-      )
-    ).toBe('Hello Bar!')
-  })
-})
+		didNotReload = await session.patch('pages/mdx.mdx', `Hello Bar!`);
+		expect(didNotReload).toBe(true);
+		await session.assertNoRedbox();
+		expect(
+			await session.evaluate(
+				() => document.querySelector('#__next').textContent,
+			),
+		).toBe('Hello Bar!');
+	});
+});

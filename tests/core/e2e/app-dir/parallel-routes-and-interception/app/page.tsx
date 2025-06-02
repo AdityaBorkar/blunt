@@ -1,11 +1,10 @@
-import Link from 'next/link'
-import React from 'react'
+import Link from 'next/link';
 
 export default function Page() {
-  return (
-    <>
-      <p>hello world</p>
-      <Link href="/nested">to nested</Link>
-    </>
-  )
+	return (
+		<>
+			<p>hello world</p>
+			<Link href="/nested">to nested</Link>
+		</>
+	);
 }

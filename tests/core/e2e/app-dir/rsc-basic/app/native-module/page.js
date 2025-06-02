@@ -1,14 +1,14 @@
-import fs from 'fs'
+import fs from 'node:fs';
 
-import Foo from '../../components/foo'
+import Foo from '../../components/foo';
 
 export default function Page() {
-  return (
-    <>
-      <h1>fs: {typeof fs.readFile}</h1>
-      <Foo />
-    </>
-  )
+	return (
+		<>
+			<h1>fs: {typeof fs.readFile}</h1>
+			<Foo />
+		</>
+	);
 }
 
-export const runtime = 'nodejs'
+export const runtime = 'nodejs';

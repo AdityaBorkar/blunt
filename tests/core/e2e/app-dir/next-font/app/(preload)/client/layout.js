@@ -1,13 +1,14 @@
-'use client'
-import { font4 } from '../../../fonts'
+'use client';
+
+import { font4 } from '../../../fonts';
 
 export default function Root({ children }) {
-  return (
-    <>
-      <p id="client-layout" className={font4.className}>
-        {JSON.stringify(font4)}
-      </p>
-      {children}
-    </>
-  )
+	return (
+		<>
+			<p className={font4.className} id="client-layout">
+				{JSON.stringify(font4)}
+			</p>
+			{children}
+		</>
+	);
 }

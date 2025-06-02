@@ -1,1 +1,1 @@
-export const condition = 'worker'
+export const condition = 'worker';

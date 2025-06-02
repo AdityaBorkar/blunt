@@ -1,0 +1,180 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Performance Optimization Guidelines
+
+## Bun-Specific Optimizations
+
+### Runtime Performance
+- **Native APIs**: Always prefer Bun's native APIs over Node.js polyfills
+- **File I/O**: Use `Bun.file()` for file operations instead of fs module
+- **HTTP Requests**: Leverage Bun's built-in `fetch` implementation
+- **JSON Processing**: Use Bun's optimized JSON.parse/stringify
+- **Module Loading**: Utilize Bun's fast ESM loader
+
+### Build Optimizations
+- **Bundling**: Let Bun handle bundling natively - avoid webpack/rollup
+- **Tree Shaking**: Structure exports for optimal tree shaking
+- **Hot Reloading**: Leverage Bun's built-in HMR for instant updates
+- **TypeScript**: Use Bun's native TypeScript transpilation
+- **Asset Processing**: Utilize Bun's asset pipeline in [blunt/media/](mdc:blunt/media)
+
+## React Performance Patterns
+
+### Component Optimization
+- **Memoization**: Use `React.memo()` for expensive component renders
+- **Callback Optimization**: Wrap callbacks with `useCallback()` for stable references
+- **Value Memoization**: Use `useMemo()` for expensive computations
+- **Lazy Loading**: Implement `React.lazy()` for code splitting
+
+### State Management Performance
+- **React Query Integration**: Leverage caching patterns in [blunt/forms/](mdc:blunt/forms)
+- **State Batching**: Group related state updates
+- **Reducer Patterns**: Use `useReducer` for complex state logic
+- **Context Optimization**: Split contexts to minimize re-renders
+
+### Routing Performance
+Optimize the routing system in [blunt/navigation/](mdc:blunt/navigation):
+
+- **Trie-based Routing**: Utilize the implemented trie structure for O(1) lookups
+- **Route Preloading**: Implement intelligent route prefetching
+- **Dynamic Imports**: Code-split routes using dynamic imports
+- **Route Memoization**: Cache route resolution results
+
+## Bundle Size Optimization
+
+### Import Strategies
+Follow [biome.jsonc](mdc:biome.jsonc) import organization:
+
+```typescript
+// ✅ Optimal import order
+import { useState } from 'react';           // External packages
+import { cn } from '@/lib/utils';          // Aliases
+import { Button } from './components/ui';  // Relative paths
+
+// ✅ Tree-shakeable imports
+import { debounce } from 'lodash-es';      // ES modules
+// ❌ Avoid full imports
+import * as _ from 'lodash';               // Imports entire library
+```
+
+### Code Splitting Strategies
+- **Route-level Splitting**: Split at page boundaries
+- **Component-level Splitting**: Lazy load heavy components
+- **Vendor Splitting**: Separate third-party libraries
+- **Dynamic Loading**: Load features on demand
+
+### Asset Optimization
+In [blunt/media/](mdc:blunt/media) implement:
+
+- **Image Optimization**: WebP/AVIF conversion with fallbacks
+- **SVG Inlining**: Inline small SVGs, external load large ones
+- **Font Optimization**: Subset fonts and use font-display: swap
+- **Static Asset Hashing**: Cache-busting for immutable assets
+
+## Server-Side Performance
+
+### Development Server
+Optimize [blunt/server/dev/](mdc:blunt/server/dev) for speed:
+
+- **File Watching**: Efficient file system monitoring
+- **Compilation Caching**: Cache TypeScript compilation results
+- **Module Resolution**: Fast module dependency resolution
+- **Memory Management**: Prevent memory leaks during development
+
+### API Route Performance
+- **Response Caching**: Implement appropriate cache headers
+- **JSON Serialization**: Use Bun's fast JSON methods
+- **Request Parsing**: Efficient body parsing for forms and JSON
+- **Error Handling**: Fast error response paths
+
+### Build Performance
+Optimize build pipeline in [blunt/server/](mdc:blunt/server):
+
+- **Parallel Processing**: Utilize Bun's worker threads
+- **Incremental Builds**: Only rebuild changed modules
+- **Asset Pipeline**: Efficient asset processing and optimization
+- **Output Optimization**: Minimize final bundle size
+
+## Memory Management
+
+### React Memory Patterns
+- **Cleanup Effects**: Always cleanup useEffect subscriptions
+- **Reference Management**: Avoid creating functions in render
+- **Event Listeners**: Remove event listeners in cleanup
+- **Timer Cleanup**: Clear timeouts and intervals
+
+### Server Memory Management
+- **Request Cleanup**: Ensure proper request/response cleanup
+- **Cache Management**: Implement cache eviction policies
+- **Resource Pooling**: Reuse expensive resources
+- **Memory Monitoring**: Track memory usage in development
+
+## Development Performance
+
+### Hot Module Replacement
+Optimize HMR in the development workflow:
+
+- **Granular Updates**: Update only changed components
+- **State Preservation**: Maintain component state during updates
+- **Error Recovery**: Fast recovery from compilation errors
+- **Dependency Tracking**: Efficient change detection
+
+### TypeScript Performance
+- **Incremental Compilation**: Use TypeScript incremental mode
+- **Project References**: Structure for optimal compilation
+- **Type-only Imports**: Use `import type` as enforced by [biome.jsonc](mdc:biome.jsonc)
+- **Declaration Files**: Generate optimized .d.ts files
+
+## Monitoring & Profiling
+
+### Performance Metrics
+Track these key metrics:
+
+- **Bundle Size**: Monitor JavaScript bundle growth
+- **Build Time**: Measure compilation performance
+- **Runtime Performance**: Monitor React component render times
+- **Memory Usage**: Track memory consumption patterns
+- **Load Times**: Measure initial page load performance
+
+### Profiling Tools
+- **Bun Profiler**: Use Bun's built-in profiling capabilities
+- **React DevTools**: Profile component render performance
+- **Bundle Analyzer**: Analyze bundle composition
+- **Memory Profiler**: Track memory allocation patterns
+
+## Performance Testing
+
+### Automated Performance Testing
+Include in [tests/](mdc:tests) directory:
+
+- **Bundle Size Tests**: Verify bundle size stays under limits
+- **Build Time Tests**: Ensure builds complete within thresholds
+- **Runtime Performance Tests**: Validate component render times
+- **Memory Leak Tests**: Check for memory leaks in long-running scenarios
+
+### Benchmarking
+- **Before/After Comparisons**: Measure performance improvements
+- **Regression Testing**: Catch performance regressions
+- **Cross-Platform Testing**: Verify performance across environments
+- **Load Testing**: Test under various load conditions
+
+## Framework-Specific Optimizations
+
+### Blunt.js Features
+Leverage framework capabilities:
+
+- **Trie Routing**: Maximum routing performance
+- **React Query Integration**: Efficient data fetching
+- **Form Optimization**: Fast form handling via [blunt/forms/](mdc:blunt/forms)
+- **Asset Pipeline**: Optimized media handling
+
+### Plugin Performance
+For [plugins/](mdc:plugins) development:
+
+- **Lazy Loading**: Load plugins only when needed
+- **Caching**: Cache plugin compilation results
+- **Minimal Overhead**: Keep plugin runtime impact minimal
+- **Tree Shaking**: Ensure plugins are tree-shakeable

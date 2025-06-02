@@ -1,24 +1,24 @@
-import Link from 'next/link'
+import Link from 'next/link';
 
 export async function getServerSideProps() {
-  return {
-    props: {
-      world: 'world',
-      time: new Date().getTime(),
-    },
-  }
+	return {
+		props: {
+			time: Date.now(),
+			world: 'world',
+		},
+	};
 }
 
 export default ({ world, time }) => (
-  <>
-    <p>hello {world}</p>
-    <span>time: {time}</span>
-    <Link href="/" id="home">
-      to home
-    </Link>
-    <br />
-    <Link href="/something" id="something">
-      to something
-    </Link>
-  </>
-)
+	<>
+		<p>hello {world}</p>
+		<span>time: {time}</span>
+		<Link href="/" id="home">
+			to home
+		</Link>
+		<br />
+		<Link href="/something" id="something">
+			to something
+		</Link>
+	</>
+);

@@ -1,21 +1,21 @@
-'use client'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import React from 'react'
+'use client';
+
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function Page() {
-  const router = useRouter()
+	const router = useRouter();
 
-  return (
-    <dialog open>
-      <h1>Modal</h1>
+	return (
+		<dialog open>
+			<h1>Modal</h1>
 
-      <br />
+			<br />
 
-      <button onClick={() => router.refresh()} id="refresh-router">
-        Refresh Router
-      </button>
-      <Link href="/">Close</Link>
-    </dialog>
-  )
+			<button id="refresh-router" onClick={() => router.refresh()}>
+				Refresh Router
+			</button>
+			<Link href="/">Close</Link>
+		</dialog>
+	);
 }

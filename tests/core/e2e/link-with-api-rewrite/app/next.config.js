@@ -1,17 +1,17 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
-  async rewrites() {
-    return {
-      beforeFiles: [
-        {
-          source: '/:path(.*)',
-          has: [{ type: 'query', key: 'json', value: 'true' }],
-          destination: '/api/json?from=/:path',
-        },
-      ],
-    }
-  },
-}
+	reactStrictMode: true,
+	async rewrites() {
+		return {
+			beforeFiles: [
+				{
+					destination: '/api/json?from=/:path',
+					has: [{ key: 'json', type: 'query', value: 'true' }],
+					source: '/:path(.*)',
+				},
+			],
+		};
+	},
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

@@ -1,118 +1,132 @@
-import { nextTestSetup } from 'e2e-utils'
-import { getRouteTypeFromDevToolsIndicator, retry } from 'next-test-utils'
+import { nextTestSetup } from 'e2e-utils';
+import { getRouteTypeFromDevToolsIndicator, retry } from 'next-test-utils';
 
 describe('dev indicator - route type', () => {
-  const { next } = nextTestSetup({
-    files: __dirname,
-  })
+	const { next } = nextTestSetup({
+		files: __dirname,
+	});
 
-  describe('getServerSideProps', () => {
-    it('should update when going from dynamic -> static', async () => {
-      const browser = await next.browser('/gssp')
+	describe('getServerSideProps', () => {
+		it('should update when going from dynamic -> static', async () => {
+			const browser = await next.browser('/gssp');
 
-      await retry(async () => {
-        expect(await getRouteTypeFromDevToolsIndicator(browser)).toBe('Dynamic')
-      })
+			await retry(async () => {
+				expect(await getRouteTypeFromDevToolsIndicator(browser)).toBe(
+					'Dynamic',
+				);
+			});
 
-      // validate static -> dynamic updates
-      await browser.elementByCss("[href='/']").click()
+			// validate static -> dynamic updates
+			await browser.elementByCss("[href='/']").click();
 
-      await retry(async () => {
-        expect(await getRouteTypeFromDevToolsIndicator(browser)).toBe('Static')
-      })
-    })
+			await retry(async () => {
+				expect(await getRouteTypeFromDevToolsIndicator(browser)).toBe('Static');
+			});
+		});
 
-    it('should update when going from static -> dynamic', async () => {
-      const browser = await next.browser('/')
+		it('should update when going from static -> dynamic', async () => {
+			const browser = await next.browser('/');
 
-      await retry(async () => {
-        expect(await getRouteTypeFromDevToolsIndicator(browser)).toBe('Static')
-      })
+			await retry(async () => {
+				expect(await getRouteTypeFromDevToolsIndicator(browser)).toBe('Static');
+			});
 
-      // validate static -> dynamic updates
-      await browser.elementByCss("[href='/gssp']").click()
+			// validate static -> dynamic updates
+			await browser.elementByCss("[href='/gssp']").click();
 
-      await retry(async () => {
-        expect(await getRouteTypeFromDevToolsIndicator(browser)).toBe('Dynamic')
-      })
-    })
+			await retry(async () => {
+				expect(await getRouteTypeFromDevToolsIndicator(browser)).toBe(
+					'Dynamic',
+				);
+			});
+		});
 
-    it('should be marked dynamic on first load', async () => {
-      const browser = await next.browser('/gssp')
+		it('should be marked dynamic on first load', async () => {
+			const browser = await next.browser('/gssp');
 
-      await retry(async () => {
-        expect(await getRouteTypeFromDevToolsIndicator(browser)).toBe('Dynamic')
-      })
-    })
-  })
+			await retry(async () => {
+				expect(await getRouteTypeFromDevToolsIndicator(browser)).toBe(
+					'Dynamic',
+				);
+			});
+		});
+	});
 
-  describe('getInitialProps', () => {
-    it('should be marked dynamic on first load', async () => {
-      const browser = await next.browser('/gip')
+	describe('getInitialProps', () => {
+		it('should be marked dynamic on first load', async () => {
+			const browser = await next.browser('/gip');
 
-      await retry(async () => {
-        expect(await getRouteTypeFromDevToolsIndicator(browser)).toBe('Dynamic')
-      })
-    })
+			await retry(async () => {
+				expect(await getRouteTypeFromDevToolsIndicator(browser)).toBe(
+					'Dynamic',
+				);
+			});
+		});
 
-    it('should update when going from dynamic -> static', async () => {
-      const browser = await next.browser('/gip')
+		it('should update when going from dynamic -> static', async () => {
+			const browser = await next.browser('/gip');
 
-      await retry(async () => {
-        expect(await getRouteTypeFromDevToolsIndicator(browser)).toBe('Dynamic')
-      })
+			await retry(async () => {
+				expect(await getRouteTypeFromDevToolsIndicator(browser)).toBe(
+					'Dynamic',
+				);
+			});
 
-      await browser.elementByCss("[href='/']").click()
+			await browser.elementByCss("[href='/']").click();
 
-      await retry(async () => {
-        expect(await getRouteTypeFromDevToolsIndicator(browser)).toBe('Static')
-      })
-    })
+			await retry(async () => {
+				expect(await getRouteTypeFromDevToolsIndicator(browser)).toBe('Static');
+			});
+		});
 
-    it('should update when going from static -> dynamic', async () => {
-      const browser = await next.browser('/')
+		it('should update when going from static -> dynamic', async () => {
+			const browser = await next.browser('/');
 
-      await retry(async () => {
-        expect(await getRouteTypeFromDevToolsIndicator(browser)).toBe('Static')
-      })
+			await retry(async () => {
+				expect(await getRouteTypeFromDevToolsIndicator(browser)).toBe('Static');
+			});
 
-      await browser.elementByCss("[href='/gip']").click()
+			await browser.elementByCss("[href='/gip']").click();
 
-      await retry(async () => {
-        expect(await getRouteTypeFromDevToolsIndicator(browser)).toBe('Dynamic')
-      })
-    })
-  })
+			await retry(async () => {
+				expect(await getRouteTypeFromDevToolsIndicator(browser)).toBe(
+					'Dynamic',
+				);
+			});
+		});
+	});
 
-  describe('getStaticPaths', () => {
-    it('should be marked static on first load', async () => {
-      const browser = await next.browser('/pregenerated')
+	describe('getStaticPaths', () => {
+		it('should be marked static on first load', async () => {
+			const browser = await next.browser('/pregenerated');
 
-      await retry(async () => {
-        expect(await getRouteTypeFromDevToolsIndicator(browser)).toBe('Static')
-      })
-    })
+			await retry(async () => {
+				expect(await getRouteTypeFromDevToolsIndicator(browser)).toBe('Static');
+			});
+		});
 
-    it('should update when going from dynamic -> static', async () => {
-      const browser = await next.browser('/gssp')
+		it('should update when going from dynamic -> static', async () => {
+			const browser = await next.browser('/gssp');
 
-      await retry(async () => {
-        expect(await getRouteTypeFromDevToolsIndicator(browser)).toBe('Dynamic')
-      })
+			await retry(async () => {
+				expect(await getRouteTypeFromDevToolsIndicator(browser)).toBe(
+					'Dynamic',
+				);
+			});
 
-      await browser.elementByCss("[href='/pregenerated']").click()
+			await browser.elementByCss("[href='/pregenerated']").click();
 
-      await retry(async () => {
-        expect(await getRouteTypeFromDevToolsIndicator(browser)).toBe('Static')
-      })
-    })
-  })
+			await retry(async () => {
+				expect(await getRouteTypeFromDevToolsIndicator(browser)).toBe('Static');
+			});
+		});
+	});
 
-  it('should have route type as static by default for static page', async () => {
-    const browser = await next.browser('/')
+	it('should have route type as static by default for static page', async () => {
+		const browser = await next.browser('/');
 
-    await retry(async () => {
-      expect(await getRouteTypeFromDevToolsIndicator(browser)).toBe('Static')
-    })
-  })
-})
+		await retry(async () => {
+			expect(await getRouteTypeFromDevToolsIndicator(browser)).toBe('Static');
+		});
+	});
+});

@@ -1,1 +1,1 @@
-export default 'SERVER'
+export default 'SERVER';

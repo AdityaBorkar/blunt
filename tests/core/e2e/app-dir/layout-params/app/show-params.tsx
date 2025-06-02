@@ -1,19 +1,17 @@
-import React from 'react'
-
 export default function ShowParams({
-  prefix,
-  params,
+	prefix,
+	params,
 }: {
-  prefix: string
-  params: Record<string, unknown>
+	prefix: string;
+	params: Record<string, unknown>;
 }) {
-  return (
-    <div id={`${prefix}-layout`}>
-      {Object.entries(params).map(([key, val]) => (
-        <div key={key} id={`${prefix}-${key}`}>
-          {JSON.stringify(val)}
-        </div>
-      ))}
-    </div>
-  )
+	return (
+		<div id={`${prefix}-layout`}>
+			{Object.entries(params).map(([key, val]) => (
+				<div id={`${prefix}-${key}`} key={key}>
+					{JSON.stringify(val)}
+				</div>
+			))}
+		</div>
+	);
 }

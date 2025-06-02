@@ -1,5 +1,5 @@
-'use client'
+'use client';
 
 export function Button() {
-  return <button>submit</button>
+	return <button>submit</button>;
 }

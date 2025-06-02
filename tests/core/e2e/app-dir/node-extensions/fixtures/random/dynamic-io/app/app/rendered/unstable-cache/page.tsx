@@ -1,24 +1,24 @@
-import { connection } from 'next/server'
-import { unstable_cache as cache } from 'next/cache'
+import { unstable_cache as cache } from 'next/cache';
+import { connection } from 'next/server';
 
 export default async function Page() {
-  await connection()
-  return (
-    <ul>
-      <li>
-        <RandomValue />
-      </li>
-      <li>
-        <RandomValue />
-      </li>
-    </ul>
-  )
+	await connection();
+	return (
+		<ul>
+			<li>
+				<RandomValue />
+			</li>
+			<li>
+				<RandomValue />
+			</li>
+		</ul>
+	);
 }
 
 async function RandomValue() {
-  return getCachedRandom()
+	return getCachedRandom();
 }
 
 const getCachedRandom = cache(async () => {
-  return Math.random()
-})
+	return Math.random();
+});

@@ -1,60 +1,13 @@
-import { RuleTester as ESLintTesterV8 } from 'eslint-v8'
-import { RuleTester as ESLintTesterV9 } from 'eslint'
-import { rules } from '@next/eslint-plugin-next'
+import { rules } from '@next/eslint-plugin-next';
+import { RuleTester as ESLintTesterV9 } from 'eslint';
+import { RuleTester as ESLintTesterV8 } from 'eslint-v8';
 
-const NextESLintRule = rules['no-unwanted-polyfillio']
+const NextESLintRule = rules['no-unwanted-polyfillio'];
 
 const tests = {
-  valid: [
-    `import {Head} from 'next/document';
-
-      export class Blah extends Head {
-        render() {
-          return (
-            <div>
-              <h1>Hello title</h1>
-              <script src='https://polyfill.io/v3/polyfill.min.js?features=AbortController'></script>
-            </div>
-          );
-        }
-    }`,
-    `import {Head} from 'next/document';
-
-      export class Blah extends Head {
-        render() {
-          return (
-            <div>
-              <h1>Hello title</h1>
-              <script src='https://polyfill.io/v3/polyfill.min.js?features=IntersectionObserver'></script>
-            </div>
-          );
-        }
-    }`,
-    `import Script from 'next/script';
-
-      export function MyApp({ Component, pageProps }) {
-          return (
-            <div>
-              <Component {...pageProps} />
-              <Script src='https://polyfill.io/v3/polyfill.min.js?features=IntersectionObserver' />
-            </div>
-          );
-    }`,
-    `import Script from 'next/script';
-
-      export function MyApp({ Component, pageProps }) {
-          return (
-            <div>
-              <Component {...pageProps} />
-              <Script src='https://polyfill-fastly.io/v3/polyfill.min.js?features=IntersectionObserver' />
-            </div>
-          );
-    }`,
-  ],
-
-  invalid: [
-    {
-      code: `import {Head} from 'next/document';
+	invalid: [
+		{
+			code: `import {Head} from 'next/document';
 
       export class Blah extends Head {
         render() {
@@ -66,16 +19,16 @@ const tests = {
           );
         }
     }`,
-      errors: [
-        {
-          message:
-            'No duplicate polyfills from Polyfill.io are allowed. WeakSet, Promise, Promise.prototype.finally, es2015, es5, es6 are already shipped with Next.js. See: https://nextjs.org/docs/messages/no-unwanted-polyfillio',
-          type: 'JSXOpeningElement',
-        },
-      ],
-    },
-    {
-      code: `
+			errors: [
+				{
+					message:
+						'No duplicate polyfills from Polyfill.io are allowed. WeakSet, Promise, Promise.prototype.finally, es2015, es5, es6 are already shipped with Next.js. See: https://nextjs.org/docs/messages/no-unwanted-polyfillio',
+					type: 'JSXOpeningElement',
+				},
+			],
+		},
+		{
+			code: `
       export class Blah {
         render() {
           return (
@@ -86,16 +39,16 @@ const tests = {
           );
         }
     }`,
-      errors: [
-        {
-          message:
-            'No duplicate polyfills from Polyfill.io are allowed. Array.prototype.copyWithin is already shipped with Next.js. See: https://nextjs.org/docs/messages/no-unwanted-polyfillio',
-          type: 'JSXOpeningElement',
-        },
-      ],
-    },
-    {
-      code: `import NextScript from 'next/script';
+			errors: [
+				{
+					message:
+						'No duplicate polyfills from Polyfill.io are allowed. Array.prototype.copyWithin is already shipped with Next.js. See: https://nextjs.org/docs/messages/no-unwanted-polyfillio',
+					type: 'JSXOpeningElement',
+				},
+			],
+		},
+		{
+			code: `import NextScript from 'next/script';
 
       export function MyApp({ Component, pageProps }) {
           return (
@@ -105,16 +58,16 @@ const tests = {
             </div>
           );
     }`,
-      errors: [
-        {
-          message:
-            'No duplicate polyfills from Polyfill.io are allowed. Array.prototype.copyWithin is already shipped with Next.js. See: https://nextjs.org/docs/messages/no-unwanted-polyfillio',
-          type: 'JSXOpeningElement',
-        },
-      ],
-    },
-    {
-      code: `import {Head} from 'next/document';
+			errors: [
+				{
+					message:
+						'No duplicate polyfills from Polyfill.io are allowed. Array.prototype.copyWithin is already shipped with Next.js. See: https://nextjs.org/docs/messages/no-unwanted-polyfillio',
+					type: 'JSXOpeningElement',
+				},
+			],
+		},
+		{
+			code: `import {Head} from 'next/document';
 
         export class ES2019Features extends Head {
           render() {
@@ -126,38 +79,84 @@ const tests = {
             );
           }
       }`,
-      errors: [
-        {
-          message:
-            'No duplicate polyfills from Polyfill.io are allowed. Object.fromEntries is already shipped with Next.js. See: https://nextjs.org/docs/messages/no-unwanted-polyfillio',
-        },
-      ],
-    },
-  ],
-}
+			errors: [
+				{
+					message:
+						'No duplicate polyfills from Polyfill.io are allowed. Object.fromEntries is already shipped with Next.js. See: https://nextjs.org/docs/messages/no-unwanted-polyfillio',
+				},
+			],
+		},
+	],
+	valid: [
+		`import {Head} from 'next/document';
+
+      export class Blah extends Head {
+        render() {
+          return (
+            <div>
+              <h1>Hello title</h1>
+              <script src='https://polyfill.io/v3/polyfill.min.js?features=AbortController'></script>
+            </div>
+          );
+        }
+    }`,
+		`import {Head} from 'next/document';
+
+      export class Blah extends Head {
+        render() {
+          return (
+            <div>
+              <h1>Hello title</h1>
+              <script src='https://polyfill.io/v3/polyfill.min.js?features=IntersectionObserver'></script>
+            </div>
+          );
+        }
+    }`,
+		`import Script from 'next/script';
+
+      export function MyApp({ Component, pageProps }) {
+          return (
+            <div>
+              <Component {...pageProps} />
+              <Script src='https://polyfill.io/v3/polyfill.min.js?features=IntersectionObserver' />
+            </div>
+          );
+    }`,
+		`import Script from 'next/script';
+
+      export function MyApp({ Component, pageProps }) {
+          return (
+            <div>
+              <Component {...pageProps} />
+              <Script src='https://polyfill-fastly.io/v3/polyfill.min.js?features=IntersectionObserver' />
+            </div>
+          );
+    }`,
+	],
+};
 
 describe('no-unwanted-polyfillio', () => {
-  new ESLintTesterV8({
-    parserOptions: {
-      ecmaVersion: 2018,
-      sourceType: 'module',
-      ecmaFeatures: {
-        modules: true,
-        jsx: true,
-      },
-    },
-  }).run('eslint-v8', NextESLintRule, tests)
+	new ESLintTesterV8({
+		parserOptions: {
+			ecmaFeatures: {
+				jsx: true,
+				modules: true,
+			},
+			ecmaVersion: 2018,
+			sourceType: 'module',
+		},
+	}).run('eslint-v8', NextESLintRule, tests);
 
-  new ESLintTesterV9({
-    languageOptions: {
-      ecmaVersion: 2018,
-      sourceType: 'module',
-      parserOptions: {
-        ecmaFeatures: {
-          modules: true,
-          jsx: true,
-        },
-      },
-    },
-  }).run('eslint-v9', NextESLintRule, tests)
-})
+	new ESLintTesterV9({
+		languageOptions: {
+			ecmaVersion: 2018,
+			parserOptions: {
+				ecmaFeatures: {
+					jsx: true,
+					modules: true,
+				},
+			},
+			sourceType: 'module',
+		},
+	}).run('eslint-v9', NextESLintRule, tests);
+});

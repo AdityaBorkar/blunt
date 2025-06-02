@@ -2,9 +2,9 @@
  * @type {import('next').NextConfig}
  */
 const nextConfig = {
-  experimental: {
-    authInterrupts: true,
-  },
-}
+	experimental: {
+		authInterrupts: true,
+	},
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

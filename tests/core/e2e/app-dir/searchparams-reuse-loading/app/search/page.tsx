@@ -1,22 +1,23 @@
-import Link from 'next/link'
-import { Search } from './search'
+import Link from 'next/link';
 
-type AnySearchParams = { [key: string]: string | Array<string> | undefined }
+import { Search } from './search';
+
+type AnySearchParams = { [key: string]: string | Array<string> | undefined };
 
 export default async function Page({
-  searchParams,
+	searchParams,
 }: {
-  searchParams: Promise<AnySearchParams>
+	searchParams: Promise<AnySearchParams>;
 }) {
-  await new Promise((resolve) => setTimeout(resolve, 3000))
+	await new Promise((resolve) => setTimeout(resolve, 3000));
 
-  return (
-    <main id="page-content">
-      <Search />
-      <p id="search-value">Search Value: {(await searchParams).q ?? 'None'}</p>
-      <Link href="/search" prefetch>
-        Home
-      </Link>
-    </main>
-  )
+	return (
+		<main id="page-content">
+			<Search />
+			<p id="search-value">Search Value: {(await searchParams).q ?? 'None'}</p>
+			<Link href="/search" prefetch>
+				Home
+			</Link>
+		</main>
+	);
 }

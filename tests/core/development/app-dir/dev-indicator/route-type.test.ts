@@ -1,61 +1,65 @@
-import { nextTestSetup } from 'e2e-utils'
-import { getRouteTypeFromDevToolsIndicator, retry } from 'next-test-utils'
+import { nextTestSetup } from 'e2e-utils';
+import { getRouteTypeFromDevToolsIndicator, retry } from 'next-test-utils';
 
 describe('app dir dev indicator - route type', () => {
-  const { next } = nextTestSetup({
-    files: __dirname,
-  })
+	const { next } = nextTestSetup({
+		files: __dirname,
+	});
 
-  it('should have route type as static by default for static page', async () => {
-    const browser = await next.browser('/')
+	it('should have route type as static by default for static page', async () => {
+		const browser = await next.browser('/');
 
-    await retry(async () => {
-      expect(await getRouteTypeFromDevToolsIndicator(browser)).toBe('Static')
-    })
-  })
+		await retry(async () => {
+			expect(await getRouteTypeFromDevToolsIndicator(browser)).toBe('Static');
+		});
+	});
 
-  it('should have route type as dynamic when changing to dynamic page', async () => {
-    const browser = await next.browser('/')
-    const origContent = await next.readFile('app/page.tsx')
+	it('should have route type as dynamic when changing to dynamic page', async () => {
+		const browser = await next.browser('/');
+		const origContent = await next.readFile('app/page.tsx');
 
-    await next.patchFile(
-      'app/page.tsx',
-      origContent.replace('// headers()', 'headers()')
-    )
+		await next.patchFile(
+			'app/page.tsx',
+			origContent.replace('// headers()', 'headers()'),
+		);
 
-    try {
-      await retry(async () => {
-        expect(await getRouteTypeFromDevToolsIndicator(browser)).toBe('Dynamic')
-      })
-    } finally {
-      await next.patchFile('app/page.tsx', origContent)
-    }
-  })
+		try {
+			await retry(async () => {
+				expect(await getRouteTypeFromDevToolsIndicator(browser)).toBe(
+					'Dynamic',
+				);
+			});
+		} finally {
+			await next.patchFile('app/page.tsx', origContent);
+		}
+	});
 
-  it('should have route type as dynamic when on load of dynamic page', async () => {
-    const origContent = await next.readFile('app/page.tsx')
+	it('should have route type as dynamic when on load of dynamic page', async () => {
+		const origContent = await next.readFile('app/page.tsx');
 
-    await next.patchFile(
-      'app/page.tsx',
-      origContent.replace('// headers()', 'headers()')
-    )
+		await next.patchFile(
+			'app/page.tsx',
+			origContent.replace('// headers()', 'headers()'),
+		);
 
-    const browser = await next.browser('/')
+		const browser = await next.browser('/');
 
-    try {
-      await retry(async () => {
-        expect(await getRouteTypeFromDevToolsIndicator(browser)).toBe('Dynamic')
-      })
-    } finally {
-      await next.patchFile('app/page.tsx', origContent)
-    }
-  })
+		try {
+			await retry(async () => {
+				expect(await getRouteTypeFromDevToolsIndicator(browser)).toBe(
+					'Dynamic',
+				);
+			});
+		} finally {
+			await next.patchFile('app/page.tsx', origContent);
+		}
+	});
 
-  it('should have route type as dynamic when using force-dynamic', async () => {
-    const browser = await next.browser('/force-dynamic')
+	it('should have route type as dynamic when using force-dynamic', async () => {
+		const browser = await next.browser('/force-dynamic');
 
-    await browser.waitForElementByCss('#ready')
+		await browser.waitForElementByCss('#ready');
 
-    expect(await getRouteTypeFromDevToolsIndicator(browser)).toBe('Dynamic')
-  })
-})
+		expect(await getRouteTypeFromDevToolsIndicator(browser)).toBe('Dynamic');
+	});
+});

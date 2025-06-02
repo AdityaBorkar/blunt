@@ -1,17 +1,17 @@
-'use client'
+'use client';
 
-import dynamic from 'next/dynamic'
+import dynamic from 'next/dynamic';
 
-const Dynamic = dynamic(() => import('../text-dynamic-client'))
+const Dynamic = dynamic(() => import('../text-dynamic-client'));
 const DynamicNoSSR = dynamic(() => import('../text-dynamic-no-ssr-client'), {
-  ssr: false,
-})
+	ssr: false,
+});
 
 export function NextDynamicClientComponent() {
-  return (
-    <>
-      <Dynamic />
-      <DynamicNoSSR name=":suffix" />
-    </>
-  )
+	return (
+		<>
+			<Dynamic />
+			<DynamicNoSSR name=":suffix" />
+		</>
+	);
 }

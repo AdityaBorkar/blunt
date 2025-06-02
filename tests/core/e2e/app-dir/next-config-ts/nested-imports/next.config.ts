@@ -1,10 +1,11 @@
-import type { NextConfig } from 'next'
-import { foobarbaz } from './foo'
+import type { NextConfig } from 'next';
+
+import { foobarbaz } from './foo';
 
 const nextConfig: NextConfig = {
-  env: {
-    foobarbaz,
-  },
-}
+	env: {
+		foobarbaz,
+	},
+};
 
-export default nextConfig
+export default nextConfig;

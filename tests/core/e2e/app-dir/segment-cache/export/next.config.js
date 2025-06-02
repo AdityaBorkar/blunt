@@ -2,12 +2,12 @@
  * @type {import('next').NextConfig}
  */
 const nextConfig = {
-  output: 'export',
-  experimental: {
-    ppr: false,
-    dynamicIO: true,
-    clientSegmentCache: true,
-  },
-}
+	experimental: {
+		clientSegmentCache: true,
+		dynamicIO: true,
+		ppr: false,
+	},
+	output: 'export',
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

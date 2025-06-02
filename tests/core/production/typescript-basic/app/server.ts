@@ -1,16 +1,16 @@
-import next from 'next'
-import bundleAnalyzer from '@next/bundle-analyzer'
+import bundleAnalyzer from '@next/bundle-analyzer';
+import next from 'next';
 
 // eslint-disable-next-line
-const config = bundleAnalyzer({})
+const _config = bundleAnalyzer({});
 
 const app = next({
-  dir: '.',
-  dev: process.env.NODE_ENV !== 'production',
-  conf: {
-    compress: false,
-  },
-  quiet: false,
-})
+	conf: {
+		compress: false,
+	},
+	dev: process.env.NODE_ENV !== 'production',
+	dir: '.',
+	quiet: false,
+});
 // eslint-disable-next-line
-const requestHandler = app.getRequestHandler()
+const _requestHandler = app.getRequestHandler();

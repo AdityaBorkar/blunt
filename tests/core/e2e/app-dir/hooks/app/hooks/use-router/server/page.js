@@ -1,8 +1,8 @@
 // import { useRouter } from 'next/navigation'
 
 export default function Page() {
-  // This should throw an error.
-  // useRouter()
+	// This should throw an error.
+	// useRouter()
 
-  return null
+	return null;
 }

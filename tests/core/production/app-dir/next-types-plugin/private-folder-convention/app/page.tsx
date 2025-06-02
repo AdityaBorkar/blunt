@@ -1,5 +1,5 @@
-import { PrivatePage } from './_private/page'
+import { PrivatePage } from './_private/page';
 
 export default function Page() {
-  return <PrivatePage />
+	return <PrivatePage />;
 }

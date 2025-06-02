@@ -1,14 +1,14 @@
-import { InferGetStaticPropsType } from 'next'
+import type { InferGetStaticPropsType } from 'next';
 
 export const getStaticProps = async () => {
-  return {
-    props: { data: ['hello', 'world'] },
-    revalidate: false,
-  }
-}
+	return {
+		props: { data: ['hello', 'world'] },
+		revalidate: false,
+	};
+};
 
 export default function Page({
-  data,
+	data,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
-  return <h1>{data.join(' ')}</h1>
+	return <h1>{data.join(' ')}</h1>;
 }

@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-import { ErrorComponent } from '../component'
+import { ErrorComponent } from '../component';
 
-export default () => <ErrorComponent name="client-node" />
+export default () => <ErrorComponent name="client-node" />;
 
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';

@@ -5,4 +5,4 @@
 //
 // because `new URL('http:', 'http://localhost:3000')` works fine.
 // So better to pick something that's always invalid
-export const INVALID_URL = '///'
+export const INVALID_URL = '///';

@@ -1,60 +1,16 @@
-import { RuleTester as ESLintTesterV8 } from 'eslint-v8'
-import { RuleTester as ESLintTesterV9 } from 'eslint'
-import { rules } from '@next/eslint-plugin-next'
+import { rules } from '@next/eslint-plugin-next';
+import { RuleTester as ESLintTesterV9 } from 'eslint';
+import { RuleTester as ESLintTesterV8 } from 'eslint-v8';
 
-const NextESLintRule = rules['no-async-client-component']
+const NextESLintRule = rules['no-async-client-component'];
 
 const message =
-  'Prevent client components from being async functions. See: https://nextjs.org/docs/messages/no-async-client-component'
+	'Prevent client components from being async functions. See: https://nextjs.org/docs/messages/no-async-client-component';
 
 const tests = {
-  valid: [
-    `
-    // single line
-    export default async function MyComponent() {
-      return <></>
-    }
-    `,
-    `
-    // single line capitalization
-    "use client"
-
-    export default async function myFunction() {
-      return ''
-    }
-    `,
-    `
-    // multiple line
-    async function MyComponent() {
-      return <></>
-    }
-
-    export default MyComponent
-    `,
-    `
-    // multiple line capitalization
-    "use client"
-
-    async function myFunction() {
-      return ''
-    }
-
-    export default myFunction
-    `,
-    `
-    // arrow function
-    "use client"
-
-    const myFunction = () => {
-      return ''
-    }
-
-    export default myFunction
-    `,
-  ],
-  invalid: [
-    {
-      code: `
+	invalid: [
+		{
+			code: `
       // single line
       "use client"
 
@@ -62,10 +18,10 @@ const tests = {
         return <></>
       }
       `,
-      errors: [{ message }],
-    },
-    {
-      code: `
+			errors: [{ message }],
+		},
+		{
+			code: `
       // single line capitalization
       "use client"
 
@@ -73,10 +29,10 @@ const tests = {
         return ''
       }
       `,
-      errors: [{ message }],
-    },
-    {
-      code: `
+			errors: [{ message }],
+		},
+		{
+			code: `
       // multiple line
       "use client"
 
@@ -86,10 +42,10 @@ const tests = {
 
       export default MyComponent
       `,
-      errors: [{ message }],
-    },
-    {
-      code: `
+			errors: [{ message }],
+		},
+		{
+			code: `
       // multiple line capitalization
       "use client"
 
@@ -99,10 +55,10 @@ const tests = {
 
       export default MyFunction
       `,
-      errors: [{ message }],
-    },
-    {
-      code: `
+			errors: [{ message }],
+		},
+		{
+			code: `
       // arrow function
       "use client"
 
@@ -112,33 +68,77 @@ const tests = {
 
       export default MyFunction
       `,
-      errors: [{ message }],
-    },
-  ],
-}
+			errors: [{ message }],
+		},
+	],
+	valid: [
+		`
+    // single line
+    export default async function MyComponent() {
+      return <></>
+    }
+    `,
+		`
+    // single line capitalization
+    "use client"
+
+    export default async function myFunction() {
+      return ''
+    }
+    `,
+		`
+    // multiple line
+    async function MyComponent() {
+      return <></>
+    }
+
+    export default MyComponent
+    `,
+		`
+    // multiple line capitalization
+    "use client"
+
+    async function myFunction() {
+      return ''
+    }
+
+    export default myFunction
+    `,
+		`
+    // arrow function
+    "use client"
+
+    const myFunction = () => {
+      return ''
+    }
+
+    export default myFunction
+    `,
+	],
+};
 
 describe('no-async-client-component', () => {
-  new ESLintTesterV8({
-    parserOptions: {
-      ecmaVersion: 2018,
-      sourceType: 'module',
-      ecmaFeatures: {
-        modules: true,
-        jsx: true,
-      },
-    },
-  }).run('eslint-v8', NextESLintRule, tests)
+	new ESLintTesterV8({
+		parserOptions: {
+			ecmaFeatures: {
+				jsx: true,
+				modules: true,
+			},
+			ecmaVersion: 2018,
+			sourceType: 'module',
+		},
+	}).run('eslint-v8', NextESLintRule, tests);
 
-  new ESLintTesterV9({
-    languageOptions: {
-      ecmaVersion: 2018,
-      sourceType: 'module',
-      parserOptions: {
-        ecmaFeatures: {
-          modules: true,
-          jsx: true,
-        },
-      },
-    },
-  }).run('eslint-v9', NextESLintRule, tests)
-})
+	new ESLintTesterV9({
+		languageOptions: {
+			ecmaVersion: 2018,
+			parserOptions: {
+				ecmaFeatures: {
+					jsx: true,
+					modules: true,
+				},
+			},
+			sourceType: 'module',
+		},
+	}).run('eslint-v9', NextESLintRule, tests);
+});

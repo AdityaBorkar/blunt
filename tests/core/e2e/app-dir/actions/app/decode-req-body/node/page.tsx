@@ -1,13 +1,13 @@
-import { Form } from './form'
+import { Form } from './form';
 
 export default function Page() {
-  return (
-    <Form
-      echoAction={async (value) => {
-        'use server'
+	return (
+		<Form
+			echoAction={async (value) => {
+				'use server';
 
-        return value
-      }}
-    />
-  )
+				return value;
+			}}
+		/>
+	);
 }

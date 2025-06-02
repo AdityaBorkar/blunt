@@ -2,10 +2,10 @@
  * @type {import('next').NextConfig}
  */
 const nextConfig = {
-  output: 'standalone',
-  experimental: {
-    dynamicIO: true,
-  },
-}
+	experimental: {
+		dynamicIO: true,
+	},
+	output: 'standalone',
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

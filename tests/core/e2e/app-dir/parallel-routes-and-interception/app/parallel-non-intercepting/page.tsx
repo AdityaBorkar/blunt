@@ -1,10 +1,9 @@
-import Link from 'next/link'
-import React from 'react'
+import Link from 'next/link';
 
 export default function Layout() {
-  return (
-    <div>
-      <Link href="/parallel-non-intercepting/foo">link</Link>
-    </div>
-  )
+	return (
+		<div>
+			<Link href="/parallel-non-intercepting/foo">link</Link>
+		</div>
+	);
 }

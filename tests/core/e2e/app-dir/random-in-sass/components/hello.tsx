@@ -1,5 +1,5 @@
-import styles from './hello.module.scss'
+import styles from './hello.module.scss';
 
-export default function Problem(props) {
-  return <p className={styles.hello}>Hello World</p>
+export default function Problem(_props) {
+	return <p className={styles.hello}>Hello World</p>;
 }

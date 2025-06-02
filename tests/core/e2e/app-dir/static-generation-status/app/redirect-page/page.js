@@ -1,7 +1,7 @@
-import { redirect } from 'next/navigation'
+import { redirect } from 'next/navigation';
 
 export default function Page() {
-  redirect('/')
+	redirect('/');
 }
 
-export const dynamic = 'force-static'
+export const dynamic = 'force-static';

@@ -1,30 +1,28 @@
-import type { User } from '../User'
-// eslint-disable-next-line
-import * as UnusedUserStatisticsThatShouldNotBeElided from '../UserStatistics'
+import type { User } from '../User';
 
 const users: User[] = [
-  {
-    id: 'a',
-    email: 'a@a.de',
-    username: 'anton',
-  },
-  {
-    id: 'b',
-    email: 'b@b.de',
-    username: 'berta',
-  },
-]
+	{
+		email: 'a@a.de',
+		id: 'a',
+		username: 'anton',
+	},
+	{
+		email: 'b@b.de',
+		id: 'b',
+		username: 'berta',
+	},
+];
 
 function Index() {
-  return (
-    <ul>
-      {users.map((u) => (
-        <li key={u.id}>
-          {u.username}: {u.email}
-        </li>
-      ))}
-    </ul>
-  )
+	return (
+		<ul>
+			{users.map((u) => (
+				<li key={u.id}>
+					{u.username}: {u.email}
+				</li>
+			))}
+		</ul>
+	);
 }
 
-export default Index
+export default Index;

@@ -1,4 +1,4 @@
 export function runInternalIgnored(fn) {
-    return fn();
+	return fn();
 }
 //# sourceMappingURL=ignored.js.map

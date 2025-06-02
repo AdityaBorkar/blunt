@@ -2,9 +2,9 @@
  * @type {import('next').NextConfig}
  */
 const nextConfig = {
-  experimental: {
-    // serverComponentsHmrCache: false,
-  },
-}
+	experimental: {
+		// serverComponentsHmrCache: false,
+	},
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

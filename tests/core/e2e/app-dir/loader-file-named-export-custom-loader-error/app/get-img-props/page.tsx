@@ -1,17 +1,17 @@
-import { getImageProps } from 'next/image'
+import { getImageProps } from 'next/image';
 
 export default function Page() {
-  const { props: imageProps } = getImageProps({
-    id: 'logo',
-    alt: 'logo',
-    src: '/logo.png',
-    width: '400',
-    height: '400',
-  })
+	const { props: imageProps } = getImageProps({
+		alt: 'logo',
+		height: '400',
+		id: 'logo',
+		src: '/logo.png',
+		width: '400',
+	});
 
-  return (
-    <div>
-      <img {...imageProps} />
-    </div>
-  )
+	return (
+		<div>
+			<img {...imageProps} />
+		</div>
+	);
 }

@@ -1,9 +1,9 @@
-'use server'
+'use server';
 
-import 'server-only'
+import 'server-only';
 
-import { redirect } from 'next/navigation'
+import { redirect } from 'next/navigation';
 
 export async function redirectAction(path) {
-  redirect(path)
+	redirect(path);
 }

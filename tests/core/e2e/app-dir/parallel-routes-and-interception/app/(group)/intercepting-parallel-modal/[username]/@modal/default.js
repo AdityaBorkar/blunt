@@ -1,3 +1,3 @@
-export default function Page(props) {
-  return <div>default modal slot</div>
+export default function Page(_props) {
+	return <div>default modal slot</div>;
 }

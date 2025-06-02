@@ -2,9 +2,9 @@
  * @type {import('next').NextConfig}
  */
 const nextConfig = {
-  experimental: {
-    serverSourceMaps: true,
-  },
-}
+	experimental: {
+		serverSourceMaps: true,
+	},
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

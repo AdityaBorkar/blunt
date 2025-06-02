@@ -1,14 +1,14 @@
 {
-  "name": "my-differentiated-files",
-  "type": "module",
-  "exports": {
-    "./browser": {
-      "browser": "./my-file-browser.js",
-      "node": null
-    },
-    "./server": {
-      "browser": null,
-      "node": "./my-file-server.js"
-    }
-  }
+	"exports": {
+		"./browser": {
+			"browser": "./my-file-browser.js",
+			"node": null
+		},
+		"./server": {
+			"browser": null,
+			"node": "./my-file-server.js"
+		}
+	},
+	"name": "my-differentiated-files",
+	"type": "module"
 }

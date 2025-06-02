@@ -1,120 +1,119 @@
-import { createNext, FileRef } from 'e2e-utils'
-import { NextInstance } from 'e2e-utils'
-import { fetchViaHTTP, renderViaHTTP } from 'next-test-utils'
-import path from 'path'
-import type { Response } from 'node-fetch'
+import path from 'node:path';
+import { createNext, FileRef, type NextInstance } from 'e2e-utils';
+import { fetchViaHTTP, renderViaHTTP } from 'next-test-utils';
+import type { Response } from 'node-fetch';
 
 async function serialize(response: Response) {
-  return {
-    text: await response.text(),
-    headers: Object.fromEntries(response.headers),
-    status: response.status,
-  }
+	return {
+		headers: Object.fromEntries(response.headers),
+		status: response.status,
+		text: await response.text(),
+	};
 }
 
 describe('Edge can read request body', () => {
-  let next: NextInstance
+	let next: NextInstance;
 
-  beforeAll(async () => {
-    next = await createNext({
-      files: new FileRef(path.resolve(__dirname, './app')),
-      dependencies: {},
-    })
-  })
-  afterAll(() => next.destroy())
+	beforeAll(async () => {
+		next = await createNext({
+			dependencies: {},
+			files: new FileRef(path.resolve(__dirname, './app')),
+		});
+	});
+	afterAll(() => next.destroy());
 
-  it('renders the static page', async () => {
-    const html = await renderViaHTTP(next.url, '/api/nothing')
-    expect(html).toContain('ok')
-  })
+	it('renders the static page', async () => {
+		const html = await renderViaHTTP(next.url, '/api/nothing');
+		expect(html).toContain('ok');
+	});
 
-  describe('middleware', () => {
-    it('reads a JSON body', async () => {
-      const response = await fetchViaHTTP(
-        next.url,
-        '/api/nothing?middleware-handler=json',
-        null,
-        {
-          method: 'POST',
-          body: JSON.stringify({ hello: 'world' }),
-        }
-      )
-      expect(await serialize(response)).toMatchObject({
-        text: expect.stringContaining('ok'),
-        status: 200,
-        headers: {
-          'x-req-type': 'json',
-          'x-serialized': '{"hello":"world"}',
-        },
-      })
-    })
+	describe('middleware', () => {
+		it('reads a JSON body', async () => {
+			const response = await fetchViaHTTP(
+				next.url,
+				'/api/nothing?middleware-handler=json',
+				null,
+				{
+					body: JSON.stringify({ hello: 'world' }),
+					method: 'POST',
+				},
+			);
+			expect(await serialize(response)).toMatchObject({
+				headers: {
+					'x-req-type': 'json',
+					'x-serialized': '{"hello":"world"}',
+				},
+				status: 200,
+				text: expect.stringContaining('ok'),
+			});
+		});
 
-    it('reads a text body', async () => {
-      try {
-        const response = await fetchViaHTTP(
-          next.url,
-          '/api/nothing?middleware-handler=text',
-          null,
-          {
-            method: 'POST',
-            body: JSON.stringify({ hello: 'world' }),
-          }
-        )
+		it('reads a text body', async () => {
+			try {
+				const response = await fetchViaHTTP(
+					next.url,
+					'/api/nothing?middleware-handler=text',
+					null,
+					{
+						body: JSON.stringify({ hello: 'world' }),
+						method: 'POST',
+					},
+				);
 
-        expect(await serialize(response)).toMatchObject({
-          text: expect.stringContaining('ok'),
-          status: 200,
-          headers: {
-            'x-req-type': 'text',
-            'x-serialized': '{"hello":"world"}',
-          },
-        })
-      } catch (err) {
-        console.log('FAILED', err)
-      }
-    })
+				expect(await serialize(response)).toMatchObject({
+					headers: {
+						'x-req-type': 'text',
+						'x-serialized': '{"hello":"world"}',
+					},
+					status: 200,
+					text: expect.stringContaining('ok'),
+				});
+			} catch (err) {
+				console.log('FAILED', err);
+			}
+		});
 
-    it('reads an URL encoded form data', async () => {
-      const response = await fetchViaHTTP(
-        next.url,
-        '/api/nothing?middleware-handler=formData',
-        null,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          body: new URLSearchParams({ hello: 'world' }).toString(),
-        }
-      )
-      expect(await serialize(response)).toMatchObject({
-        text: expect.stringContaining('ok'),
-        status: 200,
-        headers: {
-          'x-req-type': 'formData',
-          'x-serialized': '{"hello":"world"}',
-        },
-      })
-    })
+		it('reads an URL encoded form data', async () => {
+			const response = await fetchViaHTTP(
+				next.url,
+				'/api/nothing?middleware-handler=formData',
+				null,
+				{
+					body: new URLSearchParams({ hello: 'world' }).toString(),
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded',
+					},
+					method: 'POST',
+				},
+			);
+			expect(await serialize(response)).toMatchObject({
+				headers: {
+					'x-req-type': 'formData',
+					'x-serialized': '{"hello":"world"}',
+				},
+				status: 200,
+				text: expect.stringContaining('ok'),
+			});
+		});
 
-    it('reads a multipart form data', async () => {
-      const formData = new FormData()
-      formData.append('hello', 'world')
+		it('reads a multipart form data', async () => {
+			const formData = new FormData();
+			formData.append('hello', 'world');
 
-      // @ts-expect-error use `fetchViaHTTP` when we drop `node-fetch`
-      const response: Response = await fetch(
-        new URL(next.url + '/api/nothing?middleware-handler=formData'),
-        { method: 'POST', body: formData }
-      )
+			// @ts-expect-error use `fetchViaHTTP` when we drop `node-fetch`
+			const response: Response = await fetch(
+				new URL(`${next.url}/api/nothing?middleware-handler=formData`),
+				{ body: formData, method: 'POST' },
+			);
 
-      expect(await serialize(response)).toMatchObject({
-        text: expect.stringContaining('ok'),
-        status: 200,
-        headers: {
-          'x-req-type': 'formData',
-          'x-serialized': '{"hello":"world"}',
-        },
-      })
-    })
-  })
-})
+			expect(await serialize(response)).toMatchObject({
+				headers: {
+					'x-req-type': 'formData',
+					'x-serialized': '{"hello":"world"}',
+				},
+				status: 200,
+				text: expect.stringContaining('ok'),
+			});
+		});
+	});
+});

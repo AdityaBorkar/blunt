@@ -1,9 +1,8 @@
-import React from 'react'
-import { cookies } from 'next/headers'
+import { cookies } from 'next/headers';
 
 export default async function Page() {
-  try {
-    await cookies()
-  } catch (err) {}
-  return <div>Hello World</div>
+	try {
+		await cookies();
+	} catch (_err) {}
+	return <div>Hello World</div>;
 }

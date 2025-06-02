@@ -1,24 +1,26 @@
 /* eslint-env jest */
-import { createSandbox } from 'development-sandbox'
-import { FileRef, nextTestSetup } from 'e2e-utils'
-import { getToastErrorCount, retry } from 'next-test-utils'
-import path from 'path'
-import { outdent } from 'outdent'
+/* eslint-env jest */
+
+import path from 'node:path';
+import { createSandbox } from 'development-sandbox';
+import { FileRef, nextTestSetup } from 'e2e-utils';
+import { getToastErrorCount, retry } from 'next-test-utils';
+import { outdent } from 'outdent';
 
 describe('ReactRefreshLogBox app', () => {
-  const { next, isTurbopack } = nextTestSetup({
-    files: new FileRef(path.join(__dirname, 'fixtures', 'default-template')),
-    skipStart: true,
-    patchFileDelay: 1000,
-  })
+	const { next, isTurbopack } = nextTestSetup({
+		files: new FileRef(path.join(__dirname, 'fixtures', 'default-template')),
+		patchFileDelay: 1000,
+		skipStart: true,
+	});
 
-  test('should strip whitespace correctly with newline', async () => {
-    await using sandbox = await createSandbox(next)
-    const { browser, session } = sandbox
+	test('should strip whitespace correctly with newline', async () => {
+		await using sandbox = await createSandbox(next);
+		const { browser, session } = sandbox;
 
-    await session.patch(
-      'index.js',
-      outdent`
+		await session.patch(
+			'index.js',
+			outdent`
         export default function Page() {
           return (
             <>
@@ -32,31 +34,31 @@ describe('ReactRefreshLogBox app', () => {
             </>
           )
         }
-      `
-    )
-    await session.evaluate(() => document.querySelector('a').click())
+      `,
+		);
+		await session.evaluate(() => document.querySelector('a').click());
 
-    if (isTurbopack) {
-      await expect(browser).toDisplayRedbox(
-        `"Expected Redbox but found no visible one."`
-      )
-    } else {
-      await expect(browser).toDisplayRedbox(
-        `"Expected Redbox but found no visible one."`
-      )
-    }
-  })
+		if (isTurbopack) {
+			await expect(browser).toDisplayRedbox(
+				`"Expected Redbox but found no visible one."`,
+			);
+		} else {
+			await expect(browser).toDisplayRedbox(
+				`"Expected Redbox but found no visible one."`,
+			);
+		}
+	});
 
-  // https://github.com/pmmmwh/react-refresh-webpack-plugin/pull/3#issuecomment-554137807
-  test('module init error not shown', async () => {
-    // Start here:
-    await using sandbox = await createSandbox(next)
-    const { browser, session } = sandbox
+	// https://github.com/pmmmwh/react-refresh-webpack-plugin/pull/3#issuecomment-554137807
+	test('module init error not shown', async () => {
+		// Start here:
+		await using sandbox = await createSandbox(next);
+		const { browser, session } = sandbox;
 
-    // We start here.
-    await session.patch(
-      'index.js',
-      outdent`
+		// We start here.
+		await session.patch(
+			'index.js',
+			outdent`
         import * as React from 'react';
         class ClassDefault extends React.Component {
           render() {
@@ -64,17 +66,17 @@ describe('ReactRefreshLogBox app', () => {
           }
         }
         export default ClassDefault;
-      `
-    )
+      `,
+		);
 
-    expect(
-      await session.evaluate(() => document.querySelector('h1').textContent)
-    ).toBe('Default Export')
+		expect(
+			await session.evaluate(() => document.querySelector('h1').textContent),
+		).toBe('Default Export');
 
-    // Add a throw in module init phase:
-    await session.patch(
-      'index.js',
-      outdent`
+		// Add a throw in module init phase:
+		await session.patch(
+			'index.js',
+			outdent`
         // top offset for snapshot
         import * as React from 'react';
         throw new Error('no')
@@ -84,11 +86,11 @@ describe('ReactRefreshLogBox app', () => {
           }
         }
         export default ClassDefault;
-      `
-    )
+      `,
+		);
 
-    if (isTurbopack) {
-      await expect(browser).toDisplayRedbox(`
+		if (isTurbopack) {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Error: no",
@@ -102,9 +104,9 @@ describe('ReactRefreshLogBox app', () => {
            "[project]/app/page.js [app-client] (ecmascript) app/page.js (2:1)",
          ],
        }
-      `)
-    } else {
-      await expect(browser).toDisplayRedbox(`
+      `);
+		} else {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 2,
          "description": "Error: no",
@@ -126,26 +128,26 @@ describe('ReactRefreshLogBox app', () => {
            "<FIXME-next-dist-dir>",
          ],
        }
-      `)
-    }
-  })
+      `);
+		}
+	});
 
-  // https://github.com/pmmmwh/react-refresh-webpack-plugin/pull/3#issuecomment-554152127
-  test('boundaries', async () => {
-    await using sandbox = await createSandbox(next)
-    const { browser, session } = sandbox
+	// https://github.com/pmmmwh/react-refresh-webpack-plugin/pull/3#issuecomment-554152127
+	test('boundaries', async () => {
+		await using sandbox = await createSandbox(next);
+		const { browser, session } = sandbox;
 
-    await session.write(
-      'FunctionDefault.js',
-      outdent`
+		await session.write(
+			'FunctionDefault.js',
+			outdent`
         export default function FunctionDefault() {
           return <h2>hello</h2>
         }
-      `
-    )
-    await session.patch(
-      'index.js',
-      outdent`
+      `,
+		);
+		await session.patch(
+			'index.js',
+			outdent`
         import FunctionDefault from './FunctionDefault.js'
         import * as React from 'react'
         class ErrorBoundary extends React.Component {
@@ -174,56 +176,56 @@ describe('ReactRefreshLogBox app', () => {
           );
         }
         export default App;
-      `
-    )
+      `,
+		);
 
-    expect(
-      await session.evaluate(() => document.querySelector('h2').textContent)
-    ).toBe('hello')
+		expect(
+			await session.evaluate(() => document.querySelector('h2').textContent),
+		).toBe('hello');
 
-    await session.write(
-      'FunctionDefault.js',
-      `export default function FunctionDefault() { throw new Error('no'); }`
-    )
+		await session.write(
+			'FunctionDefault.js',
+			`export default function FunctionDefault() { throw new Error('no'); }`,
+		);
 
-    if (isTurbopack) {
-      await expect(browser).toDisplayRedbox(
-        `"Expected Redbox but found no visible one."`
-      )
-    } else {
-      await expect(browser).toDisplayRedbox(
-        `"Expected Redbox but found no visible one."`
-      )
-    }
-  })
+		if (isTurbopack) {
+			await expect(browser).toDisplayRedbox(
+				`"Expected Redbox but found no visible one."`,
+			);
+		} else {
+			await expect(browser).toDisplayRedbox(
+				`"Expected Redbox but found no visible one."`,
+			);
+		}
+	});
 
-  // TODO: investigate why this fails when running outside of the Next.js
-  // monorepo e.g. fails when using pnpm create next-app
-  // https://github.com/vercel/next.js/pull/23203
-  test.skip('internal package errors', async () => {
-    await using sandbox = await createSandbox(next)
-    const { browser, session } = sandbox
+	// TODO: investigate why this fails when running outside of the Next.js
+	// monorepo e.g. fails when using pnpm create next-app
+	// https://github.com/vercel/next.js/pull/23203
+	test.skip('internal package errors', async () => {
+		await using sandbox = await createSandbox(next);
+		const { browser, session } = sandbox;
 
-    // Make a react build-time error.
-    await session.patch(
-      'index.js',
-      outdent`
+		// Make a react build-time error.
+		await session.patch(
+			'index.js',
+			outdent`
         export default function FunctionNamed() {
           return <div>{{}}</div>
         }
-      `
-    )
+      `,
+		);
 
-    await expect(browser).toDisplayRedbox()
-  })
+		await expect(browser).toDisplayRedbox();
+	});
 
-  test('unterminated JSX', async () => {
-    await using sandbox = await createSandbox(next)
-    const { browser, session } = sandbox
+	test('unterminated JSX', async () => {
+		await using sandbox = await createSandbox(next);
+		const { browser, session } = sandbox;
 
-    await session.patch(
-      'index.js',
-      outdent`
+		await session.patch(
+			'index.js',
+			outdent`
         export default () => {
           return (
             <div>
@@ -231,14 +233,14 @@ describe('ReactRefreshLogBox app', () => {
             </div>
           )
         }
-      `
-    )
+      `,
+		);
 
-    await session.assertNoRedbox()
+		await session.assertNoRedbox();
 
-    await session.patch(
-      'index.js',
-      outdent`
+		await session.patch(
+			'index.js',
+			outdent`
         export default () => {
           return (
             <div>
@@ -246,11 +248,11 @@ describe('ReactRefreshLogBox app', () => {
             div
           )
         }
-      `
-    )
+      `,
+		);
 
-    if (isTurbopack) {
-      await expect(browser).toDisplayRedbox(`
+		if (isTurbopack) {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Parsing ecmascript source code failed",
@@ -262,9 +264,9 @@ describe('ReactRefreshLogBox app', () => {
            | ^",
          "stack": [],
        }
-      `)
-    } else {
-      await expect(browser).toDisplayRedbox(`
+      `);
+		} else {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Error:   x Unexpected token. Did you mean \`{'}'}\` or \`&rbrace;\`?",
@@ -293,27 +295,27 @@ describe('ReactRefreshLogBox app', () => {
        ./app/page.js",
          "stack": [],
        }
-      `)
-    }
-  })
+      `);
+		}
+	});
 
-  // Module trace is only available with webpack 5
-  test('conversion to class component (1)', async () => {
-    await using sandbox = await createSandbox(next)
-    const { browser, session } = sandbox
+	// Module trace is only available with webpack 5
+	test('conversion to class component (1)', async () => {
+		await using sandbox = await createSandbox(next);
+		const { browser, session } = sandbox;
 
-    await session.write(
-      'Child.js',
-      outdent`
+		await session.write(
+			'Child.js',
+			outdent`
         export default function ClickCount() {
           return <p>hello</p>
         }
-      `
-    )
+      `,
+		);
 
-    await session.patch(
-      'index.js',
-      outdent`
+		await session.patch(
+			'index.js',
+			outdent`
         import Child from './Child';
 
         export default function Home() {
@@ -323,32 +325,32 @@ describe('ReactRefreshLogBox app', () => {
             </div>
           )
         }
-      `
-    )
+      `,
+		);
 
-    await session.assertNoRedbox()
-    expect(
-      await session.evaluate(() => document.querySelector('p').textContent)
-    ).toBe('hello')
+		await session.assertNoRedbox();
+		expect(
+			await session.evaluate(() => document.querySelector('p').textContent),
+		).toBe('hello');
 
-    await session.patch(
-      'Child.js',
-      outdent`
+		await session.patch(
+			'Child.js',
+			outdent`
         import { Component } from 'react';
         export default class ClickCount extends Component {
           render() {
             throw new Error()
           }
         }
-      `
-    )
+      `,
+		);
 
-    if (isTurbopack) {
-      // TODO(veil): Turbopack is flaky. Possibly related to https://linear.app/vercel/issue/NDX-920/turbopack-errors-after-hmr-have-no-stacktraces-in-affected-chunks
-      // Should use `await expect(browser).toDisplayRedbox()`
-      await session.assertHasRedbox()
-    } else {
-      await expect(browser).toDisplayRedbox(`
+		if (isTurbopack) {
+			// TODO(veil): Turbopack is flaky. Possibly related to https://linear.app/vercel/issue/NDX-920/turbopack-errors-after-hmr-have-no-stacktraces-in-affected-chunks
+			// Should use `await expect(browser).toDisplayRedbox()`
+			await session.assertHasRedbox();
+		} else {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Error: ",
@@ -363,35 +365,35 @@ describe('ReactRefreshLogBox app', () => {
            "Page app/page.js (4:10)",
          ],
        }
-      `)
-    }
+      `);
+		}
 
-    await session.patch(
-      'Child.js',
-      outdent`
+		await session.patch(
+			'Child.js',
+			outdent`
         import { Component } from 'react';
         export default class ClickCount extends Component {
           render() {
             return <p>hello new</p>
           }
         }
-      `
-    )
+      `,
+		);
 
-    await session.assertNoRedbox()
-    expect(
-      await session.evaluate(() => document.querySelector('p').textContent)
-    ).toBe('hello new')
-  })
+		await session.assertNoRedbox();
+		expect(
+			await session.evaluate(() => document.querySelector('p').textContent),
+		).toBe('hello new');
+	});
 
-  test('css syntax errors', async () => {
-    await using sandbox = await createSandbox(next)
-    const { browser, session } = sandbox
+	test('css syntax errors', async () => {
+		await using sandbox = await createSandbox(next);
+		const { browser, session } = sandbox;
 
-    await session.write('index.module.css', `.button {}`)
-    await session.patch(
-      'index.js',
-      outdent`
+		await session.write('index.module.css', `.button {}`);
+		await session.patch(
+			'index.js',
+			outdent`
         import './index.module.css';
         export default () => {
           return (
@@ -400,15 +402,15 @@ describe('ReactRefreshLogBox app', () => {
             </div>
           )
         }
-      `
-    )
+      `,
+		);
 
-    await session.assertNoRedbox()
+		await session.assertNoRedbox();
 
-    await session.patch('index.module.css', `.button`)
+		await session.patch('index.module.css', `.button`);
 
-    if (isTurbopack) {
-      await expect(browser).toDisplayRedbox(`
+		if (isTurbopack) {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Parsing css source code failed",
@@ -420,9 +422,9 @@ describe('ReactRefreshLogBox app', () => {
            |         ^",
          "stack": [],
        }
-      `)
-    } else {
-      await expect({ browser, next }).toDisplayRedbox(`
+      `);
+		} else {
+			await expect({ browser, next }).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Syntax error: <FIXME-project-root>/index.module.css Unknown word",
@@ -434,15 +436,15 @@ describe('ReactRefreshLogBox app', () => {
            | ^",
          "stack": [],
        }
-      `)
-    }
+      `);
+		}
 
-    // Checks for selectors that can't be prefixed.
-    // Selector "button" is not pure (pure selectors must contain at least one local class or id)
-    await session.patch('index.module.css', `button {}`)
+		// Checks for selectors that can't be prefixed.
+		// Selector "button" is not pure (pure selectors must contain at least one local class or id)
+		await session.patch('index.module.css', `button {}`);
 
-    if (isTurbopack) {
-      await expect(browser).toDisplayRedbox(`
+		if (isTurbopack) {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Parsing css source code failed",
@@ -453,9 +455,9 @@ describe('ReactRefreshLogBox app', () => {
        Selector is not pure (pure selectors must contain at least one local class or id), (lightningcss, Selector(button, specificity = 0x1))",
          "stack": [],
        }
-      `)
-    } else {
-      await expect(browser).toDisplayRedbox(`
+      `);
+		} else {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Syntax error: Selector "button" is not pure (pure selectors must contain at least one local class or id)",
@@ -467,17 +469,17 @@ describe('ReactRefreshLogBox app', () => {
            | ^",
          "stack": [],
        }
-      `)
-    }
-  })
+      `);
+		}
+	});
 
-  it('logbox: anchors links in error messages', async () => {
-    await using sandbox = await createSandbox(next)
-    const { browser, session } = sandbox
+	it('logbox: anchors links in error messages', async () => {
+		await using sandbox = await createSandbox(next);
+		const { browser, session } = sandbox;
 
-    await session.patch(
-      'index.js',
-      outdent`
+		await session.patch(
+			'index.js',
+			outdent`
         import { useCallback } from 'react'
 
         export default function Index() {
@@ -490,14 +492,14 @@ describe('ReactRefreshLogBox app', () => {
             </main>
           )
         }
-      `
-    )
+      `,
+		);
 
-    await session.evaluate(() => document.querySelector('button').click())
+		await session.evaluate(() => document.querySelector('button').click());
 
-    // TODO(veil): Why Owner Stack location different?
-    if (isTurbopack) {
-      await expect(browser).toDisplayCollapsedRedbox(`
+		// TODO(veil): Why Owner Stack location different?
+		if (isTurbopack) {
+			await expect(browser).toDisplayCollapsedRedbox(`
        {
          "count": 1,
          "description": "Error: end https://nextjs.org",
@@ -515,9 +517,9 @@ describe('ReactRefreshLogBox app', () => {
            "Page index.js (9:30)",
          ],
        }
-      `)
-    } else {
-      await expect(browser).toDisplayCollapsedRedbox(`
+      `);
+		} else {
+			await expect(browser).toDisplayCollapsedRedbox(`
        {
          "count": 1,
          "description": "Error: end https://nextjs.org",
@@ -535,34 +537,34 @@ describe('ReactRefreshLogBox app', () => {
            "Page app/page.js (4:10)",
          ],
        }
-      `)
-    }
+      `);
+		}
 
-    expect(
-      await session.evaluate(
-        () =>
-          document
-            .querySelector('body > nextjs-portal')
-            .shadowRoot.querySelectorAll('#nextjs__container_errors_desc a')
-            .length
-      )
-    ).toBe(1)
-    expect(
-      await session.evaluate(
-        () =>
-          (
-            document
-              .querySelector('body > nextjs-portal')
-              .shadowRoot.querySelector(
-                '#nextjs__container_errors_desc a:nth-of-type(1)'
-              ) as any
-          ).href
-      )
-    ).toMatchInlineSnapshot(`"https://nextjs.org/"`)
+		expect(
+			await session.evaluate(
+				() =>
+					document
+						.querySelector('body > nextjs-portal')
+						.shadowRoot.querySelectorAll('#nextjs__container_errors_desc a')
+						.length,
+			),
+		).toBe(1);
+		expect(
+			await session.evaluate(
+				() =>
+					(
+						document
+							.querySelector('body > nextjs-portal')
+							.shadowRoot.querySelector(
+								'#nextjs__container_errors_desc a:nth-of-type(1)',
+							) as any
+					).href,
+			),
+		).toMatchInlineSnapshot(`"https://nextjs.org/"`);
 
-    await session.patch(
-      'index.js',
-      outdent`
+		await session.patch(
+			'index.js',
+			outdent`
         import { useCallback } from 'react'
 
         export default function Index() {
@@ -575,14 +577,14 @@ describe('ReactRefreshLogBox app', () => {
             </main>
           )
         }
-      `
-    )
+      `,
+		);
 
-    await session.evaluate(() => document.querySelector('button').click())
+		await session.evaluate(() => document.querySelector('button').click());
 
-    // TODO(veil): Why Owner Stack location different?
-    if (isTurbopack) {
-      await expect(browser).toDisplayRedbox(`
+		// TODO(veil): Why Owner Stack location different?
+		if (isTurbopack) {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Error: https://nextjs.org start",
@@ -600,9 +602,9 @@ describe('ReactRefreshLogBox app', () => {
            "Page index.js (9:30)",
          ],
        }
-      `)
-    } else {
-      await expect(browser).toDisplayRedbox(`
+      `);
+		} else {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Error: https://nextjs.org start",
@@ -620,33 +622,33 @@ describe('ReactRefreshLogBox app', () => {
            "Page app/page.js (4:10)",
          ],
        }
-      `)
-    }
-    expect(
-      await session.evaluate(
-        () =>
-          document
-            .querySelector('body > nextjs-portal')
-            .shadowRoot.querySelectorAll('#nextjs__container_errors_desc a')
-            .length
-      )
-    ).toBe(1)
-    expect(
-      await session.evaluate(
-        () =>
-          (
-            document
-              .querySelector('body > nextjs-portal')
-              .shadowRoot.querySelector(
-                '#nextjs__container_errors_desc a:nth-of-type(1)'
-              ) as any
-          ).href
-      )
-    ).toMatchInlineSnapshot(`"https://nextjs.org/"`)
+      `);
+		}
+		expect(
+			await session.evaluate(
+				() =>
+					document
+						.querySelector('body > nextjs-portal')
+						.shadowRoot.querySelectorAll('#nextjs__container_errors_desc a')
+						.length,
+			),
+		).toBe(1);
+		expect(
+			await session.evaluate(
+				() =>
+					(
+						document
+							.querySelector('body > nextjs-portal')
+							.shadowRoot.querySelector(
+								'#nextjs__container_errors_desc a:nth-of-type(1)',
+							) as any
+					).href,
+			),
+		).toMatchInlineSnapshot(`"https://nextjs.org/"`);
 
-    await session.patch(
-      'index.js',
-      outdent`
+		await session.patch(
+			'index.js',
+			outdent`
         import { useCallback } from 'react'
 
         export default function Index() {
@@ -659,14 +661,14 @@ describe('ReactRefreshLogBox app', () => {
             </main>
           )
         }
-      `
-    )
+      `,
+		);
 
-    await session.evaluate(() => document.querySelector('button').click())
+		await session.evaluate(() => document.querySelector('button').click());
 
-    // TODO(veil): Why Owner Stack location different?
-    if (isTurbopack) {
-      await expect(browser).toDisplayRedbox(`
+		// TODO(veil): Why Owner Stack location different?
+		if (isTurbopack) {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Error: middle https://nextjs.org end",
@@ -684,9 +686,9 @@ describe('ReactRefreshLogBox app', () => {
            "Page index.js (9:30)",
          ],
        }
-      `)
-    } else {
-      await expect(browser).toDisplayRedbox(`
+      `);
+		} else {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Error: middle https://nextjs.org end",
@@ -704,33 +706,33 @@ describe('ReactRefreshLogBox app', () => {
            "Page app/page.js (4:10)",
          ],
        }
-      `)
-    }
-    expect(
-      await session.evaluate(
-        () =>
-          document
-            .querySelector('body > nextjs-portal')
-            .shadowRoot.querySelectorAll('#nextjs__container_errors_desc a')
-            .length
-      )
-    ).toBe(1)
-    expect(
-      await session.evaluate(
-        () =>
-          (
-            document
-              .querySelector('body > nextjs-portal')
-              .shadowRoot.querySelector(
-                '#nextjs__container_errors_desc a:nth-of-type(1)'
-              ) as any
-          ).href
-      )
-    ).toMatchInlineSnapshot(`"https://nextjs.org/"`)
+      `);
+		}
+		expect(
+			await session.evaluate(
+				() =>
+					document
+						.querySelector('body > nextjs-portal')
+						.shadowRoot.querySelectorAll('#nextjs__container_errors_desc a')
+						.length,
+			),
+		).toBe(1);
+		expect(
+			await session.evaluate(
+				() =>
+					(
+						document
+							.querySelector('body > nextjs-portal')
+							.shadowRoot.querySelector(
+								'#nextjs__container_errors_desc a:nth-of-type(1)',
+							) as any
+					).href,
+			),
+		).toMatchInlineSnapshot(`"https://nextjs.org/"`);
 
-    await session.patch(
-      'index.js',
-      outdent`
+		await session.patch(
+			'index.js',
+			outdent`
         import { useCallback } from 'react'
 
         export default function Index() {
@@ -743,14 +745,14 @@ describe('ReactRefreshLogBox app', () => {
             </main>
           )
         }
-      `
-    )
+      `,
+		);
 
-    await session.evaluate(() => document.querySelector('button').click())
+		await session.evaluate(() => document.querySelector('button').click());
 
-    // TODO(veil): Why Owner Stack location different?
-    if (isTurbopack) {
-      await expect(browser).toDisplayRedbox(`
+		// TODO(veil): Why Owner Stack location different?
+		if (isTurbopack) {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Error: multiple https://nextjs.org links http://example.com",
@@ -768,9 +770,9 @@ describe('ReactRefreshLogBox app', () => {
            "Page index.js (9:30)",
          ],
        }
-      `)
-    } else {
-      await expect(browser).toDisplayRedbox(`
+      `);
+		} else {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Error: multiple https://nextjs.org links http://example.com",
@@ -788,78 +790,78 @@ describe('ReactRefreshLogBox app', () => {
            "Page app/page.js (4:10)",
          ],
        }
-      `)
-    }
-    // Do not highlight example.com but do highlight nextjs.org
-    expect(
-      await session.evaluate(
-        () =>
-          document
-            .querySelector('body > nextjs-portal')
-            .shadowRoot.querySelectorAll('#nextjs__container_errors_desc a')
-            .length
-      )
-    ).toBe(1)
-    expect(
-      await session.evaluate(
-        () =>
-          (
-            document
-              .querySelector('body > nextjs-portal')
-              .shadowRoot.querySelector(
-                '#nextjs__container_errors_desc a:nth-of-type(1)'
-              ) as any
-          ).href
-      )
-    ).toMatchInlineSnapshot(`"https://nextjs.org/"`)
-    expect(
-      await session.evaluate(
-        () =>
-          (
-            document
-              .querySelector('body > nextjs-portal')
-              .shadowRoot.querySelector(
-                '#nextjs__container_errors_desc a:nth-of-type(2)'
-              ) as any
-          ).href
-      )
-    ).toBe(null)
-  })
+      `);
+		}
+		// Do not highlight example.com but do highlight nextjs.org
+		expect(
+			await session.evaluate(
+				() =>
+					document
+						.querySelector('body > nextjs-portal')
+						.shadowRoot.querySelectorAll('#nextjs__container_errors_desc a')
+						.length,
+			),
+		).toBe(1);
+		expect(
+			await session.evaluate(
+				() =>
+					(
+						document
+							.querySelector('body > nextjs-portal')
+							.shadowRoot.querySelector(
+								'#nextjs__container_errors_desc a:nth-of-type(1)',
+							) as any
+					).href,
+			),
+		).toMatchInlineSnapshot(`"https://nextjs.org/"`);
+		expect(
+			await session.evaluate(
+				() =>
+					(
+						document
+							.querySelector('body > nextjs-portal')
+							.shadowRoot.querySelector(
+								'#nextjs__container_errors_desc a:nth-of-type(2)',
+							) as any
+					).href,
+			),
+		).toBe(null);
+	});
 
-  // TODO-APP: Catch errors that happen before useEffect
-  test.skip('non-Error errors are handled properly', async () => {
-    await using sandbox = await createSandbox(next)
-    const { browser, session } = sandbox
+	// TODO-APP: Catch errors that happen before useEffect
+	test.skip('non-Error errors are handled properly', async () => {
+		await using sandbox = await createSandbox(next);
+		const { browser, session } = sandbox;
 
-    await session.patch(
-      'index.js',
-      outdent`
+		await session.patch(
+			'index.js',
+			outdent`
         export default () => {
           throw {'a': 1, 'b': 'x'};
           return (
             <div>hello</div>
           )
         }
-      `
-    )
+      `,
+		);
 
-    await expect(browser).toDisplayRedbox()
+		await expect(browser).toDisplayRedbox();
 
-    // fix previous error
-    await session.patch(
-      'index.js',
-      outdent`
+		// fix previous error
+		await session.patch(
+			'index.js',
+			outdent`
         export default () => {
           return (
             <div>hello</div>
           )
         }
-      `
-    )
-    await session.assertNoRedbox()
-    await session.patch(
-      'index.js',
-      outdent`
+      `,
+		);
+		await session.assertNoRedbox();
+		await session.patch(
+			'index.js',
+			outdent`
         class Hello {}
 
         export default () => {
@@ -868,71 +870,71 @@ describe('ReactRefreshLogBox app', () => {
             <div>hello</div>
           )
         }
-      `
-    )
+      `,
+		);
 
-    await expect(browser).toDisplayRedbox()
+		await expect(browser).toDisplayRedbox();
 
-    // fix previous error
-    await session.patch(
-      'index.js',
-      outdent`
+		// fix previous error
+		await session.patch(
+			'index.js',
+			outdent`
         export default () => {
           return (
             <div>hello</div>
           )
         }
-      `
-    )
-    await session.assertNoRedbox()
-    await session.patch(
-      'index.js',
-      outdent`
+      `,
+		);
+		await session.assertNoRedbox();
+		await session.patch(
+			'index.js',
+			outdent`
         export default () => {
           throw "string error"
           return (
             <div>hello</div>
           )
         }
-      `
-    )
+      `,
+		);
 
-    await expect(browser).toDisplayRedbox()
+		await expect(browser).toDisplayRedbox();
 
-    // fix previous error
-    await session.patch(
-      'index.js',
-      outdent`
+		// fix previous error
+		await session.patch(
+			'index.js',
+			outdent`
         export default () => {
           return (
             <div>hello</div>
           )
         }
-      `
-    )
-    await session.assertNoRedbox()
-    await session.patch(
-      'index.js',
-      outdent`
+      `,
+		);
+		await session.assertNoRedbox();
+		await session.patch(
+			'index.js',
+			outdent`
         export default () => {
           throw null
           return (
             <div>hello</div>
           )
         }
-      `
-    )
+      `,
+		);
 
-    await expect(browser).toDisplayRedbox()
-  })
+		await expect(browser).toDisplayRedbox();
+	});
 
-  test('Should not show __webpack_exports__ when exporting anonymous arrow function', async () => {
-    await using sandbox = await createSandbox(next)
-    const { browser, session } = sandbox
+	test('Should not show __webpack_exports__ when exporting anonymous arrow function', async () => {
+		await using sandbox = await createSandbox(next);
+		const { browser, session } = sandbox;
 
-    await session.patch(
-      'index.js',
-      outdent`
+		await session.patch(
+			'index.js',
+			outdent`
         export default () => {
           if (typeof window !== 'undefined') {
             throw new Error('test')
@@ -940,11 +942,11 @@ describe('ReactRefreshLogBox app', () => {
 
           return null
         }
-      `
-    )
+      `,
+		);
 
-    if (isTurbopack) {
-      await expect(browser).toDisplayRedbox(`
+		if (isTurbopack) {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Error: test",
@@ -959,9 +961,9 @@ describe('ReactRefreshLogBox app', () => {
            "Page app/page.js (2:1)",
          ],
        }
-      `)
-    } else {
-      await expect(browser).toDisplayRedbox(`
+      `);
+		} else {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Error: test",
@@ -975,15 +977,15 @@ describe('ReactRefreshLogBox app', () => {
            "Page app/page.js (4:10)",
          ],
        }
-      `)
-    }
-  })
+      `);
+		}
+	});
 
-  test('Unhandled errors and rejections opens up in the minimized state', async () => {
-    await using sandbox = await createSandbox(next)
-    const { session, browser } = sandbox
+	test('Unhandled errors and rejections opens up in the minimized state', async () => {
+		await using sandbox = await createSandbox(next);
+		const { session, browser } = sandbox;
 
-    const file = outdent`
+		const file = outdent`
       export default function Index() {
         //
         setTimeout(() => {
@@ -1013,41 +1015,41 @@ describe('ReactRefreshLogBox app', () => {
           </>
         )
       }
-    `
+    `;
 
-    await session.patch('index.js', file)
+		await session.patch('index.js', file);
 
-    // Unhandled error and rejection in setTimeout
-    await retry(async () => {
-      expect(await getToastErrorCount(browser)).toBe(2)
-    })
+		// Unhandled error and rejection in setTimeout
+		await retry(async () => {
+			expect(await getToastErrorCount(browser)).toBe(2);
+		});
 
-    // Unhandled error in event handler
-    await browser.elementById('unhandled-error').click()
-    await retry(async () => {
-      expect(await getToastErrorCount(browser)).toBe(3)
-    })
+		// Unhandled error in event handler
+		await browser.elementById('unhandled-error').click();
+		await retry(async () => {
+			expect(await getToastErrorCount(browser)).toBe(3);
+		});
 
-    // Unhandled rejection in event handler
-    await browser.elementById('unhandled-rejection').click()
-    await retry(async () => {
-      expect(await getToastErrorCount(browser)).toBe(4)
-    })
-    await session.assertNoRedbox()
+		// Unhandled rejection in event handler
+		await browser.elementById('unhandled-rejection').click();
+		await retry(async () => {
+			expect(await getToastErrorCount(browser)).toBe(4);
+		});
+		await session.assertNoRedbox();
 
-    // Add Component error
-    await session.patch(
-      'index.js',
-      file.replace(
-        '//',
-        "if (typeof window !== 'undefined') throw new Error('Component error')"
-      )
-    )
+		// Add Component error
+		await session.patch(
+			'index.js',
+			file.replace(
+				'//',
+				"if (typeof window !== 'undefined') throw new Error('Component error')",
+			),
+		);
 
-    // Render error should "win" and show up in fullscreen
-    // TODO(veil): Why Owner Stack location different?
-    if (isTurbopack) {
-      await expect(browser).toDisplayRedbox(`
+		// Render error should "win" and show up in fullscreen
+		// TODO(veil): Why Owner Stack location different?
+		if (isTurbopack) {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Error: Component error",
@@ -1061,9 +1063,9 @@ describe('ReactRefreshLogBox app', () => {
            "Page index.js (16:8)",
          ],
        }
-      `)
-    } else {
-      await expect(browser).toDisplayRedbox(`
+      `);
+		} else {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Error: Component error",
@@ -1077,17 +1079,17 @@ describe('ReactRefreshLogBox app', () => {
            "Page app/page.js (4:10)",
          ],
        }
-      `)
-    }
-  })
+      `);
+		}
+	});
 
-  test('Call stack for client error', async () => {
-    await using sandbox = await createSandbox(
-      next,
-      new Map([
-        [
-          'app/page.js',
-          outdent`
+	test('Call stack for client error', async () => {
+		await using sandbox = await createSandbox(
+			next,
+			new Map([
+				[
+					'app/page.js',
+					outdent`
             'use client'
             export default function Page() {
               if (typeof window !== 'undefined') {
@@ -1096,12 +1098,12 @@ describe('ReactRefreshLogBox app', () => {
               return null
             }
           `,
-        ],
-      ])
-    )
-    const { browser } = sandbox
+				],
+			]),
+		);
+		const { browser } = sandbox;
 
-    await expect(browser).toDisplayRedbox(`
+		await expect(browser).toDisplayRedbox(`
      {
        "count": 1,
        "description": "Error: Client error",
@@ -1114,26 +1116,26 @@ describe('ReactRefreshLogBox app', () => {
          "Page app/page.js (4:11)",
        ],
      }
-    `)
-  })
+    `);
+	});
 
-  test('Call stack for server error', async () => {
-    await using sandbox = await createSandbox(
-      next,
-      new Map([
-        [
-          'app/page.js',
-          outdent`
+	test('Call stack for server error', async () => {
+		await using sandbox = await createSandbox(
+			next,
+			new Map([
+				[
+					'app/page.js',
+					outdent`
       export default function Page() {
         throw new Error('Server error')
       }
     `,
-        ],
-      ])
-    )
-    const { browser } = sandbox
+				],
+			]),
+		);
+		const { browser } = sandbox;
 
-    await expect(browser).toDisplayRedbox(`
+		await expect(browser).toDisplayRedbox(`
      {
        "count": 1,
        "description": "Error: Server error",
@@ -1146,16 +1148,16 @@ describe('ReactRefreshLogBox app', () => {
          "Page app/page.js (2:9)",
        ],
      }
-    `)
-  })
+    `);
+	});
 
-  test('should hide unrelated frames in stack trace with unknown anonymous calls', async () => {
-    await using sandbox = await createSandbox(
-      next,
-      new Map([
-        [
-          'app/page.js',
-          outdent`
+	test('should hide unrelated frames in stack trace with unknown anonymous calls', async () => {
+		await using sandbox = await createSandbox(
+			next,
+			new Map([
+				[
+					'app/page.js',
+					outdent`
           export default function Page() {
             try {
               (function() {
@@ -1166,14 +1168,14 @@ describe('ReactRefreshLogBox app', () => {
             }
           }
         `,
-        ],
-      ])
-    )
-    const { browser } = sandbox
+				],
+			]),
+		);
+		const { browser } = sandbox;
 
-    if (isTurbopack) {
-      // TODO(veil): investigate the column number is off by 1 between turbo and webpack
-      await expect(browser).toDisplayRedbox(`
+		if (isTurbopack) {
+			// TODO(veil): investigate the column number is off by 1 between turbo and webpack
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Error: This is an error from an anonymous function",
@@ -1187,9 +1189,9 @@ describe('ReactRefreshLogBox app', () => {
            "Page app/page.js (5:6)",
          ],
        }
-      `)
-    } else {
-      await expect(browser).toDisplayRedbox(`
+      `);
+		} else {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Error: This is an error from an anonymous function",
@@ -1203,28 +1205,28 @@ describe('ReactRefreshLogBox app', () => {
            "Page app/page.js (5:5)",
          ],
        }
-      `)
-    }
-  })
+      `);
+		}
+	});
 
-  test('should hide unrelated frames in stack trace with nodejs internal calls', async () => {
-    await using sandbox = await createSandbox(
-      next,
-      new Map([
-        [
-          'app/page.js',
-          // Node.js will throw an error about the invalid URL since this is a server component
-          outdent`
+	test('should hide unrelated frames in stack trace with nodejs internal calls', async () => {
+		await using sandbox = await createSandbox(
+			next,
+			new Map([
+				[
+					'app/page.js',
+					// Node.js will throw an error about the invalid URL since this is a server component
+					outdent`
           export default function Page() {
             new URL("/", "invalid");
           }`,
-        ],
-      ])
-    )
-    const { browser } = sandbox
+				],
+			]),
+		);
+		const { browser } = sandbox;
 
-    if (isTurbopack) {
-      await expect(browser).toDisplayRedbox(`
+		if (isTurbopack) {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "TypeError: Invalid URL",
@@ -1237,9 +1239,9 @@ describe('ReactRefreshLogBox app', () => {
            "Page app/page.js (2:3)",
          ],
        }
-      `)
-    } else {
-      await expect(browser).toDisplayRedbox(`
+      `);
+		} else {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "TypeError: Invalid URL",
@@ -1252,29 +1254,29 @@ describe('ReactRefreshLogBox app', () => {
            "Page app/page.js (2:3)",
          ],
        }
-      `)
-    }
-  })
+      `);
+		}
+	});
 
-  test('Server component errors should open up in fullscreen', async () => {
-    await using sandbox = await createSandbox(
-      next,
-      new Map([
-        // Start with error
-        [
-          'app/page.js',
-          outdent`
+	test('Server component errors should open up in fullscreen', async () => {
+		await using sandbox = await createSandbox(
+			next,
+			new Map([
+				// Start with error
+				[
+					'app/page.js',
+					outdent`
             export default function Page() {
               throw new Error('Server component error')
               return <p id="text">Hello world</p>
             }
           `,
-        ],
-      ])
-    )
-    const { session, browser } = sandbox
+				],
+			]),
+		);
+		const { session, browser } = sandbox;
 
-    await expect(browser).toDisplayRedbox(`
+		await expect(browser).toDisplayRedbox(`
      {
        "count": 1,
        "description": "Error: Server component error",
@@ -1287,34 +1289,34 @@ describe('ReactRefreshLogBox app', () => {
          "Page app/page.js (2:9)",
        ],
      }
-    `)
+    `);
 
-    // Remove error
-    await session.patch(
-      'app/page.js',
-      outdent`
+		// Remove error
+		await session.patch(
+			'app/page.js',
+			outdent`
         export default function Page() {
           return <p id="text">Hello world</p>
         }
-      `
-    )
-    expect(await browser.waitForElementByCss('#text').text()).toBe(
-      'Hello world'
-    )
-    await session.assertNoRedbox()
+      `,
+		);
+		expect(await browser.waitForElementByCss('#text').text()).toBe(
+			'Hello world',
+		);
+		await session.assertNoRedbox();
 
-    // Re-add error
-    await session.patch(
-      'app/page.js',
-      outdent`
+		// Re-add error
+		await session.patch(
+			'app/page.js',
+			outdent`
         export default function Page() {
           throw new Error('Server component error!')
           return <p id="text">Hello world</p>
         }
-      `
-    )
+      `,
+		);
 
-    await expect(browser).toDisplayRedbox(`
+		await expect(browser).toDisplayRedbox(`
      {
        "count": 1,
        "description": "Error: Server component error!",
@@ -1327,20 +1329,20 @@ describe('ReactRefreshLogBox app', () => {
          "Page app/page.js (2:9)",
        ],
      }
-    `)
-  })
+    `);
+	});
 
-  test('Import trace when module not found in layout', async () => {
-    await using sandbox = await createSandbox(
-      next,
+	test('Import trace when module not found in layout', async () => {
+		await using sandbox = await createSandbox(
+			next,
 
-      new Map([['app/module.js', `import "non-existing-module"`]])
-    )
-    const { browser, session } = sandbox
+			new Map([['app/module.js', `import "non-existing-module"`]]),
+		);
+		const { browser, session } = sandbox;
 
-    await session.patch(
-      'app/layout.js',
-      outdent`
+		await session.patch(
+			'app/layout.js',
+			outdent`
         import "./module"
 
         export default function RootLayout({ children }) {
@@ -1351,11 +1353,11 @@ describe('ReactRefreshLogBox app', () => {
             </html>
           )
         }
-      `
-    )
+      `,
+		);
 
-    if (isTurbopack) {
-      await expect(browser).toDisplayRedbox(`
+		if (isTurbopack) {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Module not found: Can't resolve 'non-existing-module'",
@@ -1367,9 +1369,9 @@ describe('ReactRefreshLogBox app', () => {
            | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
          "stack": [],
        }
-      `)
-    } else {
-      await expect(browser).toDisplayRedbox(`
+      `);
+		} else {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Module not found: Can't resolve 'non-existing-module'",
@@ -1381,22 +1383,22 @@ describe('ReactRefreshLogBox app', () => {
            | ^",
          "stack": [],
        }
-      `)
-    }
-  })
+      `);
+		}
+	});
 
-  test("Can't resolve @import in CSS file", async () => {
-    await using sandbox = await createSandbox(
-      next,
-      new Map([
-        ['app/styles1.css', '@import "./styles2.css"'],
-        ['app/styles2.css', '@import "./boom.css"'],
-      ])
-    )
-    const { browser, session } = sandbox
-    await session.patch(
-      'app/layout.js',
-      outdent`
+	test("Can't resolve @import in CSS file", async () => {
+		await using sandbox = await createSandbox(
+			next,
+			new Map([
+				['app/styles1.css', '@import "./styles2.css"'],
+				['app/styles2.css', '@import "./boom.css"'],
+			]),
+		);
+		const { browser, session } = sandbox;
+		await session.patch(
+			'app/layout.js',
+			outdent`
         import "./styles1.css"
 
         export default function RootLayout({ children }) {
@@ -1407,12 +1409,12 @@ describe('ReactRefreshLogBox app', () => {
             </html>
           )
         }
-      `
-    )
+      `,
+		);
 
-    // Wait for patch to apply and new error to show.
-    if (isTurbopack) {
-      await expect(browser).toDisplayRedbox(`
+		// Wait for patch to apply and new error to show.
+		if (isTurbopack) {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Module not found: Can't resolve './boom.css'",
@@ -1424,9 +1426,9 @@ describe('ReactRefreshLogBox app', () => {
            |  ^",
          "stack": [],
        }
-      `)
-    } else {
-      await expect(browser).toDisplayRedbox(`
+      `);
+		} else {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Module not found: Can't resolve './boom.css'",
@@ -1439,24 +1441,24 @@ describe('ReactRefreshLogBox app', () => {
        ./app/styles1.css",
          "stack": [],
        }
-      `)
-    }
-  })
+      `);
+		}
+	});
 
-  // TODO: The error overlay is not closed when restoring the working code.
-  for (const type of ['server' /* , 'client' */]) {
-    test(`${type} component can recover from error thrown in the module`, async () => {
-      await using sandbox = await createSandbox(next, undefined, '/' + type)
-      const { browser, session } = sandbox
+	// TODO: The error overlay is not closed when restoring the working code.
+	for (const type of ['server' /* , 'client' */]) {
+		test(`${type} component can recover from error thrown in the module`, async () => {
+			await using sandbox = await createSandbox(next, undefined, `/${type}`);
+			const { browser, session } = sandbox;
 
-      await next.patchFile('index.js', "throw new Error('module error')")
+			await next.patchFile('index.js', "throw new Error('module error')");
 
-      if (isTurbopack) {
-        // TODO(veil): Turbopack is flaky. Possibly related to https://linear.app/vercel/issue/NDX-920/turbopack-errors-after-hmr-have-no-stacktraces-in-affected-chunks
-        // Should use `await expect(browser).toDisplayRedbox()`
-        await session.assertHasRedbox()
-      } else {
-        await expect({ browser, next }).toDisplayRedbox(`
+			if (isTurbopack) {
+				// TODO(veil): Turbopack is flaky. Possibly related to https://linear.app/vercel/issue/NDX-920/turbopack-errors-after-hmr-have-no-stacktraces-in-affected-chunks
+				// Should use `await expect(browser).toDisplayRedbox()`
+				await session.assertHasRedbox();
+			} else {
+				await expect({ browser, next }).toDisplayRedbox(`
          {
            "count": 1,
            "description": "Error: module error",
@@ -1474,32 +1476,32 @@ describe('ReactRefreshLogBox app', () => {
              "<FIXME-next-dist-dir>",
            ],
          }
-        `)
-      }
+        `);
+			}
 
-      await next.patchFile(
-        'index.js',
-        'export default function Page() {return <p>hello world</p>}'
-      )
-      await session.assertNoRedbox()
-    })
-  }
+			await next.patchFile(
+				'index.js',
+				'export default function Page() {return <p>hello world</p>}',
+			);
+			await session.assertNoRedbox();
+		});
+	}
 
-  test('Should show error location for server actions in client component', async () => {
-    await using sandbox = await createSandbox(
-      next,
-      new Map([
-        [
-          'app/actions.ts',
-          `"use server";
+	test('Should show error location for server actions in client component', async () => {
+		await using sandbox = await createSandbox(
+			next,
+			new Map([
+				[
+					'app/actions.ts',
+					`"use server";
 
 export async function serverAction(a) {
   throw new Error("server action was here");
 }`,
-        ],
-        [
-          'app/page.js',
-          `"use client";
+				],
+				[
+					'app/page.js',
+					`"use client";
 import { serverAction } from "./actions";
 
 export default function Home() {
@@ -1511,13 +1513,13 @@ export default function Home() {
     </>
   );
 }`,
-        ],
-      ])
-    )
-    const { browser } = sandbox
-    await browser.elementByCss('#trigger-action').click()
+				],
+			]),
+		);
+		const { browser } = sandbox;
+		await browser.elementByCss('#trigger-action').click();
 
-    await expect(browser).toDisplayRedbox(`
+		await expect(browser).toDisplayRedbox(`
      {
        "count": 1,
        "description": "Error: server action was here",
@@ -1532,24 +1534,24 @@ export default function Home() {
          "Home app/page.js (7:7)",
        ],
      }
-    `)
-  })
+    `);
+	});
 
-  test('Should show error location for server actions in server component', async () => {
-    await using sandbox = await createSandbox(
-      next,
-      new Map([
-        [
-          'app/actions.ts',
-          `"use server";
+	test('Should show error location for server actions in server component', async () => {
+		await using sandbox = await createSandbox(
+			next,
+			new Map([
+				[
+					'app/actions.ts',
+					`"use server";
 
 export async function serverAction(a) {
   throw new Error("server action was here");
 }`,
-        ],
-        [
-          'app/page.js',
-          `import { serverAction } from "./actions";
+				],
+				[
+					'app/page.js',
+					`import { serverAction } from "./actions";
 
 export default function Home() {
   return (
@@ -1560,13 +1562,13 @@ export default function Home() {
     </>
   );
 }`,
-        ],
-      ])
-    )
-    const { browser } = sandbox
-    await browser.elementByCss('#trigger-action').click()
+				],
+			]),
+		);
+		const { browser } = sandbox;
+		await browser.elementByCss('#trigger-action').click();
 
-    await expect(browser).toDisplayRedbox(`
+		await expect(browser).toDisplayRedbox(`
      {
        "count": 1,
        "description": "Error: server action was here",
@@ -1581,37 +1583,37 @@ export default function Home() {
          "Home app/page.js (6:7)",
        ],
      }
-    `)
-  })
+    `);
+	});
 
-  test('should collapse bundler internal stack frames', async () => {
-    await using sandbox = await createSandbox(
-      next,
-      new Map([
-        [
-          'app/utils.ts',
-          `throw new Error('utils error')
+	test('should collapse bundler internal stack frames', async () => {
+		await using sandbox = await createSandbox(
+			next,
+			new Map([
+				[
+					'app/utils.ts',
+					`throw new Error('utils error')
 export function foo(){}
           `,
-        ],
-        [
-          'app/page.js',
-          `"use client";
+				],
+				[
+					'app/page.js',
+					`"use client";
 import { foo } from "./utils";
 
 export default function Home() {
   foo();
   return "hello";
 }`,
-        ],
-      ])
-    )
+				],
+			]),
+		);
 
-    const { browser } = sandbox
+		const { browser } = sandbox;
 
-    if (isTurbopack) {
-      // FIXME: display the sourcemapped stack frames
-      await expect(browser).toDisplayRedbox(`
+		if (isTurbopack) {
+			// FIXME: display the sourcemapped stack frames
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Error: utils error",
@@ -1625,10 +1627,10 @@ export default function Home() {
            "[project]/app/page.js [app-client] (ecmascript) app/page.js (2:1)",
          ],
        }
-      `)
-    } else {
-      // FIXME: Webpack stack frames are not source mapped
-      await expect(browser).toDisplayRedbox(`
+      `);
+		} else {
+			// FIXME: Webpack stack frames are not source mapped
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 2,
          "description": "Error: utils error",
@@ -1650,7 +1652,7 @@ export default function Home() {
            "<FIXME-next-dist-dir>",
          ],
        }
-      `)
-    }
-  })
-})
+      `);
+		}
+	});
+});

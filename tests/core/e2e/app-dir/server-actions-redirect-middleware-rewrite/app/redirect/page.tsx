@@ -1,3 +1,3 @@
 export default function Page() {
-  return <div id="redirected">Redirected</div>
+	return <div id="redirected">Redirected</div>;
 }

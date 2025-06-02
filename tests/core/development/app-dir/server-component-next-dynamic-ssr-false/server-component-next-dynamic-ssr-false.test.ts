@@ -1,28 +1,28 @@
-import { nextTestSetup } from 'e2e-utils'
+import { nextTestSetup } from 'e2e-utils';
 import {
-  assertHasRedbox,
-  getRedboxDescription,
-  getRedboxSource,
-} from 'next-test-utils'
+	assertHasRedbox,
+	getRedboxDescription,
+	getRedboxSource,
+} from 'next-test-utils';
 
 describe('app-dir - server-component-next-dynamic-ssr-false', () => {
-  const { next } = nextTestSetup({
-    files: __dirname,
-  })
+	const { next } = nextTestSetup({
+		files: __dirname,
+	});
 
-  it('should error when use dynamic ssr:false in server component', async () => {
-    const browser = await next.browser('/')
-    await assertHasRedbox(browser)
-    const redbox = {
-      description: await getRedboxDescription(browser),
-      source: await getRedboxSource(browser),
-    }
+	it('should error when use dynamic ssr:false in server component', async () => {
+		const browser = await next.browser('/');
+		await assertHasRedbox(browser);
+		const redbox = {
+			description: await getRedboxDescription(browser),
+			source: await getRedboxSource(browser),
+		};
 
-    if (process.env.TURBOPACK) {
-      expect(redbox.description).toMatchInlineSnapshot(
-        `"Ecmascript file had an error"`
-      )
-      expect(redbox.source).toMatchInlineSnapshot(`
+		if (process.env.TURBOPACK) {
+			expect(redbox.description).toMatchInlineSnapshot(
+				`"Ecmascript file had an error"`,
+			);
+			expect(redbox.source).toMatchInlineSnapshot(`
          "./app/page.js (3:23)
          Ecmascript file had an error
            1 | import dynamic from 'next/dynamic'
@@ -34,12 +34,12 @@ describe('app-dir - server-component-next-dynamic-ssr-false', () => {
            6 |   return <DynamicClient />
 
          \`ssr: false\` is not allowed with \`next/dynamic\` in Server Components. Please move it into a client component."
-        `)
-    } else {
-      expect(redbox.description).toMatchInlineSnapshot(
-        `"Error:   x \`ssr: false\` is not allowed with \`next/dynamic\` in Server Components. Please move it into a client component."`
-      )
-      expect(redbox.source).toMatchInlineSnapshot(`
+        `);
+		} else {
+			expect(redbox.description).toMatchInlineSnapshot(
+				`"Error:   x \`ssr: false\` is not allowed with \`next/dynamic\` in Server Components. Please move it into a client component."`,
+			);
+			expect(redbox.source).toMatchInlineSnapshot(`
          "./app/page.js
          Error:   x \`ssr: false\` is not allowed with \`next/dynamic\` in Server Components. Please move it into a client component.
             ,-[3:1]
@@ -51,7 +51,7 @@ describe('app-dir - server-component-next-dynamic-ssr-false', () => {
           5 | export default function Page() {
           6 |   return <DynamicClient />
             \`----"
-        `)
-    }
-  })
-})
+        `);
+		}
+	});
+});

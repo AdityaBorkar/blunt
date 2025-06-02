@@ -1,5 +1,5 @@
 module.exports = {
-  experimental: {
-    prerenderEarlyExit: false,
-  },
-}
+	experimental: {
+		prerenderEarlyExit: false,
+	},
+};

@@ -2,7 +2,7 @@
  * @type {import('next').NextConfig}
  */
 const nextConfig = {
-  logging: false,
-}
+	logging: false,
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

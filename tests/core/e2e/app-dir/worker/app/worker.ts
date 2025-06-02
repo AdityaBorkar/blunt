@@ -1,3 +1,3 @@
 import('./worker-dep').then((mod) => {
-  self.postMessage('worker.ts:' + mod.default)
-})
+	self.postMessage(`worker.ts:${mod.default}`);
+});

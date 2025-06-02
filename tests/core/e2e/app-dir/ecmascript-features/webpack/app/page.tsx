@@ -1,71 +1,72 @@
-'use client'
+'use client';
+
 // Test both server and client compilation of ECMAScript features.
-import { abc } from './export-as'
-import json from './file.json' with { type: 'json' }
+import { abc } from './export-as';
+import json from './file.json' with { type: 'json' };
 
 class ClassWithPrivate {
-  #privateField
-  #privateFieldWithInitializer = 11
+	#privateField;
+	#privateFieldWithInitializer = 11;
 
-  #privateMethod() {
-    this.#privateField = 10
-  }
+	#privateMethod() {
+		this.#privateField = 10;
+	}
 
-  static #privateStaticFieldWithInitializer = 12
+	static #privateStaticFieldWithInitializer = 12;
 
-  static #privateStaticMethod() {
-    return this.#privateStaticFieldWithInitializer
-  }
+	static #privateStaticMethod() {
+		return ClassWithPrivate.#privateStaticFieldWithInitializer;
+	}
 
-  constructor() {
-    this.#privateMethod()
-  }
+	constructor() {
+		this.#privateMethod();
+	}
 
-  getPrivateField() {
-    return this.#privateField
-  }
-  getPrivateFieldWithInitializer() {
-    return this.#privateFieldWithInitializer
-  }
-  getPrivateStaticFieldWithInitializer() {
-    return ClassWithPrivate.#privateStaticFieldWithInitializer
-  }
-  getPrivateStaticMethod() {
-    return ClassWithPrivate.#privateStaticMethod()
-  }
-  isPrivateMethodAvailable() {
-    return #privateField in this
-  }
+	getPrivateField() {
+		return this.#privateField;
+	}
+	getPrivateFieldWithInitializer() {
+		return this.#privateFieldWithInitializer;
+	}
+	getPrivateStaticFieldWithInitializer() {
+		return ClassWithPrivate.#privateStaticFieldWithInitializer;
+	}
+	getPrivateStaticMethod() {
+		return ClassWithPrivate.#privateStaticMethod();
+	}
+	isPrivateMethodAvailable() {
+		return #privateField in this;
+	}
 }
 
 // Not supported in Node.js yet.
 // let regex = /abc/v
 
 export default function Page() {
-  const instance = new ClassWithPrivate()
+	const instance = new ClassWithPrivate();
 
-  return (
-    <>
-      <h1>Ecmascript features test</h1>
-      <pre id="values-to-check">
-        {JSON.stringify(
-          {
-            privateField: instance.getPrivateField(),
-            privateFieldWithInitializer:
-              instance.getPrivateFieldWithInitializer(),
-            privateStaticFieldWithInitializer:
-              instance.getPrivateStaticFieldWithInitializer(),
-            privateStaticMethod: instance.getPrivateStaticMethod(),
-            privateMethodInThis: instance.isPrivateMethodAvailable(),
-            exportAs: abc,
-            importWith: json.message,
-            // Not supported in Node.js yet.
-            // regex: regex instanceof RegExp
-          },
-          null,
-          2
-        )}
-      </pre>
-    </>
-  )
+	return (
+		<>
+			<h1>Ecmascript features test</h1>
+			<pre id="values-to-check">
+				{JSON.stringify(
+					{
+						exportAs: abc,
+						importWith: json.message,
+						privateField: instance.getPrivateField(),
+						privateFieldWithInitializer:
+							instance.getPrivateFieldWithInitializer(),
+						privateMethodInThis: instance.isPrivateMethodAvailable(),
+						privateStaticFieldWithInitializer:
+							instance.getPrivateStaticFieldWithInitializer(),
+						privateStaticMethod: instance.getPrivateStaticMethod(),
+						// Not supported in Node.js yet.
+						// regex: regex instanceof RegExp
+					},
+					null,
+					2,
+				)}
+			</pre>
+		</>
+	);
 }

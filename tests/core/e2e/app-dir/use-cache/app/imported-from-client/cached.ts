@@ -1,21 +1,19 @@
-'use cache'
+'use cache';
 
 function getRandomValue() {
-  const v = Math.random()
-  console.log(v)
-  return v
+	const v = Math.random();
+	console.log(v);
+	return v;
 }
 
 export async function foo() {
-  return getRandomValue()
+	return getRandomValue();
 }
 
-export const bar = async function () {
-  return getRandomValue()
-}
+export const bar = async () => getRandomValue();
 
 const baz = async () => {
-  return getRandomValue()
-}
+	return getRandomValue();
+};
 
-export { baz }
+export { baz };

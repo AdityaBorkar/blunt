@@ -1,1 +1,1 @@
-export { default } from '../../../nodejs/interrupted/redirect-target/page'
+export { default } from '../../../nodejs/interrupted/redirect-target/page';

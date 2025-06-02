@@ -2,9 +2,9 @@
  * @type {import('next').NextConfig}
  */
 const nextConfig = {
-  images: {
-    dangerouslyAllowSVG: true,
-  },
-}
+	images: {
+		dangerouslyAllowSVG: true,
+	},
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

@@ -1,12 +1,11 @@
-import Link from 'next/link'
-import React from 'react'
+import Link from 'next/link';
 
 export default function Layout() {
-  return (
-    <div>
-      <Link prefetch={false} href="/parallel-prefetch-false/foo">
-        link
-      </Link>
-    </div>
-  )
+	return (
+		<div>
+			<Link href="/parallel-prefetch-false/foo" prefetch={false}>
+				link
+			</Link>
+		</div>
+	);
 }

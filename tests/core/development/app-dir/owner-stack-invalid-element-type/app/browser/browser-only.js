@@ -1,11 +1,11 @@
-'use client'
+'use client';
 
-import Foo from '../foo'
+import Foo from '../foo';
 
 export default function BrowserOnly() {
-  return (
-    <div>
-      <Foo />
-    </div>
-  )
+	return (
+		<div>
+			<Foo />
+		</div>
+	);
 }

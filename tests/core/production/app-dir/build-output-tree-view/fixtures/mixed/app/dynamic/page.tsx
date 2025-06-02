@@ -1,7 +1,7 @@
-import { headers } from 'next/headers'
+import { headers } from 'next/headers';
 
 export default async function Page() {
-  await headers()
+	await headers();
 
-  return <p>hello world</p>
+	return <p>hello world</p>;
 }

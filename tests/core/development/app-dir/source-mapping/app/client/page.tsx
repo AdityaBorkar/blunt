@@ -1,23 +1,24 @@
-'use client'
+'use client';
 
-import { Form } from '../form'
-import defaultAction1, { foo, bar, baz, qux } from '../actions1'
-import defaultAction2 from '../actions2'
-import defaultAction3 from '../actions3'
-import Link from 'next/link'
+import Link from 'next/link';
+
+import defaultAction1, { bar, baz, foo, qux } from '../actions1';
+import defaultAction2 from '../actions2';
+import defaultAction3 from '../actions3';
+import { Form } from '../form';
 
 export default function Page() {
-  return (
-    <main>
-      <h1>client component page</h1>
-      <Form id="form-1" action={defaultAction1} />
-      <Form id="form-2" action={defaultAction2} />
-      <Form id="form-3" action={defaultAction3} />
-      <Form id="form-4" action={foo} />
-      <Form id="form-5" action={bar} />
-      <Form id="form-6" action={baz} />
-      <Form id="form-7" action={qux} />
-      <Link href="/">server component page</Link>
-    </main>
-  )
+	return (
+		<main>
+			<h1>client component page</h1>
+			<Form action={defaultAction1} id="form-1" />
+			<Form action={defaultAction2} id="form-2" />
+			<Form action={defaultAction3} id="form-3" />
+			<Form action={foo} id="form-4" />
+			<Form action={bar} id="form-5" />
+			<Form action={baz} id="form-6" />
+			<Form action={qux} id="form-7" />
+			<Link href="/">server component page</Link>
+		</main>
+	);
 }

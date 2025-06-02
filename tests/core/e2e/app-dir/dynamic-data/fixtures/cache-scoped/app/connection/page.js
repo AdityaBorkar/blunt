@@ -1,16 +1,16 @@
-import { connection } from 'next/server'
-import { unstable_cache as cache } from 'next/cache'
+import { unstable_cache as cache } from 'next/cache';
+import { connection } from 'next/server';
 
-const cachedConnection = cache(async () => connection())
+const cachedConnection = cache(async () => connection());
 
-export default async function Page(props) {
-  await cachedConnection()
-  return (
-    <div>
-      <section>
-        This example uses `connection()` inside `unstable_cache` which should
-        cause the build to fail
-      </section>
-    </div>
-  )
+export default async function Page(_props) {
+	await cachedConnection();
+	return (
+		<div>
+			<section>
+				This example uses `connection()` inside `unstable_cache` which should
+				cause the build to fail
+			</section>
+		</div>
+	);
 }

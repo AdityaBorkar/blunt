@@ -1,1 +1,1 @@
-export default 'wrong'
+export default 'wrong';

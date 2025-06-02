@@ -1,3 +1,3 @@
 export default function Page() {
-  return 'page @foo'
+	return 'page @foo';
 }

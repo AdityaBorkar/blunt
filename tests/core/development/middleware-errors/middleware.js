@@ -1,3 +1,3 @@
 export default function () {
-  // placeholder for testing
+	// placeholder for testing
 }

@@ -1,13 +1,13 @@
-'use client'
+'use client';
 
-import './global.css'
+import './global.css';
 
 export default function GlobalError() {
-  return (
-    <html>
-      <body>
-        <h2>Error!</h2>
-      </body>
-    </html>
-  )
+	return (
+		<html>
+			<body>
+				<h2>Error!</h2>
+			</body>
+		</html>
+	);
 }

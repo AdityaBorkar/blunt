@@ -1,0 +1,71 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+# Blunt.js Project Overview
+
+## Project Vision & Aim
+Blunt.js is a **performance-first, feature-limited alternative to Next.js** designed to run on Bun with Biome tooling. The project aims to provide:
+
+- **Simplified React development** with essential features only
+- **Superior performance** through Bun's fast runtime and build system
+- **Modern tooling** with Biome for linting, formatting, and optimization
+- **Zero-config setup** with sensible defaults
+- **File-based routing** with trie-based routing optimization
+
+## Architecture Overview
+
+### Core Framework Structure
+- **Main Entry**: [blunt/index.ts](mdc:blunt/index.ts) - Framework entry point
+- **Server Implementation**: [blunt/server/](mdc:blunt/server) - Development and production servers
+- **CLI Tools**: [blunt/cli/](mdc:blunt/cli) - Command-line interface
+- **Type Definitions**: [blunt/types/](mdc:blunt/types) - TypeScript definitions
+- **Navigation**: [blunt/navigation/](mdc:blunt/navigation) - Routing system
+- **Forms**: [blunt/forms/](mdc:blunt/forms) - Form handling utilities
+- **Media**: [blunt/media/](mdc:blunt/media) - Asset management
+
+### Plugin Ecosystem
+- **Create Blunt App**: [plugins/create-blunt-app/](mdc:plugins/create-blunt-app) - Project scaffolding
+- **TypeScript Plugin**: [plugins/typescript/](mdc:plugins/typescript) - Enhanced TS support
+- **Biome Plugin**: [plugins/biome/](mdc:plugins/biome) - Code quality tools
+
+## Technology Stack
+
+### Runtime & Build Tools
+- **Bun**: Primary runtime and package manager
+- **TypeScript**: Primary language with strict type checking
+- **Biome**: Linting, formatting, and code quality
+
+### Framework Features (Current Status)
+✅ **Implemented**:
+- React with hooks support
+- React Router for navigation
+- React Query for data fetching
+- React Hook Form for form handling
+- Hot Module Replacement (HMR)
+- API Routes
+- File-based routing
+- Trie-based routing optimization
+
+❌ **Not Implemented** (by design for simplicity):
+- Server Actions
+- Server Components
+
+## Development Philosophy
+1. **Performance over features** - Only essential features included
+2. **Modern tooling** - Bun + Biome for optimal DX
+3. **Type safety** - Comprehensive TypeScript coverage
+4. **Zero configuration** - Works out of the box
+5. **Fast development** - HMR and instant builds via Bun
+
+## Monorepo Structure
+- **[blunt/](mdc:blunt)**: Core framework implementation
+- **[plugins/](mdc:plugins)**: Official plugins and tools
+- **[docs/](mdc:docs)**: Documentation and guides
+- **[tests/](mdc:tests)**: Comprehensive test suite (e2e, integration, unit)
+
+## Configuration Files
+- **[package.json](mdc:package.json)**: Monorepo workspace configuration
+- **[biome.jsonc](mdc:biome.jsonc)**: Code quality and formatting rules
+- **[bun.lock](mdc:bun.lock)**: Dependency lock file

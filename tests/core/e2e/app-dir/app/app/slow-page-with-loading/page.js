@@ -1,16 +1,16 @@
-import { use } from 'react'
+import { use } from 'react';
 
 async function getData() {
-  await new Promise((resolve) => setTimeout(resolve, 5000))
-  return {
-    message: 'hello from slow page',
-  }
+	await new Promise((resolve) => setTimeout(resolve, 5000));
+	return {
+		message: 'hello from slow page',
+	};
 }
 
-export default function SlowPage(props) {
-  const data = use(getData())
+export default function SlowPage(_props) {
+	const data = use(getData());
 
-  return <h1 id="slow-page-message">{data.message}</h1>
+	return <h1 id="slow-page-message">{data.message}</h1>;
 }
 
-export const runtime = 'edge'
+export const runtime = 'edge';

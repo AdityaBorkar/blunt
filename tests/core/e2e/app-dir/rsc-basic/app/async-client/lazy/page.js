@@ -1,7 +1,7 @@
-import { lazy } from 'react'
+import { lazy } from 'react';
 
-const Client = lazy(() => import('../client'))
+const Client = lazy(() => import('../client'));
 
 export default function Page() {
-  return <Client />
+	return <Client />;
 }

@@ -1,14 +1,14 @@
-import { RedirectForm } from '../../components/RedirectForm'
-import { redirectAction } from '../../actions'
+import { redirectAction } from '../../actions';
+import { RedirectForm } from '../../components/RedirectForm';
 
 export default function Page() {
-  return (
-    <dialog open>
-      <h1>Modal</h1>
+	return (
+		<dialog open>
+			<h1>Modal</h1>
 
-      <br />
+			<br />
 
-      <RedirectForm action={redirectAction} />
-    </dialog>
-  )
+			<RedirectForm action={redirectAction} />
+		</dialog>
+	);
 }

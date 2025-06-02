@@ -1,10 +1,10 @@
 module.exports = {
-  i18n: {
-    locales: ['en', 'id'],
-    defaultLocale: 'en',
-  },
-  experimental: {
-    clientRouterFilter: true,
-    clientRouterFilterRedirects: true,
-  },
-}
+	experimental: {
+		clientRouterFilter: true,
+		clientRouterFilterRedirects: true,
+	},
+	i18n: {
+		defaultLocale: 'en',
+		locales: ['en', 'id'],
+	},
+};

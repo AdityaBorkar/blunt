@@ -1,12 +1,12 @@
 export default function sitemap() {
-  return [
-    {
-      url: 'https://acme.com',
-      lastModified: new Date(),
-      changeFrequency: 'yearly',
-      priority: 1,
-    },
-  ]
+	return [
+		{
+			changeFrequency: 'yearly',
+			lastModified: new Date(),
+			priority: 1,
+			url: 'https://acme.com',
+		},
+	];
 }
 
-export const revalidate = 5
+export const revalidate = 5;

@@ -1,9 +1,9 @@
 export default function RootLayout({ children }) {
-  return (
-    <html>
-      <body>{children}</body>
-    </html>
-  )
+	return (
+		<html>
+			<body>{children}</body>
+		</html>
+	);
 }
 
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';

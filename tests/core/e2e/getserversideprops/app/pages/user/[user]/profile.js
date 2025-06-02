@@ -1,23 +1,22 @@
-import React from 'react'
-import Link from 'next/link'
+import Link from 'next/link';
 
 export async function getServerSideProps({ query }) {
-  return {
-    props: {
-      user: query.user,
-      time: (await import('perf_hooks')).performance.now(),
-    },
-  }
+	return {
+		props: {
+			time: (await import('node:perf_hooks')).performance.now(),
+			user: query.user,
+		},
+	};
 }
 
 export default ({ user, time }) => {
-  return (
-    <>
-      <p>User: {user}</p>
-      <span>time: {time}</span>
-      <Link href="/" id="home">
-        to home
-      </Link>
-    </>
-  )
-}
+	return (
+		<>
+			<p>User: {user}</p>
+			<span>time: {time}</span>
+			<Link href="/" id="home">
+				to home
+			</Link>
+		</>
+	);
+};

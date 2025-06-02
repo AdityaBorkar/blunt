@@ -1,5 +1,5 @@
 module.exports = {
-  typescript: {
-    tsconfigPath: 'web.tsconfig.json',
-  },
-}
+	typescript: {
+		tsconfigPath: 'web.tsconfig.json',
+	},
+};

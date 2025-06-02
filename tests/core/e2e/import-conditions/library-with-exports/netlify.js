@@ -1,1 +1,1 @@
-export const condition = 'netlify'
+export const condition = 'netlify';

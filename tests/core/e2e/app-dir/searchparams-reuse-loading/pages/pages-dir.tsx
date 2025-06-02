@@ -1,6 +1,6 @@
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
 
 export default function Page() {
-  const router = useRouter()
-  return <div>Hello from pages dir! {router.query.param}</div>
+	const router = useRouter();
+	return <div>Hello from pages dir! {router.query.param}</div>;
 }

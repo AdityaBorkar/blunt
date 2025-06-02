@@ -1,3 +1,3 @@
-export default (req, res) => {
-  res.send('Hello World')
-}
+export default (_req, res) => {
+	res.send('Hello World');
+};

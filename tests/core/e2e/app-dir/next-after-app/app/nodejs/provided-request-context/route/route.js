@@ -1,14 +1,15 @@
-import { after } from 'next/server'
-import { cliLog } from '../../../../utils/log'
+import { after } from 'next/server';
 
-export const runtime = 'nodejs'
-export const dynamic = 'force-dynamic'
+import { cliLog } from '../../../../utils/log';
+
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
-  const data = { message: 'Hello, world!' }
-  after(() => {
-    cliLog({ source: '[route handler] /provided-request-context/route' })
-  })
+	const data = { message: 'Hello, world!' };
+	after(() => {
+		cliLog({ source: '[route handler] /provided-request-context/route' });
+	});
 
-  return Response.json({ data })
+	return Response.json({ data });
 }

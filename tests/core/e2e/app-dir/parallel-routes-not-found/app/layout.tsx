@@ -1,20 +1,20 @@
 export default function Layout({
-  children,
-  slot,
+	children,
+	slot,
 }: {
-  children: React.ReactNode
-  slot: React.ReactNode
+	children: React.ReactNode;
+	slot: React.ReactNode;
 }) {
-  return (
-    <html lang="en" className="layout">
-      <body>
-        {children}
-        {slot}
-      </body>
-    </html>
-  )
+	return (
+		<html className="layout" lang="en">
+			<body>
+				{children}
+				{slot}
+			</body>
+		</html>
+	);
 }
 
 export const metadata = {
-  title: 'layout title',
-}
+	title: 'layout title',
+};

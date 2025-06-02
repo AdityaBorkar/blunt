@@ -1,7 +1,7 @@
-import { NextApiHandler } from 'next'
+import type { NextApiHandler } from 'next';
 
-const AsyncApiEndpoint: NextApiHandler = async (req, res) => {
-  res.status(200).json({ code: 'ok' })
-}
+const AsyncApiEndpoint: NextApiHandler = async (_req, res) => {
+	res.status(200).json({ code: 'ok' });
+};
 
-export default AsyncApiEndpoint
+export default AsyncApiEndpoint;

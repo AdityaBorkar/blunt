@@ -1,24 +1,24 @@
-'use client'
-import { use } from 'react'
+'use client';
 
-import Link from 'next/link'
+import Link from 'next/link';
+import { use } from 'react';
 
 export default function Page(props) {
-  const params = use(props.params)
-  return (
-    <>
-      <p id="page">/dynamic-no-gen-params</p>
-      <p id="params">{JSON.stringify(params)}</p>
+	const params = use(props.params);
+	return (
+		<>
+			<p id="page">/dynamic-no-gen-params</p>
+			<p id="params">{JSON.stringify(params)}</p>
 
-      <Link href="/dynamic-no-gen-params/second" id="dynamic-no-params-again">
-        /dynamic-no-gen-params/second
-      </Link>
-      <br />
+			<Link href="/dynamic-no-gen-params/second" id="dynamic-no-params-again">
+				/dynamic-no-gen-params/second
+			</Link>
+			<br />
 
-      <Link href="/blog/styfle" id="to-blog">
-        /blog/styfle
-      </Link>
-      <br />
-    </>
-  )
+			<Link href="/blog/styfle" id="to-blog">
+				/blog/styfle
+			</Link>
+			<br />
+		</>
+	);
 }

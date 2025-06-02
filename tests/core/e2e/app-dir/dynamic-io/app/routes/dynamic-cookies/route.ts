@@ -1,16 +1,15 @@
-import type { NextRequest } from 'next/server'
+import { cookies } from 'next/headers';
+import type { NextRequest } from 'next/server';
 
-import { cookies } from 'next/headers'
+import { getSentinelValue } from '../../getSentinelValue';
 
-import { getSentinelValue } from '../../getSentinelValue'
-
-export async function GET(request: NextRequest) {
-  const sentinel = (await cookies()).get('x-sentinel')
-  return new Response(
-    JSON.stringify({
-      value: getSentinelValue(),
-      type: 'cookies',
-      'x-sentinel': sentinel,
-    })
-  )
+export async function GET(_request: NextRequest) {
+	const sentinel = (await cookies()).get('x-sentinel');
+	return new Response(
+		JSON.stringify({
+			type: 'cookies',
+			value: getSentinelValue(),
+			'x-sentinel': sentinel,
+		}),
+	);
 }

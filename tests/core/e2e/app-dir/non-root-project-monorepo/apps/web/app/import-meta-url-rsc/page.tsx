@@ -1,5 +1,5 @@
-const text = import.meta.url
+const text = import.meta.url;
 
 export default function Page() {
-  return <p>{text}</p>
+	return <p>{text}</p>;
 }

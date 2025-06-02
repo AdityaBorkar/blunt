@@ -1,5 +1,5 @@
-import { cookies } from 'next/headers'
+import { cookies } from 'next/headers';
 export default async function Home() {
-  await cookies()
-  return null
+	await cookies();
+	return null;
 }

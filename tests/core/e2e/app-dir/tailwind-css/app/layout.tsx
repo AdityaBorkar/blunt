@@ -1,10 +1,11 @@
-import 'tailwindcss/tailwind.css'
-import { ReactNode } from 'react'
+import 'tailwindcss/tailwind.css';
+
+import type { ReactNode } from 'react';
 
 export default function Root({ children }: { children: ReactNode }) {
-  return (
-    <html>
-      <body>{children}</body>
-    </html>
-  )
+	return (
+		<html>
+			<body>{children}</body>
+		</html>
+	);
 }

@@ -1,26 +1,26 @@
-import { use } from 'react'
+import { use } from 'react';
 
-import '../styles/global.css'
-import './style.css'
+import '../styles/global.css';
+import './style.css';
 
-export const revalidate = 0
-export const preferredRegion = 'sfo1'
+export const revalidate = 0;
+export const preferredRegion = 'sfo1';
 
 async function getData() {
-  return {
-    world: 'world',
-  }
+	return {
+		world: 'world',
+	};
 }
 
 export default function Root({ children }) {
-  const { world } = use(getData())
+	const { world } = use(getData());
 
-  return (
-    <html className="this-is-the-document-html">
-      <head>
-        <title>{`hello ${world}`}</title>
-      </head>
-      <body className="this-is-the-document-body">{children}</body>
-    </html>
-  )
+	return (
+		<html className="this-is-the-document-html">
+			<head>
+				<title>{`hello ${world}`}</title>
+			</head>
+			<body className="this-is-the-document-body">{children}</body>
+		</html>
+	);
 }

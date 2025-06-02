@@ -4,9 +4,9 @@
 // we need to match the slot to a route that returns null to close the modal.
 
 export default function ModalCartCatchAll() {
-  return (
-    <div id="cart-modal-catch-all">
-      <p>Cart Catch All</p>
-    </div>
-  )
+	return (
+		<div id="cart-modal-catch-all">
+			<p>Cart Catch All</p>
+		</div>
+	);
 }

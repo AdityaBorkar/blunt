@@ -1,20 +1,21 @@
-import type { MetadataRoute } from 'next'
-import { getSentinelValue } from '../sentinel'
-import { setTimeout } from 'timers/promises'
+import { setTimeout } from 'node:timers/promises';
+import type { MetadataRoute } from 'next';
+
+import { getSentinelValue } from '../sentinel';
 
 export async function generateSitemaps() {
-  return [{ id: 0 }, { id: 1 }]
+	return [{ id: 0 }, { id: 1 }];
 }
 
 export default async function sitemap({
-  id,
+	id,
 }: {
-  id: number
+	id: number;
 }): Promise<MetadataRoute.Sitemap> {
-  'use cache'
+	'use cache';
 
-  // Simulate I/O
-  await setTimeout(100)
+	// Simulate I/O
+	await setTimeout(100);
 
-  return [{ url: `https://acme.com/${id}?sentinel=${getSentinelValue()}` }]
+	return [{ url: `https://acme.com/${id}?sentinel=${getSentinelValue()}` }];
 }

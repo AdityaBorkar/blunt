@@ -1,1 +1,1 @@
-exports.commonjs = 'commonjs'
+exports.commonjs = 'commonjs';

@@ -1,8 +1,8 @@
-'use client'
+'use client';
 
-import { foo, bar, baz } from './cached'
-import { Form } from '../form'
+import { Form } from '../form';
+import { bar, baz, foo } from './cached';
 
 export default function Page() {
-  return <Form foo={foo} bar={bar} baz={baz} />
+	return <Form bar={bar} baz={baz} foo={foo} />;
 }

@@ -1,7 +1,7 @@
-export default function Page(props) {
-  return (
-    <>
-      <p>hello from pages/blog/[slug]</p>
-    </>
-  )
+export default function Page(_props) {
+	return (
+		<>
+			<p>hello from pages/blog/[slug]</p>
+		</>
+	);
 }

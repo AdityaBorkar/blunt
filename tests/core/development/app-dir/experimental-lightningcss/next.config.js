@@ -2,9 +2,9 @@
  * @type {import('next').NextConfig}
  */
 const nextConfig = {
-  experimental: {
-    useLightningcss: true,
-  },
-}
+	experimental: {
+		useLightningcss: true,
+	},
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

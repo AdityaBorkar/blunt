@@ -1,13 +1,13 @@
-import Link from 'next/link'
-import dynamic from 'next/dynamic'
+import dynamic from 'next/dynamic';
+import Link from 'next/link';
 
-const DynamicComponent = dynamic(() => import('../components/hello'))
+const DynamicComponent = dynamic(() => import('../components/hello'));
 
 export default () => (
-  <div id="dynamic-imports-page">
-    <div>
-      <Link href="/">Go Back</Link>
-    </div>
-    <DynamicComponent />
-  </div>
-)
+	<div id="dynamic-imports-page">
+		<div>
+			<Link href="/">Go Back</Link>
+		</div>
+		<DynamicComponent />
+	</div>
+);

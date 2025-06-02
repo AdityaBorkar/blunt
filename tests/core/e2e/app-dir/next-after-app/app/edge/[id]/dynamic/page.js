@@ -1,1 +1,1 @@
-export { default } from '../../../nodejs/[id]/dynamic/page'
+export { default } from '../../../nodejs/[id]/dynamic/page';

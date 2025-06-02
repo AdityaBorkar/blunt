@@ -1,18 +1,18 @@
 export function getStaticProps() {
-  return {
-    props: {
-      now: Date.now(),
-    },
-  }
+	return {
+		props: {
+			now: Date.now(),
+		},
+	};
 }
 
 export function getStaticPaths() {
-  return {
-    paths: ['/first'],
-    fallback: 'blocking',
-  }
+	return {
+		fallback: 'blocking',
+		paths: ['/first'],
+	};
 }
 
 export default function Page() {
-  return <p>catch-all page</p>
+	return <p>catch-all page</p>;
 }

@@ -1,36 +1,37 @@
-'use client'
+'use client';
 
-import { useContext } from 'react'
-import { action, redirectAction } from './actions'
-import { DataContext } from './context'
+import { useContext } from 'react';
+
+import { action, redirectAction } from './actions';
+import { DataContext } from './context';
 
 export function Button() {
-  const { setData } = useContext(DataContext)
-  const handleClick = async () => {
-    await new Promise((res) => setTimeout(res, 1000))
+	const { setData } = useContext(DataContext);
+	const handleClick = async () => {
+		await new Promise((res) => setTimeout(res, 1000));
 
-    const result = await action()
+		const result = await action();
 
-    setData(result)
-  }
+		setData(result);
+	};
 
-  const handleRedirect = async () => {
-    await new Promise((res) => setTimeout(res, 1000))
+	const handleRedirect = async () => {
+		await new Promise((res) => setTimeout(res, 1000));
 
-    const result = await redirectAction()
+		const result = await redirectAction();
 
-    setData(result)
-  }
+		setData(result);
+	};
 
-  return (
-    <>
-      <button onClick={handleClick} id="run-action">
-        Run Action
-      </button>
+	return (
+		<>
+			<button id="run-action" onClick={handleClick}>
+				Run Action
+			</button>
 
-      <button onClick={handleRedirect} id="run-action-redirect">
-        Run Redirect
-      </button>
-    </>
-  )
+			<button id="run-action-redirect" onClick={handleRedirect}>
+				Run Redirect
+			</button>
+		</>
+	);
 }

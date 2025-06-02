@@ -1,3 +1,3 @@
 export default function Page() {
-  return <p>before edit</p>
+	return <p>before edit</p>;
 }

@@ -1,11 +1,11 @@
-const list = [1, 2, 3]
+const list = [1, 2, 3];
 
 export default function Page() {
-  return (
-    <div>
-      {list.map((item, index) => (
-        <span>{item}</span>
-      ))}
-    </div>
-  )
+	return (
+		<div>
+			{list.map((item, _index) => (
+				<span>{item}</span>
+			))}
+		</div>
+	);
 }

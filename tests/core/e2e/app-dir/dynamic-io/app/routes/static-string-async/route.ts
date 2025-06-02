@@ -1,11 +1,11 @@
-import type { NextRequest } from 'next/server'
+import type { NextRequest } from 'next/server';
 
-import { getSentinelValue } from '../../getSentinelValue'
+import { getSentinelValue } from '../../getSentinelValue';
 
-export async function GET(request: NextRequest) {
-  const response = JSON.stringify({
-    value: getSentinelValue(),
-    message: 'string response',
-  })
-  return new Response(response)
+export async function GET(_request: NextRequest) {
+	const response = JSON.stringify({
+		message: 'string response',
+		value: getSentinelValue(),
+	});
+	return new Response(response);
 }

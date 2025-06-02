@@ -2,10 +2,10 @@
 // Then change the `sources` entry in the sourcemap to `["custom://[badhost]/app/bad-sourcemap/page.js"]`
 // tsc compile errors can be ignored
 
-import { connection } from 'next/server'
+import { connection } from 'next/server';
 
 export default async function Page() {
-  await connection()
-  console.error(new Error('Boom!'))
-  return <p>Hello, Dave!</p>
+	await connection();
+	console.error(new Error('Boom!'));
+	return <p>Hello, Dave!</p>;
 }

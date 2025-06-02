@@ -1,9 +1,9 @@
-import rsc from './file.test-file'
+import rsc from './file.test-file';
 
 export default function Page() {
-  return (
-    <div>
-      <p>{rsc}</p>
-    </div>
-  )
+	return (
+		<div>
+			<p>{rsc}</p>
+		</div>
+	);
 }

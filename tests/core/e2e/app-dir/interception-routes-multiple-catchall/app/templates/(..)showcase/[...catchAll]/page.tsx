@@ -1,13 +1,12 @@
-import Link from 'next/link'
-import React from 'react'
+import Link from 'next/link';
 
 async function Page() {
-  return (
-    <div id="intercepting-page">
-      Showcase Intercepting Page
-      <Link href="/templates/single">Single</Link>
-    </div>
-  )
+	return (
+		<div id="intercepting-page">
+			Showcase Intercepting Page
+			<Link href="/templates/single">Single</Link>
+		</div>
+	);
 }
 
-export default Page
+export default Page;

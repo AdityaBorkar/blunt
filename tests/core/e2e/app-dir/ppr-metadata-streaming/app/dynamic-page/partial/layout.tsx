@@ -1,10 +1,10 @@
-import { Suspense } from 'react'
+import { Suspense } from 'react';
 
 export default function Layout({ children }) {
-  return (
-    <div data-date={Number(new Date())}>
-      <h2>Suspenseful Layout</h2>
-      <Suspense>{children}</Suspense>
-    </div>
-  )
+	return (
+		<div data-date={Date.now()}>
+			<h2>Suspenseful Layout</h2>
+			<Suspense>{children}</Suspense>
+		</div>
+	);
 }

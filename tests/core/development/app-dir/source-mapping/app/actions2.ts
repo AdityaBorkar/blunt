@@ -1,5 +1,5 @@
-'use server'
+'use server';
 
 export default async function () {
-  return 'default exported anonymous function expression'
+	return 'default exported anonymous function expression';
 }

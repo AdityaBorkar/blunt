@@ -2,10 +2,10 @@
  * @type {import('next').NextConfig}
  */
 const nextConfig = {
-  experimental: {
-    ppr: true,
-    dynamicIO: true,
-  },
-}
+	experimental: {
+		dynamicIO: true,
+		ppr: true,
+	},
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

@@ -1,21 +1,21 @@
-import { createSandbox } from 'development-sandbox'
-import { FileRef, nextTestSetup } from 'e2e-utils'
-import path from 'path'
-import { outdent } from 'outdent'
+import path from 'node:path';
+import { createSandbox } from 'development-sandbox';
+import { FileRef, nextTestSetup } from 'e2e-utils';
+import { outdent } from 'outdent';
 
 describe('ReactRefreshLogBox app', () => {
-  const { isTurbopack, next } = nextTestSetup({
-    files: new FileRef(path.join(__dirname, 'fixtures', 'default-template')),
-    skipStart: true,
-  })
+	const { isTurbopack, next } = nextTestSetup({
+		files: new FileRef(path.join(__dirname, 'fixtures', 'default-template')),
+		skipStart: true,
+	});
 
-  test('server-side only compilation errors', async () => {
-    await using sandbox = await createSandbox(next)
-    const { browser, session } = sandbox
+	test('server-side only compilation errors', async () => {
+		await using sandbox = await createSandbox(next);
+		const { browser, session } = sandbox;
 
-    await session.patch(
-      'app/page.js',
-      outdent`
+		await session.patch(
+			'app/page.js',
+			outdent`
         'use client'
         import myLibrary from 'my-non-existent-library'
         export async function getStaticProps() {
@@ -28,11 +28,11 @@ describe('ReactRefreshLogBox app', () => {
         export default function Hello(props) {
           return <h1>{props.result}</h1>
         }
-      `
-    )
+      `,
+		);
 
-    if (isTurbopack) {
-      await expect(browser).toDisplayRedbox(`
+		if (isTurbopack) {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Ecmascript file had an error",
@@ -44,9 +44,9 @@ describe('ReactRefreshLogBox app', () => {
            |                       ^^^^^^^^^^^^^^",
          "stack": [],
        }
-      `)
-    } else {
-      await expect(browser).toDisplayRedbox(`
+      `);
+		} else {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Error:   x "getStaticProps" is not supported in app/. Read more: https://nextjs.org/docs/app/building-your-application/data-fetching",
@@ -69,7 +69,7 @@ describe('ReactRefreshLogBox app', () => {
        ./app/page.js",
          "stack": [],
        }
-      `)
-    }
-  })
-})
+      `);
+		}
+	});
+});

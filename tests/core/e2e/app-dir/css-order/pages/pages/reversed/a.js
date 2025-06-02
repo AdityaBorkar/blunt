@@ -1,1 +1,1 @@
-export { default } from '../../../app/reversed/a/page'
+export { default } from '../../../app/reversed/a/page';

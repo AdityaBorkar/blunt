@@ -1,8 +1,8 @@
 function logError() {
-  console.error(new Error('Boom'))
+	console.error(new Error('Boom'));
 }
 
 export default function Page() {
-  logError()
-  return null
+	logError();
+	return null;
 }

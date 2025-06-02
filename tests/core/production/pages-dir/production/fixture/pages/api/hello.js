@@ -1,3 +1,3 @@
-export default (req, res) => {
-  res.end('API hello works')
-}
+export default (_req, res) => {
+	res.end('API hello works');
+};

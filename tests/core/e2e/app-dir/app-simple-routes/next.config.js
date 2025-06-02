@@ -2,9 +2,9 @@
  * @type {import('next').NextConfig}
  */
 const config = {
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-}
+	typescript: {
+		ignoreBuildErrors: true,
+	},
+};
 
-module.exports = config
+module.exports = config;

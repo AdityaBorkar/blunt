@@ -1,1 +1,1 @@
-export default 'BROWSER'
+export default 'BROWSER';

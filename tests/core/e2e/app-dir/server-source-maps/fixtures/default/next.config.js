@@ -2,11 +2,11 @@
  * @type {import('next').NextConfig}
  */
 const nextConfig = {
-  experimental: {
-    dynamicIO: true,
-    serverSourceMaps: true,
-  },
-  serverExternalPackages: ['external-pkg'],
-}
+	experimental: {
+		dynamicIO: true,
+		serverSourceMaps: true,
+	},
+	serverExternalPackages: ['external-pkg'],
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

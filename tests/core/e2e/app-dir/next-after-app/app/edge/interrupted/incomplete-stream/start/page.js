@@ -1,1 +1,1 @@
-export { default } from '../../../../nodejs/interrupted/incomplete-stream/start/page'
+export { default } from '../../../../nodejs/interrupted/incomplete-stream/start/page';

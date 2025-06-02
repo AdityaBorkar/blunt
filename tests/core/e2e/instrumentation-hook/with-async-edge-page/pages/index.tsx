@@ -1,15 +1,15 @@
 export default function Page({ finished }) {
-  return <p>{`Edge - finished: ${finished}`}</p>
+	return <p>{`Edge - finished: ${finished}`}</p>;
 }
 
 export function getServerSideProps() {
-  return {
-    props: {
-      finished: Boolean(globalThis.instrumentationFinished),
-    },
-  }
+	return {
+		props: {
+			finished: Boolean(globalThis.instrumentationFinished),
+		},
+	};
 }
 
 export const config = {
-  runtime: 'experimental-edge',
-}
+	runtime: 'experimental-edge',
+};

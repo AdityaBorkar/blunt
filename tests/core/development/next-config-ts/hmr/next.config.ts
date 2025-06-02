@@ -1,7 +1,7 @@
-import type { NextConfig } from 'next'
+import type { NextConfig } from 'next';
 
 const nextConfig = {
-  // target
-} satisfies NextConfig
+	// target
+} satisfies NextConfig;
 
-export default nextConfig
+export default nextConfig;

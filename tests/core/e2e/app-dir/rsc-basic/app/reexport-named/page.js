@@ -1,3 +1,3 @@
-import { PageComponent } from './client'
+import { PageComponent } from './client';
 
-export default PageComponent
+export default PageComponent;

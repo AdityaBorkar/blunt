@@ -1,37 +1,39 @@
-import { nextTestSetup } from 'e2e-utils'
+import { nextTestSetup } from 'e2e-utils';
+
 import {
-  getActionsRoutesStateByRuntime,
-  markLayoutAsEdge,
-} from '../_testing/utils'
+	getActionsRoutesStateByRuntime,
+	markLayoutAsEdge,
+} from '../_testing/utils';
 
 // TODO: revisit when we have a better side-effect free transform approach for server action
-;(process.env.TURBOPACK ? describe : describe.skip)(
-  'actions-tree-shaking - basic',
-  () => {
-    const { next } = nextTestSetup({
-      files: __dirname,
-    })
 
-    if (process.env.TEST_EDGE) {
-      markLayoutAsEdge(next)
-    }
+(process.env.TURBOPACK ? describe : describe.skip)(
+	'actions-tree-shaking - basic',
+	() => {
+		const { next } = nextTestSetup({
+			files: __dirname,
+		});
 
-    it('should not have the unused action in the manifest', async () => {
-      const actionsRoutesState = await getActionsRoutesStateByRuntime(next)
+		if (process.env.TEST_EDGE) {
+			markLayoutAsEdge(next);
+		}
 
-      expect(actionsRoutesState).toMatchObject({
-        // only one server layer action
-        'app/server/page': {
-          rsc: 3,
-        },
-        // only one browser layer action
-        'app/client/page': {
-          'action-browser': 1,
-        },
-        'app/inline/page': {
-          rsc: 1,
-        },
-      })
-    })
-  }
-)
+		it('should not have the unused action in the manifest', async () => {
+			const actionsRoutesState = await getActionsRoutesStateByRuntime(next);
+
+			expect(actionsRoutesState).toMatchObject({
+				// only one browser layer action
+				'app/client/page': {
+					'action-browser': 1,
+				},
+				'app/inline/page': {
+					rsc: 1,
+				},
+				// only one server layer action
+				'app/server/page': {
+					rsc: 3,
+				},
+			});
+		});
+	},
+);

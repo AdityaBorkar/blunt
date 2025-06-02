@@ -1,1 +1,1 @@
-export const condition = 'edge-light'
+export const condition = 'edge-light';

@@ -1,32 +1,35 @@
-import { InferGetServerSidePropsType, GetServerSidePropsContext } from 'next'
+import type {
+	GetServerSidePropsContext,
+	InferGetServerSidePropsType,
+} from 'next';
 
 type Post = {
-  author: string
-  content: string
-}
+	author: string;
+	content: string;
+};
 
 export const getServerSideProps = async (
-  ctx: GetServerSidePropsContext<{ post: string }>
+	_ctx: GetServerSidePropsContext<{ post: string }>,
 ) => {
-  const res = await fetch(`https://.../posts/`)
-  const posts: Post[] = await res.json()
-  return {
-    props: {
-      posts,
-    },
-  }
-}
+	const res = await fetch(`https://.../posts/`);
+	const posts: Post[] = await res.json();
+	return {
+		props: {
+			posts,
+		},
+	};
+};
 
 function Blog({
-  posts,
+	posts,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  return (
-    <>
-      {posts.map((post) => (
-        <div key={post.author}>{post.author}</div>
-      ))}
-    </>
-  )
+	return (
+		<>
+			{posts.map((post) => (
+				<div key={post.author}>{post.author}</div>
+			))}
+		</>
+	);
 }
 
-export default Blog
+export default Blog;

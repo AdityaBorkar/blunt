@@ -1,5 +1,5 @@
-import myMessage from 'internal-pkg'
+import myMessage from 'internal-pkg';
 
 export default function Page() {
-  return <h1>{myMessage}</h1>
+	return <h1>{myMessage}</h1>;
 }

@@ -1,28 +1,28 @@
-'use client'
+'use client';
 
-import { useActionState } from 'react'
+import { useActionState } from 'react';
 
 export function Form({
-  echoAction,
+	echoAction,
 }: {
-  echoAction: (value: string) => Promise<string>
+	echoAction: (value: string) => Promise<string>;
 }) {
-  let [result, formAction] = useActionState(
-    () => echoAction(new Array(100000).fill('あ').join('')),
-    null
-  )
+	const [result, formAction] = useActionState(
+		() => echoAction(new Array(100000).fill('あ').join('')),
+		null,
+	);
 
-  let aCount = result ? result.match(/あ/g)!.length : 0
+	const aCount = result ? result.match(/あ/g)?.length : 0;
 
-  return (
-    <form action={formAction}>
-      {result && (
-        <p>
-          Server responded with {aCount} あ characters and{' '}
-          {result.length - aCount} � characters.
-        </p>
-      )}
-      <button>Submit</button>
-    </form>
-  )
+	return (
+		<form action={formAction}>
+			{result && (
+				<p>
+					Server responded with {aCount} あ characters and{' '}
+					{result.length - aCount} � characters.
+				</p>
+			)}
+			<button>Submit</button>
+		</form>
+	);
 }

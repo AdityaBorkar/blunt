@@ -1,5 +1,5 @@
 module.exports = {
-  compiler: {
-    reactRemoveProperties: true,
-  },
-}
+	compiler: {
+		reactRemoveProperties: true,
+	},
+};

@@ -1,27 +1,27 @@
-import React from 'react'
-import Link from 'next/link'
+import Link from 'next/link';
+import React from 'react';
 
-let counter = 0
+let counter = 0;
 
 export default class Counter extends React.Component {
-  increaseCounter() {
-    counter++
-    this.forceUpdate()
-  }
+	increaseCounter() {
+		counter++;
+		this.forceUpdate();
+	}
 
-  render() {
-    return (
-      <div id="counter-page">
-        <div>
-          <Link href="/" id="go-back">
-            Go Back
-          </Link>
-        </div>
-        <p>Counter: {counter}</p>
-        <button id="counter-increase" onClick={() => this.increaseCounter()}>
-          Increase
-        </button>
-      </div>
-    )
-  }
+	render() {
+		return (
+			<div id="counter-page">
+				<div>
+					<Link href="/" id="go-back">
+						Go Back
+					</Link>
+				</div>
+				<p>Counter: {counter}</p>
+				<button id="counter-increase" onClick={() => this.increaseCounter()}>
+					Increase
+				</button>
+			</div>
+		);
+	}
 }

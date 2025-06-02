@@ -1,9 +1,9 @@
-import styles from './animation.module.css'
+import styles from './animation.module.css';
 
 export default function Page() {
-  return (
-    <h1 id="animated" className={styles['animated-item']}>
-      Animated
-    </h1>
-  )
+	return (
+		<h1 className={styles['animated-item']} id="animated">
+			Animated
+		</h1>
+	);
 }

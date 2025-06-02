@@ -1,10 +1,10 @@
-import { nanoid } from 'nanoid'
+import { nanoid } from 'nanoid';
 
 export default async function Page({ searchParams }) {
-  return (
-    <>
-      <h1>Parameter: {(await searchParams).search}</h1>
-      <p id="nanoid">{nanoid()}</p>
-    </>
-  )
+	return (
+		<>
+			<h1>Parameter: {(await searchParams).search}</h1>
+			<p id="nanoid">{nanoid()}</p>
+		</>
+	);
 }

@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-import './global.scss'
+import './global.scss';
 
 export default function Layout({ children }) {
-  return <>{children}</>
+	return <>{children}</>;
 }

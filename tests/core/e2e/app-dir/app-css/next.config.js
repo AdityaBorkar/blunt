@@ -1,12 +1,12 @@
-const mdx = require('@next/mdx')
+const mdx = require('@next/mdx');
 
-const withMDX = mdx()
+const withMDX = mdx();
 
 const nextConfig = {
-  pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
-  experimental: {
-    mdxRs: true,
-  },
-}
+	experimental: {
+		mdxRs: true,
+	},
+	pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
+};
 
-module.exports = withMDX(nextConfig)
+module.exports = withMDX(nextConfig);

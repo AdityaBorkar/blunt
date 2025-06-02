@@ -1,27 +1,27 @@
 // @ts-ignore avoid ts errors during manual testing
-import { type NextInstance } from 'e2e-utils'
+import type { NextInstance } from 'e2e-utils';
 
 async function getActionsMappingByRuntime(
-  next: NextInstance,
-  runtime: 'node' | 'edge'
+	next: NextInstance,
+	runtime: 'node' | 'edge',
 ) {
-  const manifest = JSON.parse(
-    await next.readFile('.next/server/server-reference-manifest.json')
-  )
+	const manifest = JSON.parse(
+		await next.readFile('.next/server/server-reference-manifest.json'),
+	);
 
-  return manifest[runtime]
+	return manifest[runtime];
 }
 
 export function markLayoutAsEdge(next: NextInstance) {
-  beforeAll(async () => {
-    await next.stop()
-    const layoutContent = await next.readFile('app/layout.js')
-    await next.patchFile(
-      'app/layout.js',
-      layoutContent + `\nexport const runtime = 'edge'`
-    )
-    await next.start()
-  })
+	beforeAll(async () => {
+		await next.stop();
+		const layoutContent = await next.readFile('app/layout.js');
+		await next.patchFile(
+			'app/layout.js',
+			`${layoutContent}\nexport const runtime = 'edge'`,
+		);
+		await next.start();
+	});
 }
 
 /* 
@@ -30,50 +30,50 @@ export function markLayoutAsEdge(next: NextInstance) {
 }
 */
 type ActionsMappingOfRuntime = {
-  [actionId: string]: {
-    workers: {
-      [route: string]: string
-    }
-    layer: {
-      [route: string]: string
-    }
-  }
-}
+	[actionId: string]: {
+		workers: {
+			[route: string]: string;
+		};
+		layer: {
+			[route: string]: string;
+		};
+	};
+};
 type ActionState = {
-  [route: string]: {
-    [layer: string]: number
-  }
-}
+	[route: string]: {
+		[layer: string]: number;
+	};
+};
 
 function getActionsRoutesState(
-  actionsMappingOfRuntime: ActionsMappingOfRuntime
+	actionsMappingOfRuntime: ActionsMappingOfRuntime,
 ): ActionState {
-  const state: ActionState = {}
-  Object.keys(actionsMappingOfRuntime).forEach((actionId) => {
-    const action = actionsMappingOfRuntime[actionId]
-    const routePaths = Object.keys(action.workers)
+	const state: ActionState = {};
+	Object.keys(actionsMappingOfRuntime).forEach((actionId) => {
+		const action = actionsMappingOfRuntime[actionId];
+		const routePaths = Object.keys(action.workers);
 
-    routePaths.forEach((routePath) => {
-      if (!state[routePath]) {
-        state[routePath] = {}
-      }
-      const layer = action.layer[routePath]
+		routePaths.forEach((routePath) => {
+			if (!state[routePath]) {
+				state[routePath] = {};
+			}
+			const layer = action.layer[routePath];
 
-      if (!state[routePath][layer]) {
-        state[routePath][layer] = 0
-      }
+			if (!state[routePath][layer]) {
+				state[routePath][layer] = 0;
+			}
 
-      state[routePath][layer]++
-    })
-  })
+			state[routePath][layer]++;
+		});
+	});
 
-  return state
+	return state;
 }
 
 export async function getActionsRoutesStateByRuntime(next: NextInstance) {
-  const actionsMappingOfRuntime = await getActionsMappingByRuntime(
-    next,
-    process.env.TEST_EDGE ? 'edge' : 'node'
-  )
-  return getActionsRoutesState(actionsMappingOfRuntime)
+	const actionsMappingOfRuntime = await getActionsMappingByRuntime(
+		next,
+		process.env.TEST_EDGE ? 'edge' : 'node',
+	);
+	return getActionsRoutesState(actionsMappingOfRuntime);
 }

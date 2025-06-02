@@ -1,14 +1,14 @@
-'use server'
+'use server';
 
-import { unstable_expirePath } from 'next/cache'
+import { unstable_expirePath } from 'next/cache';
 
-let x = 0
+let x = 0;
 
 export async function inc() {
-  ++x
-  unstable_expirePath('/shared')
+	++x;
+	unstable_expirePath('/shared');
 }
 
 export async function get() {
-  return x
+	return x;
 }

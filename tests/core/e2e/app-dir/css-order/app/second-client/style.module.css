@@ -1,4 +1,4 @@
 .name {
-  composes: base from '../base.module.css';
-  color: rgb(255, 128, 0);
+	composes: base from "../base.module.css";
+	color: rgb(255, 128, 0);
 }

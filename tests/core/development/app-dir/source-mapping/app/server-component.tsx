@@ -1,5 +1,5 @@
 export function ServerComponent() {
-  console.warn('foo')
+	console.warn('foo');
 
-  return <h1>server component</h1>
+	return <h1>server component</h1>;
 }

@@ -1,15 +1,15 @@
-'use client'
+'use client';
 
-import { useEffect } from 'react'
+import { useEffect } from 'react';
 
 export default function Page() {
-  useEffect(() => {
-    throw new Error('runtime error')
-  }, [])
+	useEffect(() => {
+		throw new Error('runtime error');
+	}, []);
 
-  return (
-    <p>
-      sneaky <p>very sneaky</p>
-    </p>
-  )
+	return (
+		<p>
+			sneaky <p>very sneaky</p>
+		</p>
+	);
 }

@@ -1,3 +1,3 @@
 export default function Page() {
-  return 'default no-children'
+	return 'default no-children';
 }

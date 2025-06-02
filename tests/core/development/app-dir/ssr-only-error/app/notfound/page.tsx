@@ -1,7 +1,7 @@
-import { notFound } from 'next/navigation'
+import { notFound } from 'next/navigation';
 
 export default async function Home() {
-  notFound()
+	notFound();
 }
 
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';

@@ -1,13 +1,13 @@
-'use client'
+'use client';
 
-import { foo } from '../actions'
+import { foo } from '../actions';
 
 export default function Page() {
-  return (
-    <form action={foo}>
-      <button type="submit" id="submit">
-        Submit
-      </button>
-    </form>
-  )
+	return (
+		<form action={foo}>
+			<button id="submit" type="submit">
+				Submit
+			</button>
+		</form>
+	);
 }

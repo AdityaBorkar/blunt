@@ -1,6 +1,6 @@
-import { Foo } from './lib'
+import { Foo } from './lib';
 export default function Page() {
-  return <Foo />
+	return <Foo />;
 }
 
-export const dynamic = 'error'
+export const dynamic = 'error';

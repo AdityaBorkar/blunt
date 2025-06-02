@@ -1,8 +1,8 @@
 /** @type {import("next").NextConfig} */
 const nextConfig = {
-  experimental: {
-    prerenderEarlyExit: false,
-  },
-}
+	experimental: {
+		prerenderEarlyExit: false,
+	},
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

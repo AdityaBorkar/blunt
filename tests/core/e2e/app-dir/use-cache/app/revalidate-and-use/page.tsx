@@ -1,47 +1,50 @@
-import { revalidatePath, revalidateTag, unstable_cacheTag } from 'next/cache'
-import { Form } from './form'
-import { connection } from 'next/server'
+import { revalidatePath, revalidateTag, unstable_cacheTag } from 'next/cache';
+import { connection } from 'next/server';
+
+import { Form } from './form';
 
 async function fetchCachedValue() {
-  return fetch('https://next-data-api-endpoint.vercel.app/api/random', {
-    next: { tags: ['revalidate-and-use'], revalidate: false },
-  }).then((res) => res.text())
+	return fetch('https://next-data-api-endpoint.vercel.app/api/random', {
+		next: { revalidate: false, tags: ['revalidate-and-use'] },
+	}).then((res) => res.text());
 }
 
 async function getCachedValue() {
-  'use cache'
-  unstable_cacheTag('revalidate-and-use')
-  return Math.random()
+	'use cache';
+	unstable_cacheTag('revalidate-and-use');
+	return Math.random();
 }
 
 export default async function Page() {
-  // Make the page dynamic, as we don't want to deal with ISR in this scenario.
-  await connection()
+	// Make the page dynamic, as we don't want to deal with ISR in this scenario.
+	await connection();
 
-  return (
-    <Form
-      revalidateAction={async (type: 'tag' | 'path') => {
-        'use server'
+	return (
+		<Form
+			initialValues={
+				await Promise.all([
+					getCachedValue(),
+					getCachedValue(),
+					fetchCachedValue(),
+				])
+			}
+			revalidateAction={async (type: 'tag' | 'path') => {
+				'use server';
 
-        const initialCachedValue = await getCachedValue()
+				const initialCachedValue = await getCachedValue();
 
-        if (type === 'tag') {
-          revalidateTag('revalidate-and-use')
-        } else {
-          revalidatePath('/revalidate-and-use')
-        }
+				if (type === 'tag') {
+					revalidateTag('revalidate-and-use');
+				} else {
+					revalidatePath('/revalidate-and-use');
+				}
 
-        return Promise.all([
-          initialCachedValue,
-          getCachedValue(),
-          fetchCachedValue(),
-        ])
-      }}
-      initialValues={await Promise.all([
-        getCachedValue(),
-        getCachedValue(),
-        fetchCachedValue(),
-      ])}
-    />
-  )
+				return Promise.all([
+					initialCachedValue,
+					getCachedValue(),
+					fetchCachedValue(),
+				]);
+			}}
+		/>
+	);
 }

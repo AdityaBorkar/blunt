@@ -1,11 +1,11 @@
-'use client'
+'use client';
 
-import { useRef } from 'react'
-import { useServerInsertedHTML } from 'next/navigation'
+import { useServerInsertedHTML } from 'next/navigation';
+import { useRef } from 'react';
 
 export function ServerHtml() {
-  const ref = useRef(0)
-  useServerInsertedHTML(() => (
-    <meta name="server-html" content={ref.current++} />
-  ))
+	const ref = useRef(0);
+	useServerInsertedHTML(() => (
+		<meta content={ref.current++} name="server-html" />
+	));
 }

@@ -1,15 +1,16 @@
-'use client'
+'use client';
 
-import './global.css'
-import styles from './styles.module.css'
+import './global.css';
+
+import styles from './styles.module.css';
 
 export default function Page() {
-  return (
-    <main>
-      <p id="global">Hello World</p>
-      <p id="module" className={styles.module}>
-        Hello World
-      </p>
-    </main>
-  )
+	return (
+		<main>
+			<p id="global">Hello World</p>
+			<p className={styles.module} id="module">
+				Hello World
+			</p>
+		</main>
+	);
 }

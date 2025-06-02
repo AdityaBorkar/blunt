@@ -1,12 +1,12 @@
 export function getServerSideProps({ res }) {
-  res.statusCode = 200
-  res.end('hello from gssp')
+	res.statusCode = 200;
+	res.end('hello from gssp');
 
-  return {
-    props: {},
-  }
+	return {
+		props: {},
+	};
 }
 
-export default function Page(props) {
-  return <p>early request end</p>
+export default function Page(_props) {
+	return <p>early request end</p>;
 }

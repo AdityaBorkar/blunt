@@ -3,20 +3,20 @@
  */
 
 const nextConfig = {
-  assetPrefix: '/assets',
-  rewrites() {
-    return {
-      beforeFiles: [
-        {
-          source: '/assets/:path*',
-          destination: '/:path*',
-        },
-      ],
-    }
-  },
-  experimental: {
-    ppr: true,
-  },
-}
+	assetPrefix: '/assets',
+	experimental: {
+		ppr: true,
+	},
+	rewrites() {
+		return {
+			beforeFiles: [
+				{
+					destination: '/:path*',
+					source: '/assets/:path*',
+				},
+			],
+		};
+	},
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

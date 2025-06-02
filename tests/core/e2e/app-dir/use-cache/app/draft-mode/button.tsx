@@ -1,17 +1,17 @@
-'use client'
+'use client';
 
-import React from 'react'
-import { useFormStatus } from 'react-dom'
+import type React from 'react';
+import { useFormStatus } from 'react-dom';
 
 export function Button({
-  children,
-  id,
+	children,
+	id,
 }: React.PropsWithChildren<{ id: string }>) {
-  const { pending } = useFormStatus()
+	const { pending } = useFormStatus();
 
-  return (
-    <button id={id} disabled={pending}>
-      {children}
-    </button>
-  )
+	return (
+		<button disabled={pending} id={id}>
+			{children}
+		</button>
+	);
 }

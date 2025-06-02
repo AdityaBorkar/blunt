@@ -1,9 +1,9 @@
-const path = require('path')
+const path = require('node:path');
 
 module.exports = {
-  output: 'standalone',
-  experimental: {
-    // pnpm virtual-store-dir is outside the app directory
-    outputFileTracingRoot: path.resolve(__dirname, '../'),
-  },
-}
+	experimental: {
+		// pnpm virtual-store-dir is outside the app directory
+		outputFileTracingRoot: path.resolve(__dirname, '../'),
+	},
+	output: 'standalone',
+};

@@ -1,17 +1,17 @@
-let didError = false
+let didError = false;
 
 export async function GET() {
-  errorFirstTime()
-  return new Response(
-    'This page errors during the prospective render during build. It errors on the first render during dev.'
-  )
+	errorFirstTime();
+	return new Response(
+		'This page errors during the prospective render during build. It errors on the first render during dev.',
+	);
 }
 
 function errorFirstTime() {
-  if (!didError) {
-    didError = true
-    // eslint-disable-next-line no-throw-literal
-    throw undefined
-  }
-  return null
+	if (!didError) {
+		didError = true;
+		// eslint-disable-next-line no-throw-literal
+		throw undefined;
+	}
+	return null;
 }

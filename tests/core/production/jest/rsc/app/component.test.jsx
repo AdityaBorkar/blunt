@@ -1,12 +1,13 @@
 /**
  * @jest-environment jsdom
  */
-import { fireEvent, render, screen } from '@testing-library/react'
-import Component from './component'
+import { fireEvent, render, screen } from '@testing-library/react';
+
+import Component from './component';
 
 it('works with client-only code', () => {
-  render(<Component />)
-  expect(screen.getByRole('heading')).toHaveTextContent('0')
-  fireEvent.click(screen.getByRole('button'))
-  expect(screen.getByRole('heading')).toHaveTextContent('1')
-})
+	render(<Component />);
+	expect(screen.getByRole('heading')).toHaveTextContent('0');
+	fireEvent.click(screen.getByRole('button'));
+	expect(screen.getByRole('heading')).toHaveTextContent('1');
+});

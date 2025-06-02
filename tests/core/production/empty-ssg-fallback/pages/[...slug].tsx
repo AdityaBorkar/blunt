@@ -1,15 +1,15 @@
 export const getStaticPaths = async () => {
-  return {
-    paths: [],
-    fallback: 'blocking',
-  }
-}
+	return {
+		fallback: 'blocking',
+		paths: [],
+	};
+};
 export const getStaticProps = async () => {
-  return {
-    notFound: true,
-  }
-}
+	return {
+		notFound: true,
+	};
+};
 
 export default function Page() {
-  return <p>slug</p>
+	return <p>slug</p>;
 }

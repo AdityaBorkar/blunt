@@ -1,7 +1,7 @@
-import { NextResponse } from 'next/server'
+import { NextResponse } from 'next/server';
 
 export async function GET() {
-  console.log('Route Handler invoked')
+	console.log('Route Handler invoked');
 
-  return NextResponse.json({ time: Date.now() })
+	return NextResponse.json({ time: Date.now() });
 }

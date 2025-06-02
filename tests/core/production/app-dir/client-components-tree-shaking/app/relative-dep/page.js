@@ -1,5 +1,5 @@
-import { ImportedComp } from './client-relative-dep'
+import { ImportedComp } from './client-relative-dep';
 
 export default function Page() {
-  return <ImportedComp />
+	return <ImportedComp />;
 }

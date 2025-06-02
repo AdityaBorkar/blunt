@@ -1,5 +1,5 @@
-import { ErrorComponent } from '../component'
+import { ErrorComponent } from '../component';
 
-export default () => <ErrorComponent name="server-node" />
+export default () => <ErrorComponent name="server-node" />;
 
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';

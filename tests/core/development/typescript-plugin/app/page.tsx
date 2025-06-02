@@ -1,11 +1,11 @@
-import { ClientComponent } from './client'
+import { ClientComponent } from './client';
 
-const noop = () => {}
+const noop = () => {};
 
 export default function Page() {
-  return (
-    <>
-      <ClientComponent unknown={noop} unknownAction={noop} />
-    </>
-  )
+	return (
+		<>
+			<ClientComponent unknown={noop} unknownAction={noop} />
+		</>
+	);
 }

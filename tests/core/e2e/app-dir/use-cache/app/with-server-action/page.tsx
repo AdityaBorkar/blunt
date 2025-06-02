@@ -1,17 +1,17 @@
-import { Form } from './form'
+import { Form } from './form';
 
 async function action() {
-  'use server'
+	'use server';
 
-  return 'result'
+	return 'result';
 }
 
 export default async function Page() {
-  'use cache'
+	'use cache';
 
-  return (
-    <Form action={action}>
-      <p>{Date.now()}</p>
-    </Form>
-  )
+	return (
+		<Form action={action}>
+			<p>{Date.now()}</p>
+		</Form>
+	);
 }

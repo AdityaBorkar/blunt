@@ -1,19 +1,19 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 
 export default function ClientPage() {
-  const [bad, setBad] = useState(false)
+	const [bad, setBad] = useState(false);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setBad(true)
-    })
-  }, [])
+	useEffect(() => {
+		setTimeout(() => {
+			setBad(true);
+		});
+	}, []);
 
-  if (bad) {
-    throw Error('nested error')
-  }
+	if (bad) {
+		throw Error('nested error');
+	}
 
-  return <p>client page</p>
+	return <p>client page</p>;
 }

@@ -1,26 +1,28 @@
 /* eslint-env jest */
-import { transform } from 'next/dist/build/swc'
-import path from 'path'
-import fsp from 'fs/promises'
+/* eslint-env jest */
+
+import fsp from 'node:fs/promises';
+import path from 'node:path';
+import { transform } from 'next/dist/build/swc';
 
 const swc = async (code) => {
-  let output = await transform(code)
-  return output.code
-}
+	const output = await transform(code);
+	return output.code;
+};
 
-const trim = (s) => s.join('\n').trim().replace(/^\s+/gm, '')
+const trim = (s) => s.join('\n').trim().replace(/^\s+/gm, '');
 
 describe('next/swc', () => {
-  describe('hook_optimizer', () => {
-    it('should leave alone array destructuring of hooks', async () => {
-      const output = await swc(
-        trim`
+	describe('hook_optimizer', () => {
+		it('should leave alone array destructuring of hooks', async () => {
+			const output = await swc(
+				trim`
         import { useState } from 'react';
         const [count, setCount] = useState(0);
-      `
-      )
+      `,
+			);
 
-      expect(output).toMatchInlineSnapshot(`
+			expect(output).toMatchInlineSnapshot(`
         "function _array_like_to_array(arr, len) {
             if (len == null || len > arr.length) len = arr.length;
             for(var i = 0, arr2 = new Array(len); i < len; i++)arr2[i] = arr[i];
@@ -70,18 +72,18 @@ describe('next/swc', () => {
         import { useState } from 'react';
         var _useState = _sliced_to_array(useState(0), 2), count = _useState[0], setCount = _useState[1];
         "
-      `)
-    })
+      `);
+		});
 
-    it('should leave alone array spread of hooks', async () => {
-      const output = await swc(
-        trim`
+		it('should leave alone array spread of hooks', async () => {
+			const output = await swc(
+				trim`
         import { useState } from 'react';
         const [...copy] = useState(0);
-      `
-      )
+      `,
+			);
 
-      expect(output).toMatchInlineSnapshot(`
+			expect(output).toMatchInlineSnapshot(`
         "function _array_like_to_array(arr, len) {
             if (len == null || len > arr.length) len = arr.length;
             for(var i = 0, arr2 = new Array(len); i < len; i++)arr2[i] = arr[i];
@@ -110,23 +112,23 @@ describe('next/swc', () => {
         import { useState } from 'react';
         var _useState = _to_array(useState(0)), copy = _useState.slice(0);
         "
-      `)
-    })
-  })
+      `);
+		});
+	});
 
-  describe('private env replacement', () => {
-    it('__NEXT_REQUIRED_NODE_VERSION_RANGE is replaced', async () => {
-      const pkgDir = path.dirname(require.resolve('next/package.json'))
-      const nextEntryContent = await fsp.readFile(
-        path.join(pkgDir, 'dist/bin/next'),
-        'utf8'
-      )
-      expect(nextEntryContent).not.toContain(
-        '__NEXT_REQUIRED_NODE_VERSION_RANGE'
-      )
-      expect(nextEntryContent).toMatch(
-        /For Next.js, Node.js version "\$\{"\^\d+\.\d+\.\d* \|\| \^\d+\.\d+\.\d* \|\| >= \d+\.\d+\.\d*"\}" is required./
-      )
-    })
-  })
-})
+	describe('private env replacement', () => {
+		it('__NEXT_REQUIRED_NODE_VERSION_RANGE is replaced', async () => {
+			const pkgDir = path.dirname(require.resolve('next/package.json'));
+			const nextEntryContent = await fsp.readFile(
+				path.join(pkgDir, 'dist/bin/next'),
+				'utf8',
+			);
+			expect(nextEntryContent).not.toContain(
+				'__NEXT_REQUIRED_NODE_VERSION_RANGE',
+			);
+			expect(nextEntryContent).toMatch(
+				/For Next.js, Node.js version "\$\{"\^\d+\.\d+\.\d* \|\| \^\d+\.\d+\.\d* \|\| >= \d+\.\d+\.\d*"\}" is required./,
+			);
+		});
+	});
+});

@@ -1,5 +1,5 @@
 module.exports = {
-  experimental: {
-    viewTransition: true,
-  },
-}
+	experimental: {
+		viewTransition: true,
+	},
+};

@@ -1,3 +1,3 @@
-export { default } from '../../lazy/page'
+export { default } from '../../lazy/page';
 
-export const runtime = 'edge'
+export const runtime = 'edge';

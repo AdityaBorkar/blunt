@@ -1,5 +1,5 @@
-import Page from '../fetch'
+import Page from '../fetch';
 
 export default function UnstableCacheFetchNoStore() {
-  return <Page cache="no-cache" />
+	return <Page cache="no-cache" />;
 }

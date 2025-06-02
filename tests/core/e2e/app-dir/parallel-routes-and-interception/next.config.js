@@ -2,20 +2,20 @@
  * @type {import('next').NextConfig}
  */
 const nextConfig = {
-  async rewrites() {
-    return {
-      beforeFiles: [
-        {
-          source: '/foo',
-          destination: '/en/foo',
-        },
-        {
-          source: '/photos',
-          destination: '/en/photos',
-        },
-      ],
-    }
-  },
-}
+	async rewrites() {
+		return {
+			beforeFiles: [
+				{
+					destination: '/en/foo',
+					source: '/foo',
+				},
+				{
+					destination: '/en/photos',
+					source: '/photos',
+				},
+			],
+		};
+	},
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

@@ -1,8 +1,8 @@
 export default async function Page({
-  params,
+	params,
 }: {
-  params: Promise<{ ids: string[] }>
+	params: Promise<{ ids: string[] }>;
 }) {
-  const { ids } = await params
-  return <div>Intercepted Modal Page. Id: {ids}</div>
+	const { ids } = await params;
+	return <div>Intercepted Modal Page. Id: {ids}</div>;
 }

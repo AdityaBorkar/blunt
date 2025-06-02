@@ -1,1 +1,1 @@
-export const condition = 'browser'
+export const condition = 'browser';

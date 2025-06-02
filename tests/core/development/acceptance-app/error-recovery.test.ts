@@ -1,23 +1,25 @@
 /* eslint-env jest */
-import { createSandbox } from 'development-sandbox'
-import { FileRef, nextTestSetup } from 'e2e-utils'
-import { check } from 'next-test-utils'
-import path from 'path'
-import { outdent } from 'outdent'
+/* eslint-env jest */
+
+import path from 'node:path';
+import { createSandbox } from 'development-sandbox';
+import { FileRef, nextTestSetup } from 'e2e-utils';
+import { check } from 'next-test-utils';
+import { outdent } from 'outdent';
 
 describe('Error recovery app', () => {
-  const { next, isTurbopack } = nextTestSetup({
-    files: new FileRef(path.join(__dirname, 'fixtures', 'default-template')),
-    skipStart: true,
-  })
+	const { next, isTurbopack } = nextTestSetup({
+		files: new FileRef(path.join(__dirname, 'fixtures', 'default-template')),
+		skipStart: true,
+	});
 
-  test('can recover from a syntax error without losing state', async () => {
-    await using sandbox = await createSandbox(next)
-    const { browser, session } = sandbox
+	test('can recover from a syntax error without losing state', async () => {
+		await using sandbox = await createSandbox(next);
+		const { browser, session } = sandbox;
 
-    await session.patch(
-      'index.js',
-      outdent`
+		await session.patch(
+			'index.js',
+			outdent`
         import { useCallback, useState } from 'react'
 
         export default function Index() {
@@ -30,18 +32,18 @@ describe('Error recovery app', () => {
             </main>
           )
         }
-      `
-    )
+      `,
+		);
 
-    await session.evaluate(() => document.querySelector('button').click())
-    expect(
-      await session.evaluate(() => document.querySelector('p').textContent)
-    ).toBe('1')
+		await session.evaluate(() => document.querySelector('button').click());
+		expect(
+			await session.evaluate(() => document.querySelector('p').textContent),
+		).toBe('1');
 
-    await session.patch('index.js', `export default () => <div/`)
+		await session.patch('index.js', `export default () => <div/`);
 
-    if (isTurbopack) {
-      await expect(browser).toDisplayRedbox(`
+		if (isTurbopack) {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Parsing ecmascript source code failed",
@@ -53,9 +55,9 @@ describe('Error recovery app', () => {
            |                           ^",
          "stack": [],
        }
-      `)
-    } else {
-      await expect(browser).toDisplayRedbox(`
+      `);
+		} else {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Error:   x Unexpected eof",
@@ -73,12 +75,12 @@ describe('Error recovery app', () => {
        ./app/page.js",
          "stack": [],
        }
-      `)
-    }
+      `);
+		}
 
-    await session.patch(
-      'index.js',
-      outdent`
+		await session.patch(
+			'index.js',
+			outdent`
         import { useCallback, useState } from 'react'
 
         export default function Index() {
@@ -91,31 +93,31 @@ describe('Error recovery app', () => {
             </main>
           )
         }
-      `
-    )
+      `,
+		);
 
-    await session.assertNoRedbox()
+		await session.assertNoRedbox();
 
-    await check(
-      () => session.evaluate(() => document.querySelector('p').textContent),
-      /Count: 1/
-    )
-  })
+		await check(
+			() => session.evaluate(() => document.querySelector('p').textContent),
+			/Count: 1/,
+		);
+	});
 
-  test('server component can recover from syntax error', async () => {
-    const type = 'server'
-    await using sandbox = await createSandbox(next, undefined, '/' + type)
-    const { browser, session } = sandbox
-    // Add syntax error
-    await session.patch(
-      `app/${type}/page.js`,
-      outdent`
+	test('server component can recover from syntax error', async () => {
+		const type = 'server';
+		await using sandbox = await createSandbox(next, undefined, `/${type}`);
+		const { browser, session } = sandbox;
+		// Add syntax error
+		await session.patch(
+			`app/${type}/page.js`,
+			outdent`
           export default function Page() {
             return <p>Hello world</p>
-        `
-    )
-    if (isTurbopack) {
-      await expect(browser).toDisplayRedbox(`
+        `,
+		);
+		if (isTurbopack) {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Parsing ecmascript source code failed",
@@ -127,9 +129,9 @@ describe('Error recovery app', () => {
            |                           ^",
          "stack": [],
        }
-      `)
-    } else {
-      await expect(browser).toDisplayRedbox(`
+      `);
+		} else {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Error:   x Expected '}', got '<eof>'",
@@ -148,40 +150,40 @@ describe('Error recovery app', () => {
        ./app/server/page.js",
          "stack": [],
        }
-      `)
-    }
+      `);
+		}
 
-    // Fix syntax error
-    await session.patch(
-      `app/${type}/page.js`,
-      outdent`
+		// Fix syntax error
+		await session.patch(
+			`app/${type}/page.js`,
+			outdent`
           export default function Page() {
             return <p>Hello world 2</p>
           }
-        `
-    )
+        `,
+		);
 
-    await check(
-      () => session.evaluate(() => document.querySelector('p').textContent),
-      'Hello world 2'
-    )
-  })
+		await check(
+			() => session.evaluate(() => document.querySelector('p').textContent),
+			'Hello world 2',
+		);
+	});
 
-  test('client component can recover from syntax error', async () => {
-    const type = 'client'
-    await using sandbox = await createSandbox(next, undefined, '/' + type)
-    const { browser, session } = sandbox
-    // Add syntax error
-    await session.patch(
-      `app/${type}/page.js`,
-      outdent`
+	test('client component can recover from syntax error', async () => {
+		const type = 'client';
+		await using sandbox = await createSandbox(next, undefined, `/${type}`);
+		const { browser, session } = sandbox;
+		// Add syntax error
+		await session.patch(
+			`app/${type}/page.js`,
+			outdent`
           export default function Page() {
             return <p>Hello world</p>
-        `
-    )
+        `,
+		);
 
-    if (isTurbopack) {
-      await expect(browser).toDisplayRedbox(`
+		if (isTurbopack) {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Parsing ecmascript source code failed",
@@ -193,9 +195,9 @@ describe('Error recovery app', () => {
            |                           ^",
          "stack": [],
        }
-      `)
-    } else {
-      await expect(browser).toDisplayRedbox(`
+      `);
+		} else {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Error:   x Expected '}', got '<eof>'",
@@ -214,32 +216,32 @@ describe('Error recovery app', () => {
        ./app/client/page.js",
          "stack": [],
        }
-      `)
-    }
+      `);
+		}
 
-    // Fix syntax error
-    await session.patch(
-      `app/${type}/page.js`,
-      outdent`
+		// Fix syntax error
+		await session.patch(
+			`app/${type}/page.js`,
+			outdent`
           export default function Page() {
             return <p>Hello world 2</p>
           }
-        `
-    )
+        `,
+		);
 
-    await check(
-      () => session.evaluate(() => document.querySelector('p').textContent),
-      'Hello world 2'
-    )
-  })
+		await check(
+			() => session.evaluate(() => document.querySelector('p').textContent),
+			'Hello world 2',
+		);
+	});
 
-  test('can recover from a event handler error', async () => {
-    await using sandbox = await createSandbox(next)
-    const { browser, session } = sandbox
+	test('can recover from a event handler error', async () => {
+		await using sandbox = await createSandbox(next);
+		const { browser, session } = sandbox;
 
-    await session.patch(
-      'index.js',
-      outdent`
+		await session.patch(
+			'index.js',
+			outdent`
         import { useCallback, useState } from 'react'
 
         export default function Index() {
@@ -255,19 +257,19 @@ describe('Error recovery app', () => {
             </main>
           )
         }
-      `
-    )
+      `,
+		);
 
-    expect(
-      await session.evaluate(() => document.querySelector('p').textContent)
-    ).toBe('0')
-    await session.evaluate(() => document.querySelector('button').click())
-    expect(
-      await session.evaluate(() => document.querySelector('p').textContent)
-    ).toBe('1')
+		expect(
+			await session.evaluate(() => document.querySelector('p').textContent),
+		).toBe('0');
+		await session.evaluate(() => document.querySelector('button').click());
+		expect(
+			await session.evaluate(() => document.querySelector('p').textContent),
+		).toBe('1');
 
-    if (isTurbopack) {
-      await expect(browser).toDisplayCollapsedRedbox(`
+		if (isTurbopack) {
+			await expect(browser).toDisplayCollapsedRedbox(`
        {
          "count": 1,
          "description": "Error: oops",
@@ -285,10 +287,10 @@ describe('Error recovery app', () => {
            "Page index.js (10:6)",
          ],
        }
-      `)
-    } else {
-      // TODO(veil): Location of Page should be app/page.js
-      await expect(browser).toDisplayCollapsedRedbox(`
+      `);
+		} else {
+			// TODO(veil): Location of Page should be app/page.js
+			await expect(browser).toDisplayCollapsedRedbox(`
        {
          "count": 1,
          "description": "Error: oops",
@@ -306,12 +308,12 @@ describe('Error recovery app', () => {
            "Page app/page.js (4:10)",
          ],
        }
-      `)
-    }
+      `);
+		}
 
-    await session.patch(
-      'index.js',
-      outdent`
+		await session.patch(
+			'index.js',
+			outdent`
         import { useCallback, useState } from 'react'
 
         export default function Index() {
@@ -324,41 +326,41 @@ describe('Error recovery app', () => {
             </main>
           )
         }
-      `
-    )
+      `,
+		);
 
-    await session.assertNoRedbox()
-    expect(await session.hasErrorToast()).toBe(false)
+		await session.assertNoRedbox();
+		expect(await session.hasErrorToast()).toBe(false);
 
-    expect(
-      await session.evaluate(() => document.querySelector('p').textContent)
-    ).toBe('Count: 1')
-    await session.evaluate(() => document.querySelector('button').click())
-    expect(
-      await session.evaluate(() => document.querySelector('p').textContent)
-    ).toBe('Count: 2')
+		expect(
+			await session.evaluate(() => document.querySelector('p').textContent),
+		).toBe('Count: 1');
+		await session.evaluate(() => document.querySelector('button').click());
+		expect(
+			await session.evaluate(() => document.querySelector('p').textContent),
+		).toBe('Count: 2');
 
-    await session.assertNoRedbox()
-    expect(await session.hasErrorToast()).toBe(false)
-  })
+		await session.assertNoRedbox();
+		expect(await session.hasErrorToast()).toBe(false);
+	});
 
-  test('server component can recover from a component error', async () => {
-    const type = 'server'
-    await using sandbox = await createSandbox(next, undefined, '/' + type)
-    const { session, browser } = sandbox
+	test('server component can recover from a component error', async () => {
+		const type = 'server';
+		await using sandbox = await createSandbox(next, undefined, `/${type}`);
+		const { session, browser } = sandbox;
 
-    await session.write(
-      'child.js',
-      outdent`
+		await session.write(
+			'child.js',
+			outdent`
           export default function Child() {
             return <p>Hello</p>;
           }
-        `
-    )
+        `,
+		);
 
-    await session.patch(
-      'index.js',
-      outdent`
+		await session.patch(
+			'index.js',
+			outdent`
           import Child from './child'
   
           export default function Index() {
@@ -368,22 +370,22 @@ describe('Error recovery app', () => {
               </main>
             )
           }
-        `
-    )
+        `,
+		);
 
-    expect(await browser.elementByCss('p').text()).toBe('Hello')
+		expect(await browser.elementByCss('p').text()).toBe('Hello');
 
-    await session.patch(
-      'child.js',
-      outdent`
+		await session.patch(
+			'child.js',
+			outdent`
           // hello
           export default function Child() {
             throw new Error('oops')
           }
-        `
-    )
+        `,
+		);
 
-    await expect(browser).toDisplayRedbox(`
+		await expect(browser).toDisplayRedbox(`
      {
        "count": 1,
        "description": "Error: oops",
@@ -397,43 +399,43 @@ describe('Error recovery app', () => {
          "Page app/server/page.js (3:10)",
        ],
      }
-    `)
+    `);
 
-    // TODO-APP: re-enable when error recovery doesn't reload the page.
-    /* const didNotReload = */ await session.patch(
-      'child.js',
-      outdent`
+		// TODO-APP: re-enable when error recovery doesn't reload the page.
+		/* const didNotReload = */ await session.patch(
+			'child.js',
+			outdent`
           export default function Child() {
             return <p>Hello</p>;
           }
-        `
-    )
+        `,
+		);
 
-    // TODO-APP: re-enable when error recovery doesn't reload the page.
-    // expect(didNotReload).toBe(true)
-    await session.assertNoRedbox()
-    expect(
-      await session.evaluate(() => document.querySelector('p').textContent)
-    ).toBe('Hello')
-  })
+		// TODO-APP: re-enable when error recovery doesn't reload the page.
+		// expect(didNotReload).toBe(true)
+		await session.assertNoRedbox();
+		expect(
+			await session.evaluate(() => document.querySelector('p').textContent),
+		).toBe('Hello');
+	});
 
-  test('client component can recover from a component error', async () => {
-    const type = 'client'
-    await using sandbox = await createSandbox(next, undefined, '/' + type)
-    const { session, browser } = sandbox
+	test('client component can recover from a component error', async () => {
+		const type = 'client';
+		await using sandbox = await createSandbox(next, undefined, `/${type}`);
+		const { session, browser } = sandbox;
 
-    await session.write(
-      'child.js',
-      outdent`
+		await session.write(
+			'child.js',
+			outdent`
           export default function Child() {
             return <p>Hello</p>;
           }
-        `
-    )
+        `,
+		);
 
-    await session.patch(
-      'index.js',
-      outdent`
+		await session.patch(
+			'index.js',
+			outdent`
           import Child from './child'
   
           export default function Index() {
@@ -443,23 +445,23 @@ describe('Error recovery app', () => {
               </main>
             )
           }
-        `
-    )
+        `,
+		);
 
-    expect(await browser.elementByCss('p').text()).toBe('Hello')
+		expect(await browser.elementByCss('p').text()).toBe('Hello');
 
-    await session.patch(
-      'child.js',
-      outdent`
+		await session.patch(
+			'child.js',
+			outdent`
           // hello
           export default function Child() {
             throw new Error('oops')
           }
-        `
-    )
+        `,
+		);
 
-    if (isTurbopack) {
-      await expect(browser).toDisplayRedbox(`
+		if (isTurbopack) {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Error: oops",
@@ -474,9 +476,9 @@ describe('Error recovery app', () => {
            "<FIXME-file-protocol>",
          ],
        }
-      `)
-    } else {
-      await expect(browser).toDisplayRedbox(`
+      `);
+		} else {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Error: oops",
@@ -491,47 +493,47 @@ describe('Error recovery app', () => {
            "Page app/client/page.js (4:10)",
          ],
        }
-      `)
-    }
+      `);
+		}
 
-    // TODO-APP: re-enable when error recovery doesn't reload the page.
-    /* const didNotReload = */ await session.patch(
-      'child.js',
-      outdent`
+		// TODO-APP: re-enable when error recovery doesn't reload the page.
+		/* const didNotReload = */ await session.patch(
+			'child.js',
+			outdent`
           export default function Child() {
             return <p>Hello</p>;
           }
-        `
-    )
+        `,
+		);
 
-    // TODO-APP: re-enable when error recovery doesn't reload the page.
-    // expect(didNotReload).toBe(true)
-    await session.assertNoRedbox()
-    expect(
-      await session.evaluate(() => document.querySelector('p').textContent)
-    ).toBe('Hello')
-  })
+		// TODO-APP: re-enable when error recovery doesn't reload the page.
+		// expect(didNotReload).toBe(true)
+		await session.assertNoRedbox();
+		expect(
+			await session.evaluate(() => document.querySelector('p').textContent),
+		).toBe('Hello');
+	});
 
-  // https://github.com/pmmmwh/react-refresh-webpack-plugin/pull/3#issuecomment-554150098
-  test('syntax > runtime error', async () => {
-    await using sandbox = await createSandbox(next)
-    const { browser, session } = sandbox
+	// https://github.com/pmmmwh/react-refresh-webpack-plugin/pull/3#issuecomment-554150098
+	test('syntax > runtime error', async () => {
+		await using sandbox = await createSandbox(next);
+		const { browser, session } = sandbox;
 
-    // Start here.
-    await session.patch(
-      'index.js',
-      outdent`
+		// Start here.
+		await session.patch(
+			'index.js',
+			outdent`
         import * as React from 'react';
 
         export default function FunctionNamed() {
           return <div />
         }
-      `
-    )
-    // TODO: this acts weird without above step
-    await session.patch(
-      'index.js',
-      outdent`
+      `,
+		);
+		// TODO: this acts weird without above step
+		await session.patch(
+			'index.js',
+			outdent`
         import * as React from 'react';
         let i = 0
         window.triggerError = () => {
@@ -544,11 +546,11 @@ describe('Error recovery app', () => {
         export default function FunctionNamed() {
           return <div />
         }
-      `
-    )
+      `,
+		);
 
-    await browser.eval('window.triggerError()')
-    await expect(browser).toDisplayCollapsedRedbox(`
+		await browser.eval('window.triggerError()');
+		await expect(browser).toDisplayCollapsedRedbox(`
      {
        "count": 1,
        "description": "Error: no 1",
@@ -561,12 +563,12 @@ describe('Error recovery app', () => {
          "eval index.js (7:11)",
        ],
      }
-    `)
+    `);
 
-    // Make a syntax error.
-    await session.patch(
-      'index.js',
-      outdent`
+		// Make a syntax error.
+		await session.patch(
+			'index.js',
+			outdent`
         import * as React from 'react';
         let i = 0
         window.triggerError = () => {
@@ -577,12 +579,12 @@ describe('Error recovery app', () => {
           }, 0)
         }
         export default function FunctionNamed() {
-      `
-    )
+      `,
+		);
 
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-    if (isTurbopack) {
-      await expect(browser).toDisplayRedbox(`
+		await new Promise((resolve) => setTimeout(resolve, 1000));
+		if (isTurbopack) {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Parsing ecmascript source code failed",
@@ -594,9 +596,9 @@ describe('Error recovery app', () => {
            |                                         ^",
          "stack": [],
        }
-      `)
-    } else {
-      await expect(browser).toDisplayRedbox(`
+      `);
+		} else {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Error:   x Expected '}', got '<eof>'",
@@ -615,13 +617,13 @@ describe('Error recovery app', () => {
        ./app/page.js",
          "stack": [],
        }
-      `)
-    }
+      `);
+		}
 
-    // Test that runtime error does not take over:
-    await browser.eval('window.triggerError()')
-    if (isTurbopack) {
-      await expect(browser).toDisplayRedbox(`
+		// Test that runtime error does not take over:
+		await browser.eval('window.triggerError()');
+		if (isTurbopack) {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Parsing ecmascript source code failed",
@@ -633,9 +635,9 @@ describe('Error recovery app', () => {
            |                                         ^",
          "stack": [],
        }
-      `)
-    } else {
-      await expect(browser).toDisplayRedbox(`
+      `);
+		} else {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Error:   x Expected '}', got '<eof>'",
@@ -654,19 +656,19 @@ describe('Error recovery app', () => {
        ./app/page.js",
          "stack": [],
        }
-      `)
-    }
-  })
+      `);
+		}
+	});
 
-  // https://github.com/pmmmwh/react-refresh-webpack-plugin/pull/3#issuecomment-554144016
-  test('stuck error', async () => {
-    await using sandbox = await createSandbox(next)
-    const { browser, session } = sandbox
+	// https://github.com/pmmmwh/react-refresh-webpack-plugin/pull/3#issuecomment-554144016
+	test('stuck error', async () => {
+		await using sandbox = await createSandbox(next);
+		const { browser, session } = sandbox;
 
-    // We start here.
-    await session.patch(
-      'index.js',
-      outdent`
+		// We start here.
+		await session.patch(
+			'index.js',
+			outdent`
         import * as React from 'react';
 
         function FunctionDefault() {
@@ -674,36 +676,36 @@ describe('Error recovery app', () => {
         }
 
         export default FunctionDefault;
-      `
-    )
+      `,
+		);
 
-    // We add a new file. Let's call it Foo.js.
-    await session.write(
-      'Foo.js',
-      outdent`
+		// We add a new file. Let's call it Foo.js.
+		await session.write(
+			'Foo.js',
+			outdent`
         // intentionally skips export
         export default function Foo() {
           return React.createElement('h1', null, 'Foo');
         }
-      `
-    )
+      `,
+		);
 
-    // We edit our first file to use it.
-    await session.patch(
-      'index.js',
-      outdent`
+		// We edit our first file to use it.
+		await session.patch(
+			'index.js',
+			outdent`
         import * as React from 'react';
         import Foo from './Foo';
         function FunctionDefault() {
           return <Foo />;
         }
         export default FunctionDefault;
-      `
-    )
+      `,
+		);
 
-    // We get an error because Foo didn't import React. Fair.
-    if (isTurbopack) {
-      await expect(browser).toDisplayRedbox(`
+		// We get an error because Foo didn't import React. Fair.
+		if (isTurbopack) {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Error: React is not defined",
@@ -718,9 +720,9 @@ describe('Error recovery app', () => {
            "<FIXME-file-protocol>",
          ],
        }
-      `)
-    } else {
-      await expect(browser).toDisplayRedbox(`
+      `);
+		} else {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Error: React is not defined",
@@ -735,33 +737,33 @@ describe('Error recovery app', () => {
            "Page app/page.js (4:10)",
          ],
        }
-      `)
-    }
+      `);
+		}
 
-    // Let's add that to Foo.
-    await session.patch(
-      'Foo.js',
-      outdent`
+		// Let's add that to Foo.
+		await session.patch(
+			'Foo.js',
+			outdent`
         import * as React from 'react';
         export default function Foo() {
           return React.createElement('h1', null, 'Foo');
         }
-      `
-    )
+      `,
+		);
 
-    // Expected: this fixes the problem
-    await session.assertNoRedbox()
-  })
+		// Expected: this fixes the problem
+		await session.assertNoRedbox();
+	});
 
-  // https://github.com/pmmmwh/react-refresh-webpack-plugin/pull/3#issuecomment-554137262
-  test('render error not shown right after syntax error', async () => {
-    await using sandbox = await createSandbox(next)
-    const { browser, session } = sandbox
+	// https://github.com/pmmmwh/react-refresh-webpack-plugin/pull/3#issuecomment-554137262
+	test('render error not shown right after syntax error', async () => {
+		await using sandbox = await createSandbox(next);
+		const { browser, session } = sandbox;
 
-    // Starting here:
-    await session.patch(
-      'index.js',
-      outdent`
+		// Starting here:
+		await session.patch(
+			'index.js',
+			outdent`
         import * as React from 'react';
         class ClassDefault extends React.Component {
           render() {
@@ -770,17 +772,17 @@ describe('Error recovery app', () => {
         }
 
         export default ClassDefault;
-      `
-    )
+      `,
+		);
 
-    expect(
-      await session.evaluate(() => document.querySelector('h1').textContent)
-    ).toBe('Default Export')
+		expect(
+			await session.evaluate(() => document.querySelector('h1').textContent),
+		).toBe('Default Export');
 
-    // Break it with a syntax error:
-    await session.patch(
-      'index.js',
-      outdent`
+		// Break it with a syntax error:
+		await session.patch(
+			'index.js',
+			outdent`
         import * as React from 'react';
 
         class ClassDefault extends React.Component {
@@ -790,10 +792,10 @@ describe('Error recovery app', () => {
         }
 
         export default ClassDefault;
-      `
-    )
-    if (isTurbopack) {
-      await expect(browser).toDisplayRedbox(`
+      `,
+		);
+		if (isTurbopack) {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Parsing ecmascript source code failed",
@@ -805,9 +807,9 @@ describe('Error recovery app', () => {
            |     ^^^^^^",
          "stack": [],
        }
-      `)
-    } else {
-      await expect(browser).toDisplayRedbox(`
+      `);
+		} else {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Error:   x Expected '{', got 'return'",
@@ -831,13 +833,13 @@ describe('Error recovery app', () => {
        ./app/page.js",
          "stack": [],
        }
-      `)
-    }
+      `);
+		}
 
-    // Now change the code to introduce a runtime error without fixing the syntax error:
-    await session.patch(
-      'index.js',
-      outdent`
+		// Now change the code to introduce a runtime error without fixing the syntax error:
+		await session.patch(
+			'index.js',
+			outdent`
         import * as React from 'react';
 
         class ClassDefault extends React.Component {
@@ -848,10 +850,10 @@ describe('Error recovery app', () => {
         }
 
         export default ClassDefault;
-      `
-    )
-    if (isTurbopack) {
-      await expect(browser).toDisplayRedbox(`
+      `,
+		);
+		if (isTurbopack) {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Parsing ecmascript source code failed",
@@ -863,9 +865,9 @@ describe('Error recovery app', () => {
            |     ^^^^^",
          "stack": [],
        }
-      `)
-    } else {
-      await expect(browser).toDisplayRedbox(`
+      `);
+		} else {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Error:   x Expected '{', got 'throw'",
@@ -890,13 +892,13 @@ describe('Error recovery app', () => {
        ./app/page.js",
          "stack": [],
        }
-      `)
-    }
+      `);
+		}
 
-    // Now fix the syntax error:
-    await session.patch(
-      'index.js',
-      outdent`
+		// Now fix the syntax error:
+		await session.patch(
+			'index.js',
+			outdent`
         import * as React from 'react';
 
         class ClassDefault extends React.Component {
@@ -907,10 +909,10 @@ describe('Error recovery app', () => {
         }
 
         export default ClassDefault;
-      `
-    )
-    if (isTurbopack) {
-      await expect(browser).toDisplayRedbox(`
+      `,
+		);
+		if (isTurbopack) {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Error: nooo",
@@ -924,9 +926,9 @@ describe('Error recovery app', () => {
            "Page index.js (10:16)",
          ],
        }
-      `)
-    } else {
-      await expect(browser).toDisplayRedbox(`
+      `);
+		} else {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Error: nooo",
@@ -940,19 +942,19 @@ describe('Error recovery app', () => {
            "Page app/page.js (4:10)",
          ],
        }
-      `)
-    }
-  })
+      `);
+		}
+	});
 
-  test('displays build error on initial page load', async () => {
-    await using sandbox = await createSandbox(
-      next,
-      new Map([['app/page.js', '{{{']])
-    )
-    const { browser } = sandbox
+	test('displays build error on initial page load', async () => {
+		await using sandbox = await createSandbox(
+			next,
+			new Map([['app/page.js', '{{{']]),
+		);
+		const { browser } = sandbox;
 
-    if (isTurbopack) {
-      await expect(browser).toDisplayRedbox(`
+		if (isTurbopack) {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Parsing ecmascript source code failed",
@@ -964,9 +966,9 @@ describe('Error recovery app', () => {
            |   ^",
          "stack": [],
        }
-      `)
-    } else {
-      await expect(browser).toDisplayRedbox(`
+      `);
+		} else {
+			await expect(browser).toDisplayRedbox(`
        {
          "count": 1,
          "description": "Error:   x Expected '}', got '<eof>'",
@@ -982,7 +984,7 @@ describe('Error recovery app', () => {
            Syntax Error",
          "stack": [],
        }
-      `)
-    }
-  })
-})
+      `);
+		}
+	});
+});

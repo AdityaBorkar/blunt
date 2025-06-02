@@ -1,3 +1,3 @@
-export { default } from '../nodejs/layout'
+export { default } from '../nodejs/layout';
 
-export const runtime = 'edge'
+export const runtime = 'edge';

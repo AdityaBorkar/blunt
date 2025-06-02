@@ -1,22 +1,24 @@
 /* eslint-env jest */
-import { createSandbox } from 'development-sandbox'
-import { FileRef, nextTestSetup } from 'e2e-utils'
-import path from 'path'
-import { outdent } from 'outdent'
+/* eslint-env jest */
+
+import path from 'node:path';
+import { createSandbox } from 'development-sandbox';
+import { FileRef, nextTestSetup } from 'e2e-utils';
+import { outdent } from 'outdent';
 
 describe('ReactRefresh app', () => {
-  const { next } = nextTestSetup({
-    files: new FileRef(path.join(__dirname, 'fixtures', 'default-template')),
-    skipStart: true,
-  })
+	const { next } = nextTestSetup({
+		files: new FileRef(path.join(__dirname, 'fixtures', 'default-template')),
+		skipStart: true,
+	});
 
-  test('can edit a component without losing state', async () => {
-    await using sandbox = await createSandbox(next)
-    const { session } = sandbox
+	test('can edit a component without losing state', async () => {
+		await using sandbox = await createSandbox(next);
+		const { session } = sandbox;
 
-    await session.patch(
-      'index.js',
-      outdent`
+		await session.patch(
+			'index.js',
+			outdent`
         import { useCallback, useState } from 'react'
         export default function Index() {
           const [count, setCount] = useState(0)
@@ -28,15 +30,15 @@ describe('ReactRefresh app', () => {
             </main>
           )
         }
-      `
-    )
-    await session.evaluate(() => document.querySelector('button').click())
-    expect(
-      await session.evaluate(() => document.querySelector('p').textContent)
-    ).toBe('1')
-    await session.patch(
-      'index.js',
-      outdent`
+      `,
+		);
+		await session.evaluate(() => document.querySelector('button').click());
+		expect(
+			await session.evaluate(() => document.querySelector('p').textContent),
+		).toBe('1');
+		await session.patch(
+			'index.js',
+			outdent`
         import { useCallback, useState } from 'react'
         export default function Index() {
           const [count, setCount] = useState(0)
@@ -48,24 +50,24 @@ describe('ReactRefresh app', () => {
             </main>
           )
         }
-      `
-    )
-    expect(
-      await session.evaluate(() => document.querySelector('p').textContent)
-    ).toBe('Count: 1')
-    await session.evaluate(() => document.querySelector('button').click())
-    expect(
-      await session.evaluate(() => document.querySelector('p').textContent)
-    ).toBe('Count: 2')
-  })
+      `,
+		);
+		expect(
+			await session.evaluate(() => document.querySelector('p').textContent),
+		).toBe('Count: 1');
+		await session.evaluate(() => document.querySelector('button').click());
+		expect(
+			await session.evaluate(() => document.querySelector('p').textContent),
+		).toBe('Count: 2');
+	});
 
-  test('cyclic dependencies', async () => {
-    await using sandbox = await createSandbox(next)
-    const { session } = sandbox
+	test('cyclic dependencies', async () => {
+		await using sandbox = await createSandbox(next);
+		const { session } = sandbox;
 
-    await session.write(
-      'NudgeOverview.js',
-      outdent`
+		await session.write(
+			'NudgeOverview.js',
+			outdent`
         import * as React from 'react';
 
         import { foo } from './routes';
@@ -76,23 +78,23 @@ describe('ReactRefresh app', () => {
         };
 
         export default NudgeOverview;
-      `
-    )
+      `,
+		);
 
-    await session.write(
-      'SurveyOverview.js',
-      outdent`
+		await session.write(
+			'SurveyOverview.js',
+			outdent`
         const SurveyOverview = () => {
           return 100;
         };
 
         export default SurveyOverview;
-      `
-    )
+      `,
+		);
 
-    await session.write(
-      'Milestones.js',
-      outdent`
+		await session.write(
+			'Milestones.js',
+			outdent`
         import React from 'react';
 
         import { fragment } from './DashboardPage';
@@ -103,12 +105,12 @@ describe('ReactRefresh app', () => {
         };
 
         export default Milestones;
-      `
-    )
+      `,
+		);
 
-    await session.write(
-      'DashboardPage.js',
-      outdent`
+		await session.write(
+			'DashboardPage.js',
+			outdent`
         import React from 'react';
 
         import Milestones from './Milestones';
@@ -128,12 +130,12 @@ describe('ReactRefresh app', () => {
         };
 
         export default DashboardPage;
-      `
-    )
+      `,
+		);
 
-    await session.write(
-      'routes.js',
-      outdent`
+		await session.write(
+			'routes.js',
+			outdent`
         import DashboardPage from './DashboardPage';
 
         export const foo = {};
@@ -142,12 +144,12 @@ describe('ReactRefresh app', () => {
         setTimeout(() => console.warn('DashboardPage after:', DashboardPage), 0);
 
         export default DashboardPage;
-      `
-    )
+      `,
+		);
 
-    await session.patch(
-      'index.js',
-      outdent`
+		await session.patch(
+			'index.js',
+			outdent`
         import * as React from 'react';
 
         import DashboardPage from './routes';
@@ -157,32 +159,32 @@ describe('ReactRefresh app', () => {
         };
 
         export default HeroApp;
-      `
-    )
+      `,
+		);
 
-    expect(
-      await session.evaluate(() => document.querySelector('p').textContent)
-    ).toBe('Hello. 100')
+		expect(
+			await session.evaluate(() => document.querySelector('p').textContent),
+		).toBe('Hello. 100');
 
-    let didFullRefresh = !(await session.patch(
-      'SurveyOverview.js',
-      outdent`
+		let didFullRefresh = !(await session.patch(
+			'SurveyOverview.js',
+			outdent`
         const SurveyOverview = () => {
           return 200;
         };
 
         export default SurveyOverview;
-      `
-    ))
+      `,
+		));
 
-    expect(
-      await session.evaluate(() => document.querySelector('p').textContent)
-    ).toBe('Hello. 200')
-    expect(didFullRefresh).toBe(false)
+		expect(
+			await session.evaluate(() => document.querySelector('p').textContent),
+		).toBe('Hello. 200');
+		expect(didFullRefresh).toBe(false);
 
-    didFullRefresh = !(await session.patch(
-      'index.js',
-      outdent`
+		didFullRefresh = !(await session.patch(
+			'index.js',
+			outdent`
         import * as React from 'react';
 
         import DashboardPage from './routes';
@@ -192,28 +194,28 @@ describe('ReactRefresh app', () => {
         };
 
         export default HeroApp;
-      `
-    ))
+      `,
+		));
 
-    expect(
-      await session.evaluate(() => document.querySelector('p').textContent)
-    ).toBe('Hello: 200')
-    expect(didFullRefresh).toBe(false)
+		expect(
+			await session.evaluate(() => document.querySelector('p').textContent),
+		).toBe('Hello: 200');
+		expect(didFullRefresh).toBe(false);
 
-    didFullRefresh = !(await session.patch(
-      'SurveyOverview.js',
-      outdent`
+		didFullRefresh = !(await session.patch(
+			'SurveyOverview.js',
+			outdent`
         const SurveyOverview = () => {
           return 300;
         };
 
         export default SurveyOverview;
-      `
-    ))
+      `,
+		));
 
-    expect(
-      await session.evaluate(() => document.querySelector('p').textContent)
-    ).toBe('Hello: 300')
-    expect(didFullRefresh).toBe(false)
-  })
-})
+		expect(
+			await session.evaluate(() => document.querySelector('p').textContent),
+		).toBe('Hello: 300');
+		expect(didFullRefresh).toBe(false);
+	});
+});

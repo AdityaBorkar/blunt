@@ -1,19 +1,19 @@
 // we want the layout to opt-out of static prefetching
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
 
-import Link from 'next/link'
+import Link from 'next/link';
 
 export default function RootLayout({
-  children,
+	children,
 }: {
-  children: React.ReactNode
+	children: React.ReactNode;
 }) {
-  return (
-    <html lang="en">
-      <body>
-        <Link href="/">Link to `/`</Link>
-        <div>{children}</div>
-      </body>
-    </html>
-  )
+	return (
+		<html lang="en">
+			<body>
+				<Link href="/">Link to `/`</Link>
+				<div>{children}</div>
+			</body>
+		</html>
+	);
 }

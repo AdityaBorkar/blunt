@@ -1,18 +1,29 @@
-import { createNext } from 'e2e-utils'
-import { NextInstance } from 'e2e-utils'
-import { renderViaHTTP } from 'next-test-utils'
+import { createNext, type NextInstance } from 'e2e-utils';
+import { renderViaHTTP } from 'next-test-utils';
 
 describe('eslint plugin deps', () => {
-  let next: NextInstance
+	let next: NextInstance;
 
-  beforeAll(async () => {
-    next = await createNext({
-      files: {
-        'pages/index.tsx': `export default function Page() {
-  return <p>hello world</p>;
-}
-`,
-        '.eslintrc': `
+	beforeAll(async () => {
+		next = await createNext({
+			buildCommand: 'pnpm build',
+			dependencies: {
+				'@types/node': 'latest',
+				'@types/react': 'latest',
+				'@types/react-dom': 'latest',
+				// Manually installed @typescript-eslint/eslint-plugin, expect to be deduped
+				'@typescript-eslint/eslint-plugin': 'latest',
+				'@typescript-eslint/parser': 'latest',
+				// Use minimum peer dep version instead of v9 of eslint to avoid breaking changes
+				eslint: '8.56.0',
+				'eslint-config-next': 'latest',
+				'eslint-config-prettier': 'latest',
+				'eslint-plugin-import': 'latest',
+				'eslint-plugin-react': 'latest',
+				typescript: 'latest',
+			},
+			files: {
+				'.eslintrc': `
 {
   "parser": "@typescript-eslint/parser",
   "plugins": ["react", "@typescript-eslint"],
@@ -84,7 +95,11 @@ describe('eslint plugin deps', () => {
   }
 }
         `,
-        'tsconfig.json': `{
+				'pages/index.tsx': `export default function Page() {
+  return <p>hello world</p>;
+}
+`,
+				'tsconfig.json': `{
   "compilerOptions": {
     "target": "ES2017",
     "lib": [
@@ -122,34 +137,18 @@ describe('eslint plugin deps', () => {
   ]
 }
         `,
-      },
-      dependencies: {
-        // Manually installed @typescript-eslint/eslint-plugin, expect to be deduped
-        '@typescript-eslint/eslint-plugin': 'latest',
-        '@typescript-eslint/parser': 'latest',
-        'eslint-config-prettier': 'latest',
-        'eslint-plugin-import': 'latest',
-        'eslint-plugin-react': 'latest',
-        '@types/node': 'latest',
-        '@types/react': 'latest',
-        '@types/react-dom': 'latest',
-        // Use minimum peer dep version instead of v9 of eslint to avoid breaking changes
-        eslint: '8.56.0',
-        'eslint-config-next': 'latest',
-        typescript: 'latest',
-      },
-      packageJson: {
-        scripts: {
-          build: 'next build --no-lint && next lint',
-        },
-      },
-      buildCommand: 'pnpm build',
-    })
-  })
-  afterAll(() => next.destroy())
+			},
+			packageJson: {
+				scripts: {
+					build: 'next build --no-lint && next lint',
+				},
+			},
+		});
+	});
+	afterAll(() => next.destroy());
 
-  it('should work', async () => {
-    const html = await renderViaHTTP(next.url, '/')
-    expect(html).toContain('hello world')
-  })
-})
+	it('should work', async () => {
+		const html = await renderViaHTTP(next.url, '/');
+		expect(html).toContain('hello world');
+	});
+});

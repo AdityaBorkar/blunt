@@ -1,7 +1,8 @@
-import { connection } from 'next/server'
-import { Thrower } from './Thrower'
+import { connection } from 'next/server';
+
+import { Thrower } from './Thrower';
 
 export default async function Page() {
-  await connection()
-  return <Thrower />
+	await connection();
+	return <Thrower />;
 }
