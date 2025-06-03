@@ -10,14 +10,19 @@ import { serve } from '../utils/serve';
 export async function startCommand(options: {
 	port?: string;
 	host?: string;
-	https?: boolean;
 	dir?: string;
 }) {
-	const { config } = await getProjectConfig().catch(() => {
-		Logger.error(
-			'Could not detect a Blunt project.',
-			'Create a `blunt.config.ts` file OR run `bunx create-blunt-app`',
-		);
+	const { config } = await getProjectConfig().catch((err) => {
+		if (err === 'No Blunt project found')
+			Logger.error(
+				'Could not detect a Blunt project.',
+				'Create a `blunt.config.ts` file OR run `bunx create-blunt-app`',
+			);
+		if (err === 'Invalid Blunt project config')
+			Logger.error(
+				'Invalid Blunt project config.',
+				// TODO: Better error message
+			);
 		process.exit(1);
 	});
 
@@ -30,5 +35,8 @@ export async function startCommand(options: {
 	}
 
 	process.env.NODE_ENV = 'production';
-	await serve(options);
+	const port = options.port ? parseInt(options.port) : 3000;
+	const host = options.host ?? 'localhost';
+	// TODO: Add buildDir
+	await serve({ host, port });
 }

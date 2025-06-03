@@ -1,7 +1,0 @@
-{
-	"dependencies": {
-		"reference-library": "link:./reference-library"
-	},
-	"name": "test-e2e-react-compiler",
-	"private": true
-}

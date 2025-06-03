@@ -9,7 +9,6 @@
 		],
 		"module": "ESNext",
 		"moduleDetection": "force",
-		// Bundler mode
 		"moduleResolution": "bundler",
 		"noEmit": true,
 		"noFallthroughCasesInSwitch": true,
@@ -26,5 +25,9 @@
 	},
 	"exclude": [
 		"node_modules"
+	],
+	"include": [
+		"**/*.ts",
+		"**/*.tsx"
 	]
 }

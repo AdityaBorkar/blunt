@@ -1,7 +1,0 @@
-{
-	"dependencies": {
-		"library-with-exports": "link:./library-with-exports"
-	},
-	"name": "import-conditions",
-	"private": true
-}

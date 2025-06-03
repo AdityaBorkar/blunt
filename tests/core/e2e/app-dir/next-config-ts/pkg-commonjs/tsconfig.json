@@ -1,9 +1,0 @@
-{
-	"compilerOptions": {
-		"allowImportingTsExtensions": true,
-		"allowJs": true,
-		"jsx": "preserve",
-		"lib": ["ESNext"],
-		"noEmit": true
-	}
-}

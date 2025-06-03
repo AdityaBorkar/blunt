@@ -1,6 +1,0 @@
-{
-	"dependencies": {
-		"my-package": "file:./my-package.tar"
-	},
-	"private": true
-}

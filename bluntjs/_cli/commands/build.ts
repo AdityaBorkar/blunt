@@ -11,11 +11,17 @@ export async function buildCommand(options: {
 	const environment = process.env.NODE_ENV ?? 'production';
 	process.env.NODE_ENV = environment;
 
-	const { config, path } = await getProjectConfig().catch(() => {
-		Logger.error(
-			'Could not detect a Blunt project.',
-			'Create a `blunt.config.ts` file OR run `bunx create-blunt-app`',
-		);
+	const { config, path } = await getProjectConfig().catch((err) => {
+		if (err === 'No Blunt project found')
+			Logger.error(
+				'Could not detect a Blunt project.',
+				'Create a `blunt.config.ts` file OR run `bunx create-blunt-app`',
+			);
+		if (err === 'Invalid Blunt project config')
+			Logger.error(
+				'Invalid Blunt project config.',
+				// TODO: Better error message
+			);
 		process.exit(1);
 	});
 

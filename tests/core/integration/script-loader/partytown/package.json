@@ -1,9 +1,0 @@
-{
-	"dependencies": {
-		"@builder.io/partytown": "0.4.2"
-	},
-	"license": "MIT",
-	"main": "index.js",
-	"name": "partytown",
-	"version": "1.0.0"
-}

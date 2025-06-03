@@ -1,6 +1,0 @@
-{
-	"/_error": "static/development/pages/_error.js",
-	"/index": "static/development/pages/index.js",
-	"/non-existent-child": "static/development/pages/non-existent-child.js",
-	"/world": "static/development/pages/world.js"
-}

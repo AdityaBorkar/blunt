@@ -13,6 +13,6 @@
 	"workspaces": [
 		"examples/*",
 		"docs",
-		"blunt"
+		"bluntjs"
 	]
 }

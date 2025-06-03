@@ -8,11 +8,17 @@
   href=""
 />
 
+| Server Actions | ❌ |
+| Draft Mode | ❌ |
+| Multi-Zone Deployments | ❌ |
+| React Compiler | ❌ |
+| Partial Prerendering | ❌ |
+| MDX | ❌ |
+| useLinkStatus| x |
 ! Fonts, Images, Cache, cookies, headers
 export const config = { prerender: false }
 TODO: HTTP Headers, Head Tag Metadata, OpenGraph, Config, redirect: { code: 307,path: "/some/path" }
 TODO: Instrumentation Hooks
-TODO: MDX Support
 TODO: Parallel Routes
 TODO: 'global-layout' as a file
 TODO: 'global-error' as a file
@@ -21,12 +27,13 @@ SSG. dynamicParams (Run code if route is not present or show a 404?)
 generatePaths() {}
 TODO: regeneratePaths({ path: 'SSG-PATH' })
 TODO: return { fallback: "Run this function", paths: [], regenerateInterval: 50  }
-TODO: Multiple Zones
-ANALYZE=true to export Bundle Analysis & Page Performance Analysis
-CLI Installation
-TODO: Type Safe Websockets
 TODO: View Transitions & Router
+TODO: Figure out something for instrumentation
+useLinkStatus
 
+
+Special Files - forbidden, unauthorized - DO NOT SUPPORT, instead make something common.
+Error File exports 2 functions - ClientError ServerError (https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#4xx_client_errors)
 ---
 
 
@@ -50,46 +57,35 @@ Search Param Navigation APIs
 Custom Search Param parser/serializer support
 Search param middleware
 Route matching/loading middleware
-Server Functions / RPCs
 scrollRestoration (opt-in redirect)
 Generate https://nextjs.org/docs/app/api-reference/config/next-config-js/generateEtags
 Set custom headers: https://nextjs.org/docs/app/api-reference/config/next-config-js/headers
-Auto-removal of trailing slashes
-
-trie-based router
-Define what server actions must return along with use with middlewares.
-export const schema = ... // it will auto-validate the request as per schema.
-
-SSE and Web sockets
-Pass schema in Form Component and then use it as TS Reference everywhere
-React Query alternative with an inbuilt cache() feature.
-TRPC and NextSafeActions alternative with middleware.
-Actions can be exported through a single variable.
-Note - Middleware only apply to ROUTES and PAGES and not server actions
-
-Output unused packages in the Build Summary.
-Also use knip.dev under the hood
 
 - 🛠️ Advanced Middleware: More built-in middleware for common use cases:
     - CORS handling
     - Rate limiting
     - Request logging
     - Security headers
-- Image Optimization: https://bun.sh/docs/api/html-rewriter & https://nextjs.org/docs/app/api-reference/config/next-config-js/images
-- Font Optimization: https://bun.sh/docs/api/html-rewriter
-- Script Optimization: https://bun.sh/docs/api/html-rewriter
-- Partial Prerendering
-- https://bun.sh/docs/bundler/plugins
-- https://bun.sh/docs/api/ffi
+- React Server Actions
+  - ORPC, TRPC and NextSafeActions alternative with middleware.
+  - Server Functions / RPCs
+  - Actions can be exported through a single variable.
+- Build Summary
+  - Output unused packages in the Build Summary.
+  - Also use knip.dev under the hood
+- SSE and Web sockets
+  - Type Safe Websockets
+- Cache Support. Everything is dynamic by default.
+  - React Query alternative with an inbuilt cache() feature.
+- Metadata Viewer, Astro-Nextjs Toolbar, Unlighthouse
 - Automatic API Documentation:
     - Generate API documentation from the routes from the TS.
     - Works with scalar.com OOTB.
     - Plugin to start Swagger UI for API docs.
-- Cache Support. Everything is dynamic by default.
-- React Compiler
-- Metadata Viewer, Astro-Nextjs Toolbar, Unlighthouse
-- Next.js does not automatically block cross-origin requests during development, but will block by default in a future major version of Next.js to - prevent unauthorized requesting of internal assets/endpoints that are available in development mode.
 
+- Next.js does not automatically block cross-origin requests during development, but will block by default in a future major version of Next.js to - prevent unauthorized requesting of internal assets/endpoints that are available in development mode.
+- Note - Middleware only apply to ROUTES and PAGES and not server actions. By order, middlewares always run first and then the react tree follows.
+- Auto-removal of trailing slashes
 
 ---
 

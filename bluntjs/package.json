@@ -1,25 +1,35 @@
 {
 	"bin": {
-		"blunt": "./cli/bin.ts"
+		"bluntjs": "./_cli/bin.ts"
 	},
 	"dependencies": {
 		"arktype": "^2.1.20",
-		"commander": "^14.0.0"
+		"commander": "^14.0.0",
+		"deepmerge": "^4.3.1",
+		"lodash.merge": "^4.6.2"
 	},
 	"devDependencies": {
 		"@types/bun": "latest",
+		"@types/lodash.merge": "^4.6.9",
 		"@types/node": "^22.10.2"
 	},
 	"exports": {
+		"forms": "./forms/index.ts",
+		"media": "./media/index.ts",
+		"navigation": "./navigation/index.ts",
+		"scripts": "./scripts/index.ts",
 		"server": "./server/index.ts",
 		"types": "./types/index.d.ts"
 	},
-	"module": "index.ts",
 	"name": "bluntjs",
 	"peerDependencies": {
 		"typescript": "^5"
 	},
 	"private": true,
+	"scripts": {
+		"lint": "biome check --write",
+		"typecheck": "tsc --noEmit"
+	},
 	"type": "module",
 	"version": "0.0.2"
 }

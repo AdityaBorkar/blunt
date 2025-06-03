@@ -1,8 +1,0 @@
-{
-	"exports": {
-		"./sub-export": "./src/some-file.js"
-	},
-	"name": "pkg",
-	"type": "module",
-	"version": "1.0.0"
-}

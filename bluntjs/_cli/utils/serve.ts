@@ -1,30 +1,31 @@
+import merge from 'lodash.merge';
+
 import { Logger } from '../../_logger';
 import { serve as BluntServe } from '../../server';
-import {
-	getProjectConfig,
-	type ProjectConfig,
-} from '../../server/config/project-config';
+import { getProjectConfig } from '../../server/config/project-config';
 
-export async function serve(options: ProjectConfig) {
-	const environment = process.env.NODE_ENV ?? 'development';
-	Logger.info('Starting server...');
-
-	const { config, path } = await getProjectConfig().catch(() => {
-		Logger.error(
-			'Could not detect a Blunt project.',
-			'Create a `blunt.config.ts` file OR run `bunx create-blunt-app`',
-		);
+export async function serve(options: // ProjectConfig['server']
+{
+	host: string;
+	port: number;
+}) {
+	const { config } = await getProjectConfig().catch((err) => {
+		if (err === 'No Blunt project found')
+			Logger.error(
+				'Could not detect a Blunt project.',
+				'Create a `blunt.config.ts` file OR run `bunx create-blunt-app`',
+			);
+		if (err === 'Invalid Blunt project config')
+			Logger.error(
+				'Invalid Blunt project config.',
+				// TODO: Better error message
+			);
 		process.exit(1);
 	});
 
-	Logger.info(`Using environment: ${environment}`);
-	Logger.info(`Using config: ${path}`);
-
 	try {
-		const _config = { ...config, ...options }; // TODO: DEEP MERGE
+		const _config = { ...config, server: merge(config.server, options) };
 		const server = await BluntServe(_config);
-		Logger.success(`Server started at ${server.url.href}`);
-
 		process.on('SIGINT', () => {
 			Logger.info('Shutting down server...');
 			server.stop();

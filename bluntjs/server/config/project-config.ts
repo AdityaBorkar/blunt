@@ -1,8 +1,9 @@
 import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { ArkErrors, type } from 'arktype';
+import merge from 'lodash.merge';
 
-import { FrameworkAdapters } from './framework-adapters';
+import { DEFAULT_GLOBAL_CONFIG } from '@/server/config/constants';
 
 const ProjectConfigSchema = type({
 	build: {
@@ -24,6 +25,7 @@ const ProjectConfigSchema = type({
 		timeout: 'number',
 	},
 	react: {
+		compiler: 'boolean | "annotation"', // TODO: Add "annotation" - "use react-compiler" / "use no react-compiler"
 		profiler: 'boolean',
 		strictMode: 'boolean',
 	},
@@ -33,10 +35,12 @@ const ProjectConfigSchema = type({
 		timeout: 'number',
 	},
 	server: {
-		hostname: 'string',
+		host: 'string',
 		port: 'number',
 		public: 'string',
-		// router: 'any[]',
+		router: 'Record<string, string | Function>',
+		'router_rules?':
+			'("ALLOW_NESTED_MIDDLEWARE_IN_PAGES" | "ALLOW_MIXING_PAGES_AND_ROUTES")[]',
 		// unix?: string;
 		// ipv6Only?: boolean;
 		// reusePort?: boolean;
@@ -70,48 +74,13 @@ export async function getProjectConfig() {
 	if (!path) throw new Error('No Blunt project found');
 
 	const file = await import(resolve(path));
-	const _config = file.default;
-	const $config = ProjectConfigSchema(_config);
-	if ($config instanceof ArkErrors) {
+	const projectConfig = file.default;
+	const mergedConfig = merge(DEFAULT_GLOBAL_CONFIG, projectConfig);
+	const config = ProjectConfigSchema(mergedConfig);
+	if (config instanceof ArkErrors) {
+		const errors = config.map((error) => error.message);
+		console.log({ errors });
 		throw new Error(`Invalid Blunt project config`); // TODO: Better error message
 	}
-	const config = { ...DEFAULT_GLOBAL_CONFIG, ...$config };
 	return { config, path };
 }
-
-const DEFAULT_GLOBAL_CONFIG = {
-	// TODO: Write defaults properly
-	build: {
-		analyze: true,
-		bundler: FrameworkAdapters.Bun,
-		cloud: FrameworkAdapters.Vercel,
-		linter: FrameworkAdapters.Biome,
-		minify: true,
-		outDir: '.build',
-		sourcemap: false,
-	},
-	pages: {
-		maxRequestBodySize: 1024 * 1024 * 10, // 10MB
-		ppr: false,
-		spa: false,
-		ssr: false,
-		streaming: false,
-		timeout: 60,
-	},
-	react: {
-		profiler: false,
-		strictMode: process.env.NODE_ENV === 'development', // process.env.NODE_ENV === 'development',
-		// Million Lint / React Scan / React DevTools
-	},
-	routes: {
-		maxRequestBodySize: 1024 * 1024 * 10, // 10MB
-		timeout: 60,
-	},
-	server: {
-		hostname: 'localhost',
-		port: 3000,
-		public: 'public',
-		// https: true,
-		// router: ['src/app'],
-	},
-} satisfies ProjectConfig;

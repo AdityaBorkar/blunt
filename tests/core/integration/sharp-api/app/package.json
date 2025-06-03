@@ -1,7 +1,0 @@
-{
-	"dependencies": {
-		"sharp": "latest"
-	},
-	"packageManager": "npm@10.9.2",
-	"private": true
-}

@@ -1,6 +1,0 @@
-{
-	"dependencies": {
-		"typescript": "^5.8.3"
-	},
-	"name": "typescript-plugin-fixture"
-}

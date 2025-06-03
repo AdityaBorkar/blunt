@@ -1,11 +1,11 @@
 /** biome-ignore-all lint/complexity/noStaticOnlyClass: FIX THIS LATER */
-import { color } from 'bun' with { type: 'macro' };
+import { color } from 'bun';
 
 /**
  * Custom logger with colored output for better UX
  */
 export class Logger {
-	private static prefix = '🔥 Blunt';
+	private static prefix = '';
 
 	/**
 	 * Log info messages in blue
@@ -15,8 +15,9 @@ export class Logger {
 	static info(message: string, ...args: any[]) {
 		console.log(
 			color('blue', 'ansi'),
-			`${Logger.prefix}`,
-			color('reset', 'ansi'),
+			`🔥`,
+			// ! BUG - https://github.com/oven-sh/bun/issues/17807 - Cannot reset color
+			color('lightgray', 'ansi'),
 			message,
 			...args,
 		);
@@ -29,8 +30,9 @@ export class Logger {
 	static success(message: string, ...args: any[]) {
 		console.log(
 			color('green', 'ansi'),
-			`✅ ${Logger.prefix}`,
-			color('reset', 'ansi'),
+			`✅`,
+			// ! BUG - https://github.com/oven-sh/bun/issues/17807 - Cannot reset color
+			color('lightgray', 'ansi'),
 			message,
 			...args,
 		);
@@ -43,8 +45,9 @@ export class Logger {
 	static error(message: string, ...args: any[]) {
 		console.error(
 			color('red', 'ansi'),
-			`❌ ${Logger.prefix}`,
-			color('reset', 'ansi'),
+			`❌`,
+			// ! BUG - https://github.com/oven-sh/bun/issues/17807 - Cannot reset color
+			color('lightgray', 'ansi'),
 			message,
 			...args,
 		);
@@ -57,8 +60,9 @@ export class Logger {
 	static warn(message: string, ...args: any[]) {
 		console.warn(
 			color('yellow', 'ansi'),
-			`⚠️  ${Logger.prefix}`,
-			color('reset', 'ansi'),
+			`⚠️`,
+			// ! BUG - https://github.com/oven-sh/bun/issues/17807 - Cannot reset color
+			color('lightgray', 'ansi'),
 			message,
 			...args,
 		);
@@ -72,8 +76,9 @@ export class Logger {
 		if (process.env.DEBUG) {
 			console.log(
 				color('gray', 'ansi'),
-				`🐛 ${Logger.prefix}`,
-				color('reset', 'ansi'),
+				`🐛`,
+				// ! BUG - https://github.com/oven-sh/bun/issues/17807 - Cannot reset color
+				color('lightgray', 'ansi'),
 				message,
 				...args,
 			);
