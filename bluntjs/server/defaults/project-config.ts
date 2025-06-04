@@ -1,20 +1,21 @@
 import { FrameworkAdapters } from '@/server/config/framework-adapters';
 import type { ProjectConfig } from '@/server/config/project-config';
 
-export const DEFAULT_GLOBAL_CONFIG = {
+export const DEFAULT_PROJECT_CONFIG = {
 	// TODO: Write defaults properly
 	build: {
 		analyze: true,
 		bundler: FrameworkAdapters.Bun,
 		cloud: FrameworkAdapters.Vercel,
+		compress: 'gzip',
 		linter: FrameworkAdapters.Biome,
 		minify: true,
-		outDir: '.build',
 		sourcemap: false,
 	},
 	pages: {
+		botDetection: false,
 		edge: true,
-		maxRequestBodySize: 1024 * 1024 * 10, // 10MB
+		// maxRequestBodySize: 1024 * 1024 * 10,
 		ppr: false,
 		spa: false,
 		ssr: false,
@@ -29,15 +30,31 @@ export const DEFAULT_GLOBAL_CONFIG = {
 		// millionLint: false,
 	},
 	routes: {
-		maxRequestBodySize: 1024 * 1024 * 10, // 10MB
+		botDetection: false,
+		edge: true,
+		// maxRequestBodySize: 1024 * 1024 * 10,
 		timeout: 60,
 	},
 	server: {
+		dev: {
+			allowOrigin: [],
+			buildEager: true,
+			exposeHost: true,
+			outDir: '.blunt',
+			tunnel: false,
+		},
 		host: 'localhost',
+		outDir: 'dist',
 		port: 3000,
-		public: 'public',
 		router: {
-			'/': 'src/app',
+			public: 'public',
+			redirects: [],
+			rewrites: [],
+			routes: {
+				'/': { dir: 'src/app' },
+			},
+			rules: [],
+			trailingSlash: true,
 		},
 		// https: true,
 		// router: ['src/app'],

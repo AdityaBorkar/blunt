@@ -3,22 +3,26 @@ import { resolve } from 'node:path';
 import { ArkErrors, type } from 'arktype';
 import merge from 'lodash.merge';
 
-import { DEFAULT_GLOBAL_CONFIG } from '@/server/config/constants';
+import { DEFAULT_PROJECT_CONFIG } from '@/server/defaults/project-config';
 
 const ProjectConfigSchema = type({
 	build: {
 		analyze: 'boolean',
 		bundler: "'bun' | 'vite'",
 		cloud: "'aws' | 'cloudflare' | 'vercel'",
+		compress: "'gzip' | 'brotli' | 'none'",
+		// cssChunking: 'boolean',
+		// optimizeMedia: 'boolean',
+		// doNotOptimize: 'string[]', // This can include file path and package names.
 		linter: "'biome' | 'eslint'",
 		minify: 'boolean',
-		outDir: 'string',
 		sourcemap: 'boolean',
 	},
 	pages: {
 		botDetection: 'boolean | Function',
 		edge: 'boolean',
-		maxRequestBodySize: 'number',
+		// maxRequestBodySize: 'number',
+		// maxHeadersLength: 'number',
 		ppr: 'boolean',
 		spa: 'boolean',
 		ssr: 'boolean',
@@ -32,16 +36,48 @@ const ProjectConfigSchema = type({
 	},
 	routes: {
 		botDetection: 'boolean | Function',
-		maxRequestBodySize: 'number',
+		edge: 'boolean',
+		// maxRequestBodySize: 'number',
+		// maxHeadersLength: 'number',
 		timeout: 'number',
 	},
 	server: {
+		dev: type({
+			allowOrigin: 'string[]',
+			buildEager: 'boolean',
+			exposeHost: 'boolean',
+			outDir: 'string',
+			tunnel: 'boolean',
+		}),
 		host: 'string',
+		outDir: 'string',
 		port: 'number',
-		public: 'string',
-		router: 'Record<string, string | Function>',
-		'router_rules?':
-			'("ALLOW_NESTED_MIDDLEWARE_IN_PAGES" | "ALLOW_MIXING_PAGES_AND_ROUTES")[]',
+		router: type({
+			public: 'string',
+			redirects: type(
+				{ code: '307 | 308', from: 'string', to: 'string' },
+				'[]',
+			),
+			rewrites: type({ from: 'string', to: 'string' }, '[]'),
+			routes: type({
+				'[string]': type(
+					type({ file: 'string' }, '|', { dir: 'string' }),
+					'|',
+					type({ page: 'string' }, '|', {
+						'delete?': 'string',
+						'get?': 'string',
+						'head?': 'string',
+						'options?': 'string',
+						'patch?': 'string',
+						'post?': 'string',
+						'put?': 'string',
+					}),
+				),
+			}),
+			rules:
+				'("ALLOW_NESTED_MIDDLEWARE_IN_PAGES" | "ALLOW_MIXING_PAGES_AND_ROUTES" | "USE_MIDDLEWARE_FOR_REACT_SERVER_ACTIONS")[]',
+			trailingSlash: 'boolean',
+		}),
 		// unix?: string;
 		// ipv6Only?: boolean;
 		// reusePort?: boolean;
@@ -76,7 +112,7 @@ export async function getProjectConfig() {
 
 	const file = await import(resolve(path));
 	const projectConfig = file.default;
-	const mergedConfig = merge(DEFAULT_GLOBAL_CONFIG, projectConfig);
+	const mergedConfig = merge(DEFAULT_PROJECT_CONFIG, projectConfig);
 	const config = ProjectConfigSchema(mergedConfig);
 	if (config instanceof ArkErrors) {
 		const errors = config.map((error) => error.message);

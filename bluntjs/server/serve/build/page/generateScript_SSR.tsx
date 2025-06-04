@@ -12,7 +12,7 @@ export async function generateScript_SSR(
 	const script = `
 	import { hydrateRoot } from 'react-dom/client';
     import { ${strictMode ? 'StrictMode,' : ''} Suspense } from 'react';
-	import ErrorBoundary from '.blunt/unbundled/ErrorBoundary';
+	import ErrorBoundary from '.blunt/.temp/ErrorBoundary';
 	${files.map((file, index) => `import C${index} from '${file.filePath}'`).join('\n')}
 
 	const reactNode = ${strictMode ? '<StrictMode>' : ''}${string}${strictMode ? '</StrictMode>' : ''};

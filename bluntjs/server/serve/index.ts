@@ -1,10 +1,10 @@
-import { exists, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { color } from 'bun' with { type: 'macro' };
-import { serve as BunServe } from 'bun';
+import { serve as BunServe, color } from 'bun';
+import ora from 'ora';
 
-import { importEnvFiles } from '@/server/lib/envImport';
-import { buildRouter } from '@/server/serve/build/router';
+import { importEnvFiles } from '@/server/defaults/envImport';
+import { buildRouter } from '@/server/serve/router';
 import type { ProjectConfig } from '@/types';
 
 export async function serve(config: ProjectConfig) {
@@ -12,21 +12,39 @@ export async function serve(config: ProjectConfig) {
 	const SERVER_BUILD_START = performance.now();
 	console.log(color('hotpink', 'ansi'));
 	console.log('Blunt v1.2.3 | Bun v1.1.19'); // TODO: Add version
-	console.log(color('lightgray', 'ansi'));
-	console.log('Starting Server...');
-	console.log('--------------------------------');
+	console.log(color('gray', 'ansi'));
+	const spinner = ora(' Starting Server...');
+	spinner.color = 'yellow';
+	spinner.start();
 
 	// Setup Environment
 	const ENVIRONMENT = process.env.NODE_ENV ?? 'development';
-	console.log('Environment    : ', ENVIRONMENT);
+
+	// Clean Working Directory
+	if (ENVIRONMENT === 'development') {
+		const OUTPUT_DIR = join(
+			process.cwd(),
+			ENVIRONMENT === 'development'
+				? (config.server.dev.outDir ?? '.blunt')
+				: config.server.outDir,
+		);
+		await rm(OUTPUT_DIR, { force: true, recursive: true });
+		const tempDir = join(OUTPUT_DIR, '.temp');
+		await mkdir(tempDir, { recursive: true });
+		await writeFile(
+			join(tempDir, 'ErrorBoundary.tsx'),
+			await readFile(join(__dirname, '../utils/ErrorBoundary.tsx')),
+		);
+	}
 
 	// Expose Host
 	const EXPOSE_HOST = true;
 	if (EXPOSE_HOST) {
+		// TODO
 		config.server.host = '0.0.0.0';
 	}
 
-	// Implement HTTPS
+	// TODO: Implement HTTPS
 	// if (
 	// 	config.server.https === 'auto-generate' &&
 	// 	config.server.certFile === 'auto-generate'
@@ -36,69 +54,68 @@ export async function serve(config: ProjectConfig) {
 	// 	config.server.certFile = certFile;
 	// }
 
-	const WORKING_DIR = join(
-		process.cwd(),
-		ENVIRONMENT === 'development' ? '.blunt/unbundled/' : config.build.outDir,
-	);
-	if (await exists(WORKING_DIR)) {
-		await rm(WORKING_DIR, { force: true, recursive: true });
-	}
-	await mkdir(WORKING_DIR, { recursive: true });
-	if (ENVIRONMENT === 'development') {
-		await writeFile(
-			join(process.cwd(), './.blunt/unbundled/ErrorBoundary.tsx'),
-			await readFile(join(__dirname, '../utils/ErrorBoundary.tsx')),
-		);
-	}
-
-	// TODO: Create a `blunt.types.d.ts` file and validate it
-
-	// // Build Ahead of Time
-	// if (ENVIRONMENT !== 'production') await BuildWorkspace(); //
-	// Mandatory File Checks
-	// const RootLayout = router.files.match('layout.tsx');
-	// if (!RootLayout) {
-	// 	console.log(
-	// 		color('red', 'ansi'),
-	// 		'❌ RootLayout is not present in the pages directory',
-	// 	);
-	// }
-	// const NotFound = router.files.match('not-found.tsx');
-	// if (!NotFound) {
-	// 	console.log(
-	// 		color('red', 'ansi'),
-	// 		'❌ NotFound is not present in the pages directory',
-	// 	);
-	// } TODO: Inject `ENV_FILES`
-
-	const server = BunServe({
-		development: {
-			chromeDevToolsAutomaticWorkspaceFolders: true,
-			console: true,
-			hmr: false, // ENVIRONMENT !== 'production',
-		},
-		hostname: config.server.host,
-		port: config.server.port,
-		...(await buildRouter(config)),
-	});
-
-	// TODO: Implement Tunnel
 	// TODO: RESTART SERVER ON CHANGE OF CONFIG
 	// TODO: RESTART SERVER ON CHANGE OF ENV FILES
 	const ENV_FILES = importEnvFiles({ env: ENVIRONMENT });
-	console.log('Env Files      : ', ENV_FILES.join(', '));
-	console.log('Local Network  : ', server.url.href);
-	console.log(
-		'Public Network : ',
-		EXPOSE_HOST ? server.url.href : 'use --host to expose',
-	);
-	console.log('--------------------------------');
+	const router =
+		ENVIRONMENT === 'development'
+			? await buildRouter(config)
+			: await buildRouter(config);
+	const server = BunServe({
+		development: ENVIRONMENT === 'development' && {
+			chromeDevToolsAutomaticWorkspaceFolders: true,
+			console: true,
+			hmr: true,
+		},
+		hostname: config.server.host,
+		port: config.server.port,
+		...router,
+	});
 
 	// Performance and Logging
 	const SERVER_BUILD_END = performance.now();
 	const SERVER_BUILD_TIME = (SERVER_BUILD_END - SERVER_BUILD_START).toFixed(2);
-	console.log(`Server Started in ${SERVER_BUILD_TIME}ms`);
+	spinner.succeed(` Server Started in ${SERVER_BUILD_TIME}ms`);
+	console.log();
+	console.log(color('lightgray', 'ansi'), '--------------------------------');
+	consoleLog('Environment    : ', ENVIRONMENT);
+	consoleLog('Env Files      : ', ENV_FILES.join(', '));
+	consoleLog('Local Network  : ', server.url.href);
+	consoleLog(
+		'Public Network : ',
+		EXPOSE_HOST ? server.url.href : 'use --host to expose',
+	);
 
+	// TypeScript LSP
+	const isTsLspActive = false;
+	consoleLog(
+		'TypeScript LSP : ',
+		isTsLspActive ? 'Active' : 'Inactive',
+		isTsLspActive ? 'lightblue' : 'red',
+	);
+
+	// TODO: Tunnel
+	// const isTunnelActive = false;
+	// consoleLog(
+	// 	'Tunnel         : ',
+	// 	isTunnelActive ? 'Active' : 'Inactive',
+	// 	isTunnelActive ? 'lightblue' : 'red',
+	// );
+
+	console.log(color('lightgray', 'ansi'), '--------------------------------');
 	console.log(color('white', 'ansi'));
 	return server;
+}
+
+function consoleLog(
+	title: string,
+	value: string,
+	ansiColor: string = 'lightblue',
+) {
+	console.log(
+		color('lightgray', 'ansi'),
+		title,
+		color(ansiColor, 'ansi'),
+		value,
+	);
 }

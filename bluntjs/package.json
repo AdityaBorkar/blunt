@@ -7,12 +7,15 @@
 		"bun-plugin-tailwind": "^0.0.15",
 		"commander": "^14.0.0",
 		"deepmerge": "^4.3.1",
-		"lodash.merge": "^4.6.2"
+		"lodash.merge": "^4.6.2",
+		"ora": "^8.2.0"
 	},
 	"devDependencies": {
 		"@types/bun": "latest",
 		"@types/lodash.merge": "^4.6.9",
-		"@types/node": "^22.10.2"
+		"@types/node": "^22.10.2",
+		"@types/react": "^19.1.6",
+		"@types/react-dom": "^19.1.6"
 	},
 	"exports": {
 		"forms": "./forms/index.ts",
