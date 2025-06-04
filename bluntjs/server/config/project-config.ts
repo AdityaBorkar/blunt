@@ -16,7 +16,8 @@ const ProjectConfigSchema = type({
 		sourcemap: 'boolean',
 	},
 	pages: {
-		// botDetection: 'boolean | (() => boolean)',
+		botDetection: 'boolean | Function',
+		edge: 'boolean',
 		maxRequestBodySize: 'number',
 		ppr: 'boolean',
 		spa: 'boolean',
@@ -30,7 +31,7 @@ const ProjectConfigSchema = type({
 		strictMode: 'boolean',
 	},
 	routes: {
-		// botDetection: 'boolean | (() => boolean)',
+		botDetection: 'boolean | Function',
 		maxRequestBodySize: 'number',
 		timeout: 'number',
 	},

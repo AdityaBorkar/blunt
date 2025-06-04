@@ -13,6 +13,7 @@ export const DEFAULT_GLOBAL_CONFIG = {
 		sourcemap: false,
 	},
 	pages: {
+		edge: true,
 		maxRequestBodySize: 1024 * 1024 * 10, // 10MB
 		ppr: false,
 		spa: false,

@@ -4,6 +4,7 @@
 	},
 	"dependencies": {
 		"arktype": "^2.1.20",
+		"bun-plugin-tailwind": "^0.0.15",
 		"commander": "^14.0.0",
 		"deepmerge": "^4.3.1",
 		"lodash.merge": "^4.6.2"
@@ -23,6 +24,8 @@
 	},
 	"name": "bluntjs",
 	"peerDependencies": {
+		"react": "^19.1.0",
+		"react-dom": "^19.1.0",
 		"typescript": "^5"
 	},
 	"private": true,

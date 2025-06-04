@@ -1,9 +1,8 @@
 import { writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import bunPluginTailwind from 'bun-plugin-tailwind';
-import { Suspense } from 'react';
 import {
-	renderToPipeableStream,
+	// renderToPipeableStream,
 	renderToReadableStream,
 	renderToString,
 } from 'react-dom/server';
@@ -12,8 +11,8 @@ import {
 	prerenderToNodeStream,
 } from 'react-dom/static';
 
+import { generateScript_SSR } from '@/server/serve/build/page/generateScript_SSR';
 import type { ProjectConfig } from '@/types';
-import ErrorBoundary from '../../utils/ErrorBoundary';
 
 const AsyncFunction = (async () => {}).constructor;
 
@@ -28,41 +27,26 @@ export async function buildPage({
 	config: ProjectConfig;
 	controller: AbortController;
 }) {
-	const components = await Promise.all(
-		files.map(async (file) => {
-			const fullPath = join(process.cwd(), file.filePath);
-			const _file = await import(fullPath);
-			const fn = _file.default;
-			const isAsync = fn instanceof AsyncFunction === true;
-			return { fn, isAsync, type: file.type };
-		}),
-	);
-
-	const { ssr, streaming, spa, timeout, ppr } = config.pages;
+	const { ssr, streaming, spa, timeout, ppr, edge } = config.pages;
 	const renderAtBuildTime = false;
-	const edge = true;
-	const { strictMode } = config.react;
+	const { strictMode, profiler, compiler } = config.react;
+	const id = url.replace(/\//g, '-');
 
-	const renderMode = 'static'; // config.pages.ssr ? 'dynamic' : 'static';
-	const scriptPath = join(process.cwd(), `./.blunt/unbundled/main-${id}.tsx`);
+	const isCSR = false; // TODO: Implement CSR.
+	if (isCSR) {
+		// const script = generateScript_CSR(files);
+		// RETURN blank .html and then createRoot in it.
+		return;
+	}
 
-	const ReactTree = await buildReactTree(components).catch((error) => {
-		console.log('COULD NOT BUILD REACT TREE');
-		return { jsx: null, string: '' };
-	}); // TODO: Implement <Head />
-	const ScriptContent = `
-	import { hydrateRoot } from 'react-dom/client';
-    import { ${strictMode ? 'StrictMode,' : ''} Suspense } from 'react';
-	import ErrorBoundary from '.blunt/unbundled/ErrorBoundary';
-	${files.map((file, index) => `import C${index} from '${file.filePath}'`).join('\n')}
+	const { jsx, script } = await generateScript_SSR(files, { id, strictMode });
 
-	const reactNode = ${strictMode ? '<StrictMode>' : ''}${ReactTree.string}${strictMode ? '</StrictMode>' : ''};
-	const root = hydrateRoot(document, reactNode, { identifierPrefix: "${id}" });
-	`;
-	await writeFile(scriptPath, ScriptContent);
+	const scriptPath = join(process.cwd(), `./.blunt/unbundled/path-${id}.tsx`);
+	await writeFile(scriptPath, script);
+
 	const result = await Bun.build({
 		banner: '"use client";',
-		entrypoints: [scriptPath], // TODO: ADD MULTIPLE
+		entrypoints: [scriptPath],
 		env: 'BUN_PUBLIC_*',
 		minify: false,
 		outdir: '.blunt',
@@ -71,17 +55,22 @@ export async function buildPage({
 		splitting: true,
 		target: 'browser',
 	});
-
-	if (!renderAtBuildTime && !ssr) {
-		// RETURN blank .html and then hydrate it.
-	}
-
-	const id = url.replace(/\//g, '-');
-
-	const bundles = result.outputs
-		.map((output) => output.path.replace(process.cwd(), ''))
-		.filter((bundle) => !bundle.endsWith('.js.map'));
+	const bundles = result.outputs.map((output) =>
+		output.path.replace(process.cwd(), ''),
+	);
 	const scripts = bundles.filter((bundle) => bundle.endsWith('.js'));
+
+	// Report other bundles.
+	bundles.forEach((bundle) => {
+		if (
+			bundle.endsWith('.js') ||
+			bundle.endsWith('.js.map') ||
+			bundle.endsWith('.css')
+		)
+			return;
+		console.error({ unknown_bundle: bundle });
+	});
+
 	const styles = bundles.filter((bundle) => bundle.endsWith('.css')); // ! WORKAROUND
 	const bootstrapScriptContent = ` // ! WORKAROUND
 		const styles = [${JSON.stringify(styles.map((style) => style).join('"'))}];
@@ -92,6 +81,7 @@ export async function buildPage({
 			link.href = style;
 			document.head.appendChild(link);
 		}`;
+
 	const options = {
 		bootstrapModules: scripts,
 		bootstrapScriptContent, // ! WORKAROUND
@@ -101,48 +91,18 @@ export async function buildPage({
 
 	if (renderAtBuildTime) {
 		const { prelude } = await (edge
-			? prerenderReact(ReactTree.jsx, options)
-			: prerenderToNodeStream(ReactTree.jsx, options));
-		// TODO: Continue to process this to SSR step.
-		// TODO: Break the reactive components into functions and stream+hydrate them later+separately.
-		return prelude;
+			? prerenderReact(jsx, options)
+			: prerenderToNodeStream(jsx, options));
+		// TODO: Handle (prerender = true & ssr = true)
+		// TODO: Continue to process this to SSR step. Break the reactive components into functions and stream+hydrate them later+separately.
+		if (!ssr) return prelude;
 	}
-	if (ssr) {
-		const stream = streaming
-			? edge
-				? renderToReadableStream(ReactTree.jsx, options)
-				: renderToPipeableStream(ReactTree.jsx, options)
-			: renderToString(ReactTree.jsx); // TODO: NEVER RECOMMENDED. ISSUES WARNINGS.
-		return stream;
-	}
-}
-
-async function buildReactTree(
-	components: { fn: React.ComponentType; isAsync: boolean; type: string }[],
-	index = 0,
-): Promise<{ jsx: React.ReactNode; string: string }> {
-	const [current, ...rest] = components;
-	// @ts-expect-error TODO: Fix this
-	const { fn: Component, type } = current;
-	const { jsx, string } =
-		rest.length > 0
-			? await buildReactTree(rest, index + 1)
-			: { jsx: null, string: '' };
-
-	if (type === 'loading')
-		return {
-			jsx: <Suspense fallback={<Component />}>{jsx}</Suspense>,
-			string: `<Suspense fallback={<C${index} />}>${string}</Suspense>`,
-		};
-	if (type === 'error')
-		return {
-			jsx: <ErrorBoundary fallback={<Component />}>{jsx}</ErrorBoundary>,
-			string: `<ErrorBoundary fallback={<C${index} />}>${string}</ErrorBoundary>`,
-		};
-	return {
-		jsx: <Component>{jsx}</Component>,
-		string: `<C${index}>${string}</C${index}>`,
-	};
+	const stream = streaming
+		? edge
+			? renderToReadableStream(jsx, options)
+			: renderToReadableStream(jsx, options) // ! `renderToPipeableStream` not working in Bun.
+		: renderToString(jsx); // TODO: NEVER RECOMMENDED. ISSUES WARNINGS.
+	return stream;
 }
 
 // function Head() {

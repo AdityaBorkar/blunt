@@ -12,10 +12,10 @@ type FileType = {
 		| 'file'
 		| 'not-found';
 	method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'OPTIONS' | 'HEAD';
-	filePath: string;
+	name: string;
 	httpPath: string;
 	dirPath: string;
-	relativePath: string;
+	filePath: string;
 };
 
 type RouteRecord = {

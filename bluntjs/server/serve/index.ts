@@ -18,9 +18,7 @@ export async function serve(config: ProjectConfig) {
 
 	// Setup Environment
 	const ENVIRONMENT = process.env.NODE_ENV ?? 'development';
-	const ENV_FILES = importEnvFiles({ env: ENVIRONMENT });
 	console.log('Environment    : ', ENVIRONMENT);
-	console.log('Env Files      : ', ENV_FILES.join(', '));
 
 	// Expose Host
 	const EXPOSE_HOST = true;
@@ -44,10 +42,8 @@ export async function serve(config: ProjectConfig) {
 	);
 	if (await exists(WORKING_DIR)) {
 		await rm(WORKING_DIR, { force: true, recursive: true });
-		console.log(color('gray', 'ansi'), `Cleaned ${WORKING_DIR} directory`);
-	} else {
-		await mkdir(WORKING_DIR, { recursive: true });
 	}
+	await mkdir(WORKING_DIR, { recursive: true });
 	if (ENVIRONMENT === 'development') {
 		await writeFile(
 			join(process.cwd(), './.blunt/unbundled/ErrorBoundary.tsx'),
@@ -87,6 +83,10 @@ export async function serve(config: ProjectConfig) {
 	});
 
 	// TODO: Implement Tunnel
+	// TODO: RESTART SERVER ON CHANGE OF CONFIG
+	// TODO: RESTART SERVER ON CHANGE OF ENV FILES
+	const ENV_FILES = importEnvFiles({ env: ENVIRONMENT });
+	console.log('Env Files      : ', ENV_FILES.join(', '));
 	console.log('Local Network  : ', server.url.href);
 	console.log(
 		'Public Network : ',
@@ -102,19 +102,3 @@ export async function serve(config: ProjectConfig) {
 	console.log(color('white', 'ansi'));
 	return server;
 }
-
-// TODO: HMR Support
-// Store routes in HMR data to persist between updates
-// const HMR_STATE = import.meta.hot?.data.HMR_STATE ?? {
-// 	routesDir: '',
-// 	router: null,
-// 	server: null,
-// };
-
-// Store state for HMR
-// import.meta.hot.data.HMR_STATE = { routesDir, router, server };
-
-// Total refresh on change of `blunt.config.ts`, `.env`
-
-// await server.stop();
-// await server.reload({ options })
