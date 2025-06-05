@@ -2,7 +2,6 @@ import { readdir, stat } from 'node:fs/promises';
 import { join } from 'node:path';
 
 import type { TrieRouter } from '@/server/serve/router/trie-router';
-import type { RequestMethod } from '@/types';
 
 export async function scanStaticDir(
 	router: TrieRouter,
@@ -12,22 +11,15 @@ export async function scanStaticDir(
 	const dirPath = publicDir;
 	const entries = await readdir(dirPath);
 	for (const name of entries) {
-		const fullPath = join(dirPath, name);
-		const stats = await stat(fullPath);
+		const filePath = join(dirPath, name);
 		const urlPath = urlPrefix ? `${urlPrefix}/${name}` : `/${name}`;
 
+		const stats = await stat(filePath);
 		if (stats.isDirectory()) {
-			await scanStaticDir(router, fullPath, urlPath);
+			await scanStaticDir(router, filePath, urlPath);
 		} else if (stats.isFile()) {
-			const staticFile = {
-				dirPath,
-				filePath: fullPath,
-				httpPath: urlPath,
-				method: 'GET' as RequestMethod,
-				name,
-				type: 'file' as const,
-			};
-			router.insert(urlPath, 'GET', staticFile);
+			const staticFile = { filePath, type: 'file' as const };
+			router.insert('GET', urlPath, staticFile);
 		}
 	}
 	return router;

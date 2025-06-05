@@ -10,9 +10,9 @@ import type { ProjectConfig } from '@/types';
 export async function serve(config: ProjectConfig) {
 	// Performance and Logging
 	const SERVER_BUILD_START = performance.now();
-	console.log(color('hotpink', 'ansi'));
+	console.log(color('hotpink', 'ansi-256'));
 	console.log('Blunt v1.2.3 | Bun v1.1.19'); // TODO: Add version
-	console.log(color('gray', 'ansi'));
+	console.log(color('gray', 'ansi-256'));
 	const spinner = ora(' Starting Server...');
 	spinner.color = 'yellow';
 	spinner.start();
@@ -77,7 +77,10 @@ export async function serve(config: ProjectConfig) {
 	const SERVER_BUILD_TIME = (SERVER_BUILD_END - SERVER_BUILD_START).toFixed(2);
 	spinner.succeed(` Server Started in ${SERVER_BUILD_TIME}ms`);
 	console.log();
-	console.log(color('lightgray', 'ansi'), '--------------------------------');
+	console.log(
+		color('lightgray', 'ansi-256'),
+		'--------------------------------',
+	);
 	consoleLog('Environment    : ', ENVIRONMENT);
 	consoleLog('Env Files      : ', ENV_FILES.join(', '));
 	consoleLog('Local Network  : ', server.url.href);
@@ -90,8 +93,8 @@ export async function serve(config: ProjectConfig) {
 	const isTsLspActive = false;
 	consoleLog(
 		'TypeScript LSP : ',
-		isTsLspActive ? 'Active' : 'Inactive',
-		isTsLspActive ? 'lightblue' : 'red',
+		isTsLspActive ? 'Active' : 'Not Active',
+		isTsLspActive ? 'lightblue' : 'orange',
 	);
 
 	// TODO: Tunnel
@@ -102,8 +105,11 @@ export async function serve(config: ProjectConfig) {
 	// 	isTunnelActive ? 'lightblue' : 'red',
 	// );
 
-	console.log(color('lightgray', 'ansi'), '--------------------------------');
-	console.log(color('white', 'ansi'));
+	console.log(
+		color('lightgray', 'ansi-256'),
+		'--------------------------------',
+	);
+	console.log(color('white', 'ansi-256'));
 	return server;
 }
 
@@ -113,9 +119,9 @@ function consoleLog(
 	ansiColor: string = 'lightblue',
 ) {
 	console.log(
-		color('lightgray', 'ansi'),
+		color('lightgray', 'ansi-256'),
 		title,
-		color(ansiColor, 'ansi'),
+		color(ansiColor, 'ansi-256'),
 		value,
 	);
 }

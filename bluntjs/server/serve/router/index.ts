@@ -7,6 +7,8 @@ import { scanStaticDir } from '@/server/serve/router/static-dir';
 import { TrieRouter } from '@/server/serve/router/trie-router';
 import type { ProjectConfig, RequestMethod } from '@/types';
 
+// Ideas for Performance Improvement - Allow scanning of publicDir and appDir in parallel.
+
 export async function buildRouter(projectConfig: ProjectConfig) {
 	const router = new TrieRouter();
 
@@ -35,37 +37,23 @@ export async function buildRouter(projectConfig: ProjectConfig) {
 		if (!target) continue;
 
 		if ('dir' in target) {
-			const subRouter = await scanAppDir(target.dir, prefixUrl);
-			router.merge(subRouter);
-		} else if ('file' in target) {
-			// ? Note - Supports only default and barrel exports
-			const file = await import(target.file);
-			const page = file.default;
-			const { GET, POST, PUT, DELETE, PATCH, OPTIONS, HEAD } = file;
-			if (page) {
-				router.insert('GET', prefixUrl, { page });
-				if (GET || POST || PUT || DELETE || PATCH || OPTIONS || HEAD)
-					throw new Error(
-						'Cannot have both `component` and `GET`, `POST`, `PUT`, `DELETE`, `PATCH`, `OPTIONS`, `HEAD`',
-					);
-				continue;
-			}
-			if (GET) router.insert('GET', prefixUrl, { fn: GET });
-			if (POST) router.insert('POST', prefixUrl, { fn: POST });
-			if (PUT) router.insert('PUT', prefixUrl, { fn: PUT });
-			if (DELETE) router.insert('DELETE', prefixUrl, { fn: DELETE });
-			if (PATCH) router.insert('PATCH', prefixUrl, { fn: PATCH });
-			if (OPTIONS) router.insert('OPTIONS', prefixUrl, { fn: OPTIONS });
-			if (HEAD) router.insert('HEAD', prefixUrl, { fn: HEAD });
+			await scanAppDir(router, target.dir, prefixUrl);
 		} else if ('page' in target) {
-			router.insert('GET', prefixUrl, { page: target.page });
+			// ? Note - Supports only default and barrel exports
+			const component =
+				typeof target.page === 'string'
+					? (await import(target.page)).default
+					: target.page;
+			router.insert('GET', prefixUrl, { component });
 		} else {
 			for (const key in target) {
-				const fn = target[key as keyof typeof target];
-				router.insert(key as RequestMethod, prefixUrl, { fn });
+				const func = target[key as keyof typeof target];
+				router.insert(key as RequestMethod, prefixUrl, { func });
 			}
 		}
 	}
+
+	// console.log(JSON.stringify(router.toJSON(), null, 2));
 
 	// TODO: Build Types
 
@@ -82,12 +70,16 @@ export async function buildRouter(projectConfig: ProjectConfig) {
 
 		// TODO: Support editing files in the Browser's Debugger Tab & Source Maps
 
-		const matched_routes = router.find(pathname, method);
-
-		// !
-		// console.log({ matched_routes });
+		const matched_routes = router.find(method, pathname);
+		console.log({ matched_routes });
+		console.log({ nest: matched_routes.nest });
+		// TODO: loading/etc. is not yet working.
+		// const { lastFilePath, lastFileType, files, config };
 		// const { type, files, config } = getValidFiles(matched_files);
 		// console.log({ config, files, type });
+
+		// TODO: CREATE BUILD
+		console.log(Bun.color('gray', 'ansi-256'), '(build in 30ms)');
 
 		// Setup Config:
 		// const controller = new AbortController();
@@ -135,20 +127,20 @@ export async function buildRouter(projectConfig: ProjectConfig) {
 		// 	return new Response(stream, { headers });
 		// }
 
-		// Handle static files
-		if (matched_routes.data?.file.type === 'file') {
-			const file = Bun.file(matched_routes.data.file.filePath);
-			const exists = await file.exists();
+		// // Handle static files
+		// if (matched_routes.target?.file.type === 'file') {
+		// 	const file = Bun.file(matched_routes.target.file.filePath);
+		// 	const exists = await file.exists();
 
-			if (exists) {
-				return new Response(file, {
-					headers: {
-						'Cache-Control': 'public, max-age=31536000',
-						'Content-Type': file.type || 'application/octet-stream', // 1 year cache for static assets
-					},
-				});
-			}
-		}
+		// 	if (exists) {
+		// 		return new Response(file, {
+		// 			headers: {
+		// 				'Cache-Control': 'public, max-age=31536000',
+		// 				'Content-Type': file.type || 'application/octet-stream', // 1 year cache for static assets
+		// 			},
+		// 		});
+		// 	}
+		// }
 
 		return new Response('Not Found', { status: 404 });
 	}

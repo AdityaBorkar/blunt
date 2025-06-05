@@ -34,6 +34,12 @@ const ProjectConfigSchema = type({
 		profiler: 'boolean',
 		strictMode: 'boolean',
 	},
+	// vue
+	// svelte
+	// preact
+	// solid: {
+	// 	profiler: 'boolean',
+	// },
 	routes: {
 		botDetection: 'boolean | Function',
 		edge: 'boolean',
@@ -61,16 +67,17 @@ const ProjectConfigSchema = type({
 			rewrites: type({ from: 'string', to: 'string' }, '[]'),
 			routes: type({
 				'[string]': type(
-					type({ file: 'string' }, '|', { dir: 'string' }),
+					// This type string does support Next.js based routing splats
+					type({ dir: 'string' }),
 					'|',
-					type({ page: 'string' }, '|', {
-						'delete?': 'string',
-						'get?': 'string',
-						'head?': 'string',
-						'options?': 'string',
-						'patch?': 'string',
-						'post?': 'string',
-						'put?': 'string',
+					type({ page: 'string | Function' }, '|', {
+						'delete?': 'string | Function',
+						'get?': 'string | Function',
+						'head?': 'string | Function',
+						'options?': 'string | Function',
+						'patch?': 'string | Function',
+						'post?': 'string | Function',
+						'put?': 'string | Function', // "GET": "file/path.default" / Function
 					}),
 				),
 			}),

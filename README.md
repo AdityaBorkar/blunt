@@ -27,7 +27,7 @@ TODO: Support SSG
   TODO: return { fallback: "Run this function", paths: [], regenerateInterval: 50  }
   TODO: View Transitions & Router
 
-
+- Using JSX for Head, Meta, OpenGraph tags. Config Options to include a pattern. If using config, make sure to use a VS Code Extension to show the "Title" as a comment on the line.
 
 TODO: HTTP Headers, Head Tag Metadata, OpenGraph, Config, redirect: { code: 307,path: "/some/path" }
 TODO: Instrumentation Hooks
@@ -37,6 +37,12 @@ TODO: Instrumentation Hooks
     - Rate limiting
     - Request logging
     - Security headers
+- Middleware Hooks:
+  - onRequest (default)
+  - onBeforeResponse
+  - onAfterResponse
+- Session Management - Ref: SolidStart, Astro
+- Service Workers
 - Build Summary
   - Output unused packages in the Build Summary.
   - Also use knip.dev under the hood
@@ -103,6 +109,8 @@ Auto-removal of trailing slashes
 - Shall we implement Deno server?
 - Study Convex, Clerk
 - How to implement Code-splitting?
+- GraphQL: https://docs.solidjs.com/solid-start/building-your-application/api-routes#exposing-a-graphql-api
+
 
 ## Performance
 

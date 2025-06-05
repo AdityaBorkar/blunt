@@ -11,19 +11,21 @@ export type RequestMethod =
 	| 'OPTIONS'
 	| 'HEAD';
 
-export type FileType = {
-	type:
-		| 'page'
-		| 'layout'
-		| 'template'
-		| 'loading'
-		| 'error'
-		| 'route'
-		| 'middleware'
-		| 'file'
-		| 'not-found'
-		| 'rewrite'
-		| 'redirect';
+export type FileType =
+	| 'page'
+	| 'layout'
+	| 'template'
+	| 'loading'
+	| 'error'
+	| 'route'
+	| 'middleware'
+	| 'file'
+	| 'not-found'
+	| 'rewrite'
+	| 'redirect';
+
+export type File = {
+	type: FileType;
 	method: RequestMethod;
 	filePath: string;
 	httpPath: string;

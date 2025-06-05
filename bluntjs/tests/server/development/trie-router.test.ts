@@ -51,8 +51,8 @@ describe('TrieRouter', () => {
 			router.insert('/', 'GET', file);
 
 			const result = router.find('/', 'GET');
-			expect(result.data).toBeTruthy();
-			expect(result.data?.file.filePath).toBe('/app/page.tsx');
+			expect(result.target).toBeTruthy();
+			expect(result.target?.file.filePath).toBe('/app/page.tsx');
 			expect(result.params).toEqual({});
 		});
 
@@ -69,8 +69,8 @@ describe('TrieRouter', () => {
 			router.insert('/about', 'GET', aboutFile);
 
 			const result = router.find('/about', 'GET');
-			expect(result.data).toBeTruthy();
-			expect(result.data?.file.filePath).toBe('/app/about/page.tsx');
+			expect(result.target).toBeTruthy();
+			expect(result.target?.file.filePath).toBe('/app/about/page.tsx');
 		});
 
 		test('should handle deep nested routes', () => {
@@ -86,15 +86,15 @@ describe('TrieRouter', () => {
 			router.insert('/blog/posts/archive', 'GET', deepFile);
 
 			const result = router.find('/blog/posts/archive', 'GET');
-			expect(result.data).toBeTruthy();
-			expect(result.data?.file.filePath).toBe(
+			expect(result.target).toBeTruthy();
+			expect(result.target?.file.filePath).toBe(
 				'/app/blog/posts/archive/page.tsx',
 			);
 		});
 
 		test('should return null for non-existent routes', () => {
 			const result = router.find('/non-existent', 'GET');
-			expect(result.data).toBeNull();
+			expect(result.target).toBeNull();
 		});
 
 		test('should handle different HTTP methods', () => {
@@ -123,9 +123,9 @@ describe('TrieRouter', () => {
 			const postResult = router.find('/api/users', 'POST');
 			const deleteResult = router.find('/api/users', 'DELETE');
 
-			expect(getResult.data?.file.name).toBe('route.ts');
-			expect(postResult.data?.file.name).toBe('route.post.ts');
-			expect(deleteResult.data).toBeNull();
+			expect(getResult.target?.file.name).toBe('route.ts');
+			expect(postResult.target?.file.name).toBe('route.post.ts');
+			expect(deleteResult.target).toBeNull();
 		});
 	});
 
@@ -143,8 +143,8 @@ describe('TrieRouter', () => {
 			router.insert('/users/[id]', 'GET', userFile);
 
 			const result = router.find('/users/123', 'GET');
-			expect(result.data).toBeTruthy();
-			expect(result.data?.file.filePath).toBe('/app/users/[id]/page.tsx');
+			expect(result.target).toBeTruthy();
+			expect(result.target?.file.filePath).toBe('/app/users/[id]/page.tsx');
 			expect(result.params).toEqual({ id: '123' });
 		});
 
@@ -161,7 +161,7 @@ describe('TrieRouter', () => {
 			router.insert('/users/[id]/posts/[postId]', 'GET', postFile);
 
 			const result = router.find('/users/123/posts/456', 'GET');
-			expect(result.data).toBeTruthy();
+			expect(result.target).toBeTruthy();
 			expect(result.params).toEqual({ id: '123', postId: '456' });
 		});
 
@@ -190,12 +190,12 @@ describe('TrieRouter', () => {
 			const settingsResult = router.find('/users/settings', 'GET');
 			const dynamicResult = router.find('/users/123', 'GET');
 
-			expect(settingsResult.data?.file.filePath).toBe(
+			expect(settingsResult.target?.file.filePath).toBe(
 				'/app/users/settings/page.tsx',
 			);
 			expect(settingsResult.params).toEqual({});
 
-			expect(dynamicResult.data?.file.filePath).toBe(
+			expect(dynamicResult.target?.file.filePath).toBe(
 				'/app/users/[id]/page.tsx',
 			);
 			expect(dynamicResult.params).toEqual({ id: '123' });
@@ -216,11 +216,11 @@ describe('TrieRouter', () => {
 			router.insert('/docs/[...slug]', 'GET', catchAllFile);
 
 			const result1 = router.find('/docs/getting-started', 'GET');
-			expect(result1.data).toBeTruthy();
+			expect(result1.target).toBeTruthy();
 			expect(result1.params).toEqual({ slug: ['getting-started'] });
 
 			const result2 = router.find('/docs/api/authentication/oauth', 'GET');
-			expect(result2.data).toBeTruthy();
+			expect(result2.target).toBeTruthy();
 			expect(result2.params).toEqual({
 				slug: ['api', 'authentication', 'oauth'],
 			});
@@ -240,17 +240,17 @@ describe('TrieRouter', () => {
 
 			// Should match empty path
 			const emptyResult = router.find('/shop', 'GET');
-			expect(emptyResult.data).toBeTruthy();
+			expect(emptyResult.target).toBeTruthy();
 			expect(emptyResult.params).toEqual({ category: [] });
 
 			// Should match single segment
 			const singleResult = router.find('/shop/electronics', 'GET');
-			expect(singleResult.data).toBeTruthy();
+			expect(singleResult.target).toBeTruthy();
 			expect(singleResult.params).toEqual({ category: ['electronics'] });
 
 			// Should match multiple segments
 			const multiResult = router.find('/shop/electronics/phones/apple', 'GET');
-			expect(multiResult.data).toBeTruthy();
+			expect(multiResult.target).toBeTruthy();
 			expect(multiResult.params).toEqual({
 				category: ['electronics', 'phones', 'apple'],
 			});
@@ -279,11 +279,13 @@ describe('TrieRouter', () => {
 			router.insert('/docs/[...slug]', 'GET', catchAllFile);
 
 			const specificResult = router.find('/docs/api', 'GET');
-			expect(specificResult.data?.file.filePath).toBe('/app/docs/api/page.tsx');
+			expect(specificResult.target?.file.filePath).toBe(
+				'/app/docs/api/page.tsx',
+			);
 			expect(specificResult.params).toEqual({});
 
 			const catchAllResult = router.find('/docs/getting-started', 'GET');
-			expect(catchAllResult.data?.file.filePath).toBe(
+			expect(catchAllResult.target?.file.filePath).toBe(
 				'/app/docs/[...slug]/page.tsx',
 			);
 			expect(catchAllResult.params).toEqual({ slug: ['getting-started'] });
@@ -312,7 +314,7 @@ describe('TrieRouter', () => {
 			router.insert('/', 'GET', file, config);
 
 			const result = router.find('/', 'GET');
-			expect(result.data?.config).toEqual(config);
+			expect(result.target?.config).toEqual(config);
 		});
 
 		test('should handle routes without config', () => {
@@ -328,7 +330,7 @@ describe('TrieRouter', () => {
 			router.insert('/', 'GET', file);
 
 			const result = router.find('/', 'GET');
-			expect(result.data?.config).toBeUndefined();
+			expect(result.target?.config).toBeUndefined();
 		});
 	});
 
@@ -407,11 +409,11 @@ describe('TrieRouter', () => {
 
 			// Should find route without trailing slash
 			const result1 = router.find('/about', 'GET');
-			expect(result1.data).toBeTruthy();
+			expect(result1.target).toBeTruthy();
 
 			// Should not find route with trailing slash (different path)
 			const result2 = router.find('/about/', 'GET');
-			expect(result2.data).toBeNull();
+			expect(result2.target).toBeNull();
 		});
 
 		test('should handle empty segments in path', () => {
@@ -428,7 +430,7 @@ describe('TrieRouter', () => {
 
 			// Should handle double slashes by filtering empty segments
 			const result = router.find('//api//users/', 'GET');
-			expect(result.data).toBeTruthy();
+			expect(result.target).toBeTruthy();
 		});
 
 		test('should handle special characters in dynamic routes', () => {
@@ -444,7 +446,7 @@ describe('TrieRouter', () => {
 			router.insert('/posts/[slug]', 'GET', file);
 
 			const result = router.find('/posts/hello-world-123', 'GET');
-			expect(result.data).toBeTruthy();
+			expect(result.target).toBeTruthy();
 			expect(result.params).toEqual({ slug: 'hello-world-123' });
 		});
 
@@ -461,7 +463,7 @@ describe('TrieRouter', () => {
 			router.insert('/search/[query]', 'GET', file);
 
 			const result = router.find('/search/hello%20world', 'GET');
-			expect(result.data).toBeTruthy();
+			expect(result.target).toBeTruthy();
 			expect(result.params).toEqual({ query: 'hello%20world' });
 		});
 	});
