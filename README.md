@@ -1,3 +1,11 @@
+Priority 1:
+
+- Make a list of current feature-set I want.
+- Implement them.
+- Create a production-ready build.
+- Deploy to a server.
+
+
 Use AI extensively to get things done.
 - Establish a Test Bench.
 File Handling:

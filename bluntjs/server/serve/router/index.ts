@@ -1,5 +1,6 @@
 import type { Server, ServerWebSocket } from 'bun';
 
+import { botDetection } from '@/server/defaults/botDetection';
 import { handleError } from '@/server/serve/handler/handleError';
 import { handleInternalRoute } from '@/server/serve/handler/handleInternalRoute';
 import { scanAppDir } from '@/server/serve/router/app-dir';
@@ -70,21 +71,90 @@ export async function buildRouter(projectConfig: ProjectConfig) {
 
 		// TODO: Support editing files in the Browser's Debugger Tab & Source Maps
 
-		const matched_routes = router.find(method, pathname);
-		console.log({ matched_routes });
-		console.log({ nest: matched_routes.nest });
-		// TODO: loading/etc. is not yet working.
-		// const { lastFilePath, lastFileType, files, config };
-		// const { type, files, config } = getValidFiles(matched_files);
-		// console.log({ config, files, type });
+		const path = [...pathname.split('/').filter((s) => s.length > 0)];
+		console.log({ path });
+		let { nest, params, target } = router.find(method, path);
 
+		if (!target) return new Response('Not Found', { status: 404 });
+		if ('to' in target) {
+			const { to, code } = target;
+			if (code) return new Response(to, { status: code });
+			const resolution = router.find(method, path);
+			nest = resolution.nest;
+			params = resolution.params;
+			target = resolution.target;
+			if (!target) return new Response('Not Found', { status: 404 });
+			if ('to' in target)
+				throw new Error('Nested Redirects/Rewrites are not supported');
+		}
+		if ('component' in target) {
+			console.log(
+				Bun.color('yellow', 'ansi-256'),
+				'<< WORK IN PROGRESS >>',
+				Bun.color('lightgray', 'ansi-256'),
+			);
+			const { component } = target;
+			return new Response(component, { status: 200 });
+		}
+		if ('func' in target) {
+			console.log(
+				Bun.color('yellow', 'ansi-256'),
+				'<< WORK IN PROGRESS >>',
+				Bun.color('lightgray', 'ansi-256'),
+			);
+			const { func } = target;
+			return new Response(func(request), { status: 200 });
+		}
+
+		if ('file' in target) {
+			console.log(
+				Bun.color('yellow', 'ansi-256'),
+				'<< WORK IN PROGRESS >>',
+				Bun.color('lightgray', 'ansi-256'),
+			);
+			const { file } = target;
+			return new Response(file, { status: 200 });
+		}
 		// TODO: CREATE BUILD
-		console.log(Bun.color('gray', 'ansi-256'), '(build in 30ms)');
 
-		// Setup Config:
-		// const controller = new AbortController();
-		// setTimeout(() => controller.abort(), config.timeout);
+		console.log(
+			Bun.color('gray', 'ansi-256'),
+			'(build in 30ms)',
+			Bun.color('lightgray', 'ansi-256'),
+		);
 
+		// if (urlType === 'ssr_page') {
+		// }
+		// if (urlType === 'static_page') {
+		// }
+		if (target.type === 'page') {
+			const { config } = target;
+			const controller = new AbortController();
+			setTimeout(() => controller.abort(), config.timeout);
+			// TODO: GET Instrumentation
+			const isCrawler =
+				projectConfig.pages.botDetection === false
+					? undefined
+					: typeof projectConfig.pages.botDetection === 'function'
+						? projectConfig.pages.botDetection()
+						: botDetection();
+			// TODO: FIGURE OUT WHAT TO RUN
+			// const { stream } = await executePage({
+			// 	config,
+			// 	controller,
+			// 	files: nest,
+			// 	url: pathname,
+			// });
+			if (isCrawler) await stream.allReady;
+			const headers = { 'Content-Type': 'text/html' };
+			return new Response(stream, { headers });
+		}
+		// if (urlType === 'file') {
+		// 	const stream = await buildFile(lastFile, controller);
+		// 	const headers = { 'Content-Type': 'text/html' };
+		// 	if (isCrawler) await stream.allReady;
+		// 	return new Response(stream, { headers });
+		// }
 		// if (type === 'route') {
 		// 	// TODO: GET Instrumentation
 		// 	// const isCrawler =
@@ -96,51 +166,6 @@ export async function buildRouter(projectConfig: ProjectConfig) {
 		// 	// const ip = server.requestIP(req);
 		// 	// const request = { ip, isCrawler, path, req };
 		// 	return new Response('Route', { status: 200 });
-		// }
-		// // if (urlType === 'file') {
-		// // 	const stream = await buildFile(lastFile, controller);
-		// // 	const headers = { 'Content-Type': 'text/html' };
-		// // 	if (isCrawler) await stream.allReady;
-		// // 	return new Response(stream, { headers });
-		// // }
-		// // if (urlType === 'ssr_page') {
-		// // }
-		// // if (urlType === 'static_page') {
-		// // }
-		// if (type === 'page') {
-		// 	// TODO: GET Instrumentation
-		// 	const isCrawler =
-		// 		config.pages.botDetection === false
-		// 			? undefined
-		// 			: typeof config.pages.botDetection === 'function'
-		// 				? config.pages.botDetection()
-		// 				: botDetection();
-		// 	const stream = await buildPage({
-		// 		config,
-		// 		controller,
-		// 		files,
-		// 		url: pathname,
-		// 	});
-		// 	const headers = { 'Content-Type': 'text/html' };
-
-		// 	if (isCrawler) await stream.allReady;
-		// 	return new Response(stream, { headers });
-		// }
-
-		// // Handle static files
-		// if (matched_routes.target?.file.type === 'file') {
-		// 	const file = Bun.file(matched_routes.target.file.filePath);
-		// 	const exists = await file.exists();
-
-		// 	if (exists) {
-		// 		return new Response(file, {
-		// 			headers: {
-		// 				'Cache-Control': 'public, max-age=31536000',
-		// 				'Content-Type': file.type || 'application/octet-stream', // 1 year cache for static assets
-		// 			},
-		// 		});
-		// 	}
-		// }
 
 		return new Response('Not Found', { status: 404 });
 	}

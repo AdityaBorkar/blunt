@@ -52,6 +52,15 @@ type TargetType =
 	// biome-ignore lint/complexity/noBannedTypes: WILL FIX LATER
 	| { func: Function; config: RouteConfig };
 
+type SpecialFiles = {
+	layout?: TargetType;
+	template?: TargetType;
+	loading?: TargetType;
+	error?: TargetType;
+	'not-found'?: TargetType;
+	middleware?: TargetType;
+};
+
 export class TrieRouter {
 	root: TrieNode;
 
@@ -97,115 +106,103 @@ export class TrieRouter {
 				break;
 		}
 
-		console.log({ node, target });
 		if (!method) {
+			// console.log({ filePath: target.filePath, target: target.type });
 			// @ts-expect-error - WORKAROUND - WRITE BETTER TYPES LATER
-			node[target.type] = target;
+			node[target.type] = target.filePath;
+			console.log({ node });
 		} else {
 			node.routes.set(method, target);
 		}
 	}
 
-	find(
-		method: RequestMethod,
-		path: string | string[],
-		root: TrieNode = this.root,
-		params: Record<string, string | string[]> = {},
-		nest: any[] = [],
-	): {
-		nest: any[];
-		params: Record<string, string | string[]>;
-		target: TargetType | undefined;
-	} {
-		const [segment, ...restSegments] = Array.isArray(path)
-			? path
-			: path.split('/').filter((s) => s.length > 0);
-
-		// Unknown Case
-		if (!segment) return { nest, params, target: undefined };
-		const node = root.nodes.get(segment);
-		if (!node) return { nest, params, target: undefined };
-
-		// Add Special Files
-		// ! BUG: THESE FILES ARE NOT `INSERTED` IN THE TRIE IN THE `INSERT` METHOD
+	static getSpecialFile(node: TrieNode) {
+		const SpecialFiles: SpecialFiles = {};
 		for (const specialFile of specialFiles) {
 			if (specialFile in node) {
 				const target = node[specialFile];
-				if (target) nest.push(target);
+				if (target) SpecialFiles[specialFile] = target;
 			}
 		}
+		return SpecialFiles;
+	}
 
-		// Add Exact Match
-		if (restSegments.length === 0) {
-			const target = node.routes.get(method);
+	find(
+		method: RequestMethod,
+		path: string[],
+		root: TrieNode = this.root,
+		params: Record<string, string | string[]> = {},
+		nest: SpecialFiles[] = [],
+	): {
+		nest: SpecialFiles[];
+		params: Record<string, string | string[]>;
+		target: TargetType | undefined;
+	} {
+		// Collect special files from current node
+		const files = TrieRouter.getSpecialFile(root);
+		nest.push(files);
+
+		// Base case: no more segments to process
+		if (path.length === 0) {
+			const target = root.routes.get(method);
 			return { nest, params, target };
 		}
 
-		const childNodes = node.nodes;
+		const [segment, ...restSegments] = path;
 
 		// Try exact match first
-		const exactNode = childNodes.get(segment);
-		if (exactNode) {
-			const result = this.find(method, restSegments, exactNode, params, nest);
-			if (result.target) return result;
+		if (segment !== undefined) {
+			const exactNode = root.nodes.get(segment);
+			if (exactNode) {
+				const result = this.find(method, restSegments, exactNode, params, nest);
+				if (result.target) return result;
+			}
 		}
 
 		// Try dynamic matches
-		for (const [_, node] of childNodes) {
-			// If not a dynamic segment, skip
-			if (!node.isCatch) continue;
+		for (const [_, node] of root.nodes) {
+			if (!node.isCatch || !node.paramName) continue;
+			const paramName = node.paramName;
 
-			// If a dynamic segment, try to match it
-			if (node.isCatch === PathCatchType.CATCH_SELF) {
-				const paramName = node.paramName;
-				if (!paramName) throw new Error('Invalid dynamic segment');
-				params[paramName] = segment;
-				return this.find(method, restSegments, node, params, nest);
+			if (node.isCatch === PathCatchType.CATCH_SELF && segment !== undefined) {
+				// Single dynamic segment [param]
+				const newParams = { ...params };
+				newParams[paramName] = segment;
+				const result = this.find(method, restSegments, node, newParams, [
+					...nest,
+				]);
+				if (result.target) return result;
+			} else if (
+				node.isCatch === PathCatchType.CATCH_CHILDREN &&
+				segment !== undefined
+			) {
+				// Catch-all [...param] - captures remaining segments
+				const remainingSegments = [segment, ...restSegments];
+				const newParams = { ...params };
+				newParams[paramName] = remainingSegments;
+				const result = this.find(method, [], node, newParams, [...nest]);
+				if (result.target) return result;
+			} else if (node.isCatch === PathCatchType.CATCH_ALL) {
+				// Optional catch-all [[...param]] - can match empty or remaining segments
+				if (segment !== undefined) {
+					const remainingSegments = [segment, ...restSegments];
+					const newParams = { ...params };
+					newParams[paramName] = remainingSegments;
+					const result = this.find(method, [], node, newParams, [...nest]);
+					if (result.target) return result;
+				}
+
+				// Also try matching with empty params
+				const emptyParams = { ...params };
+				emptyParams[paramName] = [];
+				const emptyResult = this.find(method, path, node, emptyParams, [
+					...nest,
+				]);
+				if (emptyResult.target) return emptyResult;
 			}
-
-			console.log('TODO - PROCESS FILE');
-
-			// 	if (child.isCatch === PathCatchType.CATCH_CHILDREN) {
-			// 		// Catch-all routes capture remaining segments
-			// 		const remainingSegments = segments.slice(index);
-			// 		if (child.paramName) {
-			// 			if (
-			// 				child.isCatch === PathCatchType.CATCH_ALL &&
-			// 				remainingSegments.length === 0
-			// 			) {
-			// 				// Optional catch-all can match empty path
-			// 				params[child.paramName] = [];
-			// 			} else {
-			// 				params[child.paramName] = remainingSegments;
-			// 			}
-			// 		}
-			// 		const route = child.routes.get(method);
-			// 		if (route) return route;
-			// 		// If optional catch-all, also try matching with empty params
-			// 		if (child.isOptionalCatchAll && remainingSegments.length === 0) {
-			// 			const result = this.$find(
-			// 				child,
-			// 				segments,
-			// 				segments.length,
-			// 				params,
-			// 				method,
-			// 			);
-			// 			if (result) return result;
-			// 		}
-			// 	} else {
-			// 		// Single dynamic segment
-			// 		if (child.paramName) {
-			// 			params[child.paramName] = segment;
-			// 		}
-			// 		const result = this.$find(child, segments, index + 1, params, method);
-			// 		if (result) return result;
-			// 		// Clean up param if match failed
-			// 		if (child.paramName) {
-			// 			delete params[child.paramName];
-			// 		}
-			// 	}
 		}
 
+		// No match found
 		return { nest, params, target: undefined };
 	}
 
@@ -232,11 +229,11 @@ export class TrieRouter {
 		// Recurse into child nodes
 		for (const [segment, child] of Array.from(node.nodes.entries())) {
 			let newPath: string;
-			if (child.isDynamic) {
-				if (child.isCatchAll) {
-					newPath = `${currentPath}/[...${child.paramName}]`;
-				} else if (child.isOptionalCatchAll) {
+			if (child.isCatch && child.paramName) {
+				if (child.isCatch === PathCatchType.CATCH_ALL) {
 					newPath = `${currentPath}/[[...${child.paramName}]]`;
+				} else if (child.isCatch === PathCatchType.CATCH_CHILDREN) {
+					newPath = `${currentPath}/[...${child.paramName}]`;
 				} else {
 					newPath = `${currentPath}/[${child.paramName}]`;
 				}
@@ -249,10 +246,16 @@ export class TrieRouter {
 
 	private static createNode(props?: Partial<TrieNode>): TrieNode {
 		return {
+			error: undefined,
 			isCatch: props?.isCatch ?? undefined,
+			layout: undefined,
+			loading: undefined,
+			middleware: undefined,
 			nodes: props?.nodes ?? new Map(),
+			'not-found': undefined,
 			paramName: props?.paramName ?? undefined,
 			routes: props?.routes ?? new Map(),
+			template: undefined,
 		};
 	}
 

@@ -85,7 +85,7 @@ export async function scanAppDir(
 			const components = parseComponents(name);
 			for (const component of components) {
 				const { method, type } = component;
-				console.log({ filePath, httpPath, method, type });
+				// console.log({ filePath, httpPath, method, type });
 				router.insert(method, httpPath, { filePath, type });
 			}
 		}
