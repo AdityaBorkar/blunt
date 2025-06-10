@@ -1,8 +1,8 @@
 import { FrameworkAdapters } from '@/server/config/framework-adapters';
 import type { ProjectConfig } from '@/server/config/project-config';
 
+// TODO: Write defaults properly
 export const DEFAULT_PROJECT_CONFIG = {
-	// TODO: Write defaults properly
 	build: {
 		analyze: true,
 		bundler: FrameworkAdapters.Bun,
@@ -25,7 +25,7 @@ export const DEFAULT_PROJECT_CONFIG = {
 	react: {
 		compiler: false,
 		profiler: false,
-		strictMode: process.env.NODE_ENV === 'development',
+		strictMode: true, // process.env.NODE_ENV === 'development',
 		// reactScan: false,
 		// millionLint: false,
 	},
@@ -38,12 +38,16 @@ export const DEFAULT_PROJECT_CONFIG = {
 	server: {
 		dev: {
 			allowOrigin: [],
-			buildEager: true,
+			buildEager: false,
+			debuggerPath: '/blunt',
 			exposeHost: true,
 			outDir: '.blunt',
+			toolbar: 'bottom-center',
+
 			tunnel: false,
 		},
 		host: 'localhost',
+		https: 'auto-generate',
 		outDir: 'dist',
 		port: 3000,
 		router: {

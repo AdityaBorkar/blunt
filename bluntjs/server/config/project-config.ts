@@ -11,7 +11,10 @@ const ProjectConfigSchema = type({
 		bundler: "'bun' | 'vite'",
 		cloud: "'aws' | 'cloudflare' | 'vercel'",
 		compress: "'gzip' | 'brotli' | 'none'",
-		// cssChunking: 'boolean',
+		// chunking?: {
+		// 	js?: boolean;
+		// 	css?: boolean;
+		// };
 		// optimizeMedia: 'boolean',
 		// doNotOptimize: 'string[]', // This can include file path and package names.
 		linter: "'biome' | 'eslint'",
@@ -48,14 +51,27 @@ const ProjectConfigSchema = type({
 		timeout: 'number',
 	},
 	server: {
+		// unix?: string;
+		// ipv6Only?: boolean;
+		// reusePort?: boolean;
 		dev: type({
 			allowOrigin: 'string[]',
 			buildEager: 'boolean',
+			debuggerPath: 'string',
 			exposeHost: 'boolean',
 			outDir: 'string',
+			toolbar: 'string',
 			tunnel: 'boolean',
 		}),
 		host: 'string',
+		https: type(
+			'"auto-generate"',
+			'|',
+			type({
+				certFile: 'string | Function',
+				keyFile: 'string | Function',
+			}),
+		),
 		outDir: 'string',
 		port: 'number',
 		router: type({
@@ -85,19 +101,6 @@ const ProjectConfigSchema = type({
 				'("ALLOW_NESTED_MIDDLEWARE_IN_PAGES" | "ALLOW_MIXING_PAGES_AND_ROUTES" | "USE_MIDDLEWARE_FOR_REACT_SERVER_ACTIONS")[]',
 			trailingSlash: 'boolean',
 		}),
-		// unix?: string;
-		// ipv6Only?: boolean;
-		// reusePort?: boolean;
-		// compress?: 'gzip' | 'brotli' | 'none';
-		// chunking?: {
-		// 	js?: boolean;
-		// 	css?: boolean;
-		// };
-		// https: 'boolean',
-		// https?: {
-		// 	keyFile?: string | 'auto-generate' | (() => Promise<string>);
-		// 	certFile?: string | 'auto-generate' | (() => Promise<string>);
-		// };
 	},
 });
 

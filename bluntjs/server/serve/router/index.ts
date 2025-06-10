@@ -1,12 +1,15 @@
 import type { Server, ServerWebSocket } from 'bun';
+import merge from 'lodash.merge';
 
-import { botDetection } from '@/server/defaults/botDetection';
+import { handleBluntDebugger } from '@/server/debugger';
+import { PageBuilder } from '@/server/serve/build/page/builder';
+import { PageExecutor } from '@/server/serve/build/page/executor';
 import { handleError } from '@/server/serve/handler/handleError';
 import { handleInternalRoute } from '@/server/serve/handler/handleInternalRoute';
 import { scanAppDir } from '@/server/serve/router/app-dir';
 import { scanStaticDir } from '@/server/serve/router/static-dir';
 import { TrieRouter } from '@/server/serve/router/trie-router';
-import type { ProjectConfig, RequestMethod } from '@/types';
+import type { PageConfig, ProjectConfig, RequestMethod } from '@/types';
 
 // Ideas for Performance Improvement - Allow scanning of publicDir and appDir in parallel.
 
@@ -66,8 +69,13 @@ export async function buildRouter(projectConfig: ProjectConfig) {
 		const method = request.method as RequestMethod;
 		console.log(`[${method}]`, pathname);
 
-		const isInternal = pathname.startsWith('/.blunt');
-		if (isInternal) handleInternalRoute(pathname);
+		if (pathname.startsWith('/.blunt')) {
+			// replace with _blunt_
+			return handleInternalRoute(pathname);
+		}
+		if (pathname.startsWith('/blunt')) {
+			return handleBluntDebugger(pathname);
+		}
 
 		// TODO: Support editing files in the Browser's Debugger Tab & Source Maps
 
@@ -117,37 +125,22 @@ export async function buildRouter(projectConfig: ProjectConfig) {
 		}
 		// TODO: CREATE BUILD
 
-		console.log(
-			Bun.color('gray', 'ansi-256'),
-			'(build in 30ms)',
-			Bun.color('lightgray', 'ansi-256'),
-		);
+		const buildStartTime = performance.now();
 
-		// if (urlType === 'ssr_page') {
-		// }
-		// if (urlType === 'static_page') {
-		// }
 		if (target.type === 'page') {
-			const { config } = target;
-			const controller = new AbortController();
-			setTimeout(() => controller.abort(), config.timeout);
-			// TODO: GET Instrumentation
-			const isCrawler =
-				projectConfig.pages.botDetection === false
-					? undefined
-					: typeof projectConfig.pages.botDetection === 'function'
-						? projectConfig.pages.botDetection()
-						: botDetection();
-			// TODO: FIGURE OUT WHAT TO RUN
-			// const { stream } = await executePage({
-			// 	config,
-			// 	controller,
-			// 	files: nest,
-			// 	url: pathname,
-			// });
-			if (isCrawler) await stream.allReady;
-			const headers = { 'Content-Type': 'text/html' };
-			return new Response(stream, { headers });
+			const config: PageConfig = merge(projectConfig.pages, target.config, {
+				react: projectConfig.react,
+			});
+			const { filePath } = target;
+
+			const output = await PageBuilder({
+				filePath,
+				nest,
+				pathname,
+				projectConfig,
+			});
+			consoleLogBuildTime(buildStartTime);
+			return await PageExecutor({ config, ...output });
 		}
 		// if (urlType === 'file') {
 		// 	const stream = await buildFile(lastFile, controller);
@@ -185,4 +178,14 @@ export async function buildRouter(projectConfig: ProjectConfig) {
 		routes: {} as const, // TODO: Output TrieRouter
 		websocket: handleWebSocket,
 	};
+}
+
+function consoleLogBuildTime(start: number) {
+	const end = performance.now();
+	const time = end - start;
+	console.log(
+		Bun.color('gray', 'ansi-256'),
+		`(build in ${time.toFixed(2)}ms)`,
+		Bun.color('lightgray', 'ansi-256'),
+	);
 }
